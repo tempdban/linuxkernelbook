@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0070)http://www.kerneltravel.net/kernel-book/第十三章%20启动系统/13.3.3.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>Boot Loader</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="13.3.3.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-17T14:45:00Z</o:Created>
+  <o:LastSaved>2007-08-17T14:45:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>127</o:Words>
+  <o:Characters>727</o:Characters>
+  <o:Lines>6</o:Lines>
+  <o:Paragraphs>1</o:Paragraphs>
+  <o:CharactersWithSpaces>853</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" 
+Month="12" Year="1899"><B style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">13.3.3</SPAN></B></st1:chsdate><B 
+style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"> 
+Boot Loader<o:p></o:p></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">如前所述，在启动的过程中，<SPAN 
+lang=EN-US>BIOS</SPAN>会把<SPAN lang=EN-US>Boot Loaer</SPAN>读入内存，并把控制权交给它。<SPAN 
+lang=EN-US>MBR(</SPAN>硬盘启动<SPAN lang=EN-US>)</SPAN>或软盘的启动扇区<SPAN 
+lang=EN-US>(</SPAN>软盘启动<SPAN lang=EN-US>)</SPAN>内的代码就是<SPAN lang=EN-US>Boot 
+Loader</SPAN>或者<SPAN lang=EN-US>Boot Loader</SPAN>的一部分。<SPAN lang=EN-US>Boot 
+Loader</SPAN>的实现是很复杂的，这也是我们什么要了解磁盘结构的原因。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">实际上<SPAN 
+lang=EN-US>Boot Loader</SPAN>的来源有多种，最常见的一种是你的操作系统就是<SPAN 
+lang=EN-US>DOS</SPAN>，而<SPAN lang=EN-US>Boot Loader</SPAN>是<SPAN 
+lang=EN-US>DOS</SPAN>系统提供的<SPAN lang=EN-US>MS-Boot 
+Loader</SPAN>。这种情况下比较简单：如果是软盘启动，<SPAN lang=EN-US>Boot 
+Loader</SPAN>会检查盘上是否存在两个隐含的系统文件<SPAN lang=EN-US>(IBMBIO.COM</SPAN>、<SPAN 
+lang=EN-US>IBMDOS.COM)</SPAN>，若有，读出并送至内存中指定的区域，把控制权转移给<SPAN 
+lang=EN-US>IBMBIO</SPAN>这个模块，否则显示出错信息。如果是硬盘启动，<SPAN lang=EN-US>Boot 
+Loader</SPAN>将查找主分区表中标记为活动分区的表项，把该表项对应的分区的引导扇区读入，然后把控制权交给该扇区内的引导程序，这段程序也可以被看作是<SPAN 
+lang=EN-US>Boot Loader</SPAN>的一部分，它完成的工作与软盘的<SPAN lang=EN-US>Boot 
+Loader</SPAN>大致相同。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">有时候一台计算机上所装的操作系统并不是<SPAN 
+lang=EN-US>DOS</SPAN>，或者并不仅仅是<SPAN lang=EN-US>DOS</SPAN>。在这种情况，如果你是一个<SPAN 
+lang=EN-US>Linux</SPAN>的使用者，那么，你的计算机上现在就需要两套操作系统了<SPAN 
+lang=EN-US>(Linux</SPAN>和<SPAN lang=EN-US>Windows)</SPAN>，于是启动碰上了一个新问题<SPAN 
+class=GramE>—怎么</SPAN>能引导多个系统<SPAN lang=EN-US>?<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">仅仅<SPAN 
+lang=EN-US>MS-DOS</SPAN>的<SPAN lang=EN-US>Boot 
+Loader</SPAN>无法完成这种工作，你所要的是一个可以多重启动的工具，怎么办？幸运的是，有很多用来实现这一功能的软件<SPAN 
+lang=EN-US>(</SPAN>大部分是共享或自由软件<SPAN lang=EN-US>)</SPAN>已经被编制了，如在<SPAN 
+lang=EN-US>DOS</SPAN>环境下启动<SPAN lang=EN-US>Linux</SPAN>的<SPAN 
+lang=EN-US>LOADLIN</SPAN>，<SPAN lang=EN-US>Linux</SPAN>下最常用的<SPAN 
+lang=EN-US>LILO</SPAN>等等，使用它们，你可以方便的从各种操作系统启动。不幸的是，你是一个操作系统的研究者，很可能你会需要编写自己的<SPAN 
+lang=EN-US>Boot Loader</SPAN>程序，所以，你必须了解这个程序的工作原理。由于<SPAN 
+lang=EN-US>LILO</SPAN>的强大功能和方便使用的特性，很多人来使用它，因此我们将在这里详细介绍<SPAN 
+lang=EN-US>LILO</SPAN>。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

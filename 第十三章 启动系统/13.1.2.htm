@@ -1,0 +1,391 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0070)http://www.kerneltravel.net/kernel-book/第十三章%20启动系统/13.1.2.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>BIOS启动</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="13.1.2.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-17T14:40:00Z</o:Created>
+  <o:LastSaved>2007-08-17T14:40:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>168</o:Words>
+  <o:Characters>961</o:Characters>
+  <o:Lines>8</o:Lines>
+  <o:Paragraphs>2</o:Paragraphs>
+  <o:CharactersWithSpaces>1127</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" 
+Month="12" Year="1899"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">13.1.2</SPAN></st1:chsdate><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"> 
+BIOS</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">启动<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>BIOS</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">的全名是基本输入输出系统<SPAN 
+lang=EN-US>(Basic Input Output System)</SPAN>。它的主要任务是提供<SPAN 
+lang=EN-US>CPU</SPAN>所需的启动指令。刚才提到了，计算机进入复位状态后，内存被自动清零，<SPAN 
+lang=EN-US>CPU</SPAN>此时是无法获得指令的。计算机的设计者们当然考虑到了这一点，因此，他们预先编好了<SPAN 
+class=GramE>供系统</SPAN>启动使用的启动程序，把它们存放在<SPAN 
+lang=EN-US>ROM</SPAN>中，并安排它到一个固定的位置，即<SPAN lang=EN-US>FFFF:0000</SPAN>，<SPAN 
+lang=EN-US>CPU</SPAN>就从<SPAN 
+lang=EN-US>BIOS</SPAN>中获得了启动所需的指令集。该指令集除了完成硬件的启动过程以外，还要将软盘或硬盘上的有关启动的系统软件调入内存。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">让我们看一看<SPAN 
+lang=EN-US>BIOS</SPAN>中启动程序的主要任务<SPAN lang=EN-US>:</SPAN>首先是上电自检<SPAN 
+lang=EN-US>(POST Power-On Self 
+Test)</SPAN>，然后是对系统内的硬件设备进行监测和连接，并把测试所得的数据存放到<SPAN 
+lang=EN-US>BIOS</SPAN>数据区，以便操作系统在启动时或启动后使用，最后，<SPAN 
+lang=EN-US>BIOS</SPAN>将从软盘或硬盘上读入<SPAN lang=EN-US>Boot 
+Loader</SPAN>，到底是从软盘还是从硬盘启动要看<SPAN lang=EN-US>BIOS</SPAN>的设置，如果是从硬盘启动，<SPAN 
+lang=EN-US>BIOS</SPAN>将读入该盘的零柱面零磁道上的<SPAN lang=EN-US>1</SPAN>扇区<SPAN 
+lang=EN-US>(MBR)</SPAN>，这个扇区上就存放着<SPAN lang=EN-US>Boot 
+Loader</SPAN>，该扇区的最后一个字存放着系统标志，如果该标志的值为<SPAN lang=EN-US>AA55</SPAN>，<SPAN 
+lang=EN-US>BIOS</SPAN>在完成硬件监测后会把控制权交给<SPAN lang=EN-US>Boot Loader</SPAN>。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">除了启动程序以外，<SPAN 
+lang=EN-US>BIOS</SPAN>还提供一组中断以便对硬件设备的访问。我们知道，当键盘上的某一键被按下时，<SPAN 
+lang=EN-US>CPU</SPAN>就会产生一个中断并把这个键的信息读入，在操作系统没有被装入以前<SPAN 
+lang=EN-US>(</SPAN>如<SPAN lang=EN-US>Linux</SPAN>的<SPAN 
+lang=EN-US>Bootsect.S</SPAN>还没有被读入<SPAN 
+lang=EN-US>)</SPAN>或操作系统没有专门提供另外的中断响应程序的情况下，中断的响应程序就是由<SPAN 
+lang=EN-US>BIOS</SPAN>提供的。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">这里介绍一个具体的<SPAN 
+lang=EN-US>BIOS</SPAN>系统，它的上电自检<SPAN lang=EN-US>(POST)</SPAN>程序包含<SPAN 
+lang=EN-US>14</SPAN>个项目，具体内容如表<SPAN lang=EN-US>13.1 </SPAN>所示，执行过<SPAN 
+lang=EN-US>POST</SPAN>后，该系统将调入硬盘上的<SPAN lang=EN-US>Boot Loader</SPAN>。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">表<SPAN 
+lang=EN-US>13.1<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>POST</SPAN>程序包含的<SPAN lang=EN-US>14</SPAN>个项目<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<TABLE class=MsoNormalTable 
+style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; MARGIN-LEFT: 5.4pt; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-top-alt: solid black 1.0pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black 1.0pt; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt" 
+cellSpacing=0 cellPadding=0 border=1>
+  <TBODY>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 48.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-top-alt: 1.0pt; mso-border-left-alt: 1.0pt; mso-border-right-alt: .5pt; mso-border-bottom-alt: .5pt; mso-border-color-alt: black; mso-border-style-alt: solid" 
+    vAlign=top width=81>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">序号<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 157.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=262>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">相应内容<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 46.35pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=77>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">序号<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 144.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=240>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">相应内容<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 48.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=81>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">1<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 157.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=262>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">CPU</SPAN><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">处理器内部寄存器测试<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 46.35pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=77>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">8<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 144.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=240>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">键盘复位和测试<SPAN 
+      lang=EN-US> <o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 48.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=81>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">2<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 157.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=262>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">32K 
+      RAM</SPAN><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">存储器测试<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 46.35pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=77>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">9<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 144.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=240>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">键盘复位和测试<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 48.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=81>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">3<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 157.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=262>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+      style="mso-spacerun: yes">&nbsp;</SPAN>DMA</SPAN><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">控制器测试<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 46.35pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=77>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">10<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 144.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=240>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">附加<SPAN 
+      lang=EN-US>RAM</SPAN>存储器测试<SPAN 
+  lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 33.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 48.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 33.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=81>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">4<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 157.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 33.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=262>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">32K 
+      RAM</SPAN><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">存储器测试<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 46.35pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 33.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=77>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">11<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 144.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 33.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=240>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">其他包含在系统中的<SPAN 
+      lang=EN-US>BIOS</SPAN>测试<SPAN 
+  lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 48.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=81>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">5<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 157.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=262>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">CRT</SPAN><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">视频接口测试<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 46.35pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=77>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">12<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 144.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=240>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">软盘设备测试<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 48.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=81>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">6<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 157.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=262>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">8259</SPAN><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">中断控制器测试<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 46.35pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=77>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">13<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 144.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=240>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+      style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">硬盘设备测试<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR 
+    style="HEIGHT: 33.15pt; page-break-inside: avoid; mso-yfti-lastrow: yes"><TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 48.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 33.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=81>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">7<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 157.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 33.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=262>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">8253</SPAN><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">定时器测试<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 46.35pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 33.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=77>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">14<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 144.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 33.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=240>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">打印机接口和串行接口测试<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>BIOS</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">中的中断程序、<SPAN 
+lang=EN-US>BIOS</SPAN>数据区中的信息这里就不作详细介绍了，如果你想进一步了解，请查阅相关资料，在本章后面的内容中，只会对所要涉及到的部分<SPAN 
+lang=EN-US>BIOS</SPAN>内容进行详细解释。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

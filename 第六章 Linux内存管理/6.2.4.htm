@@ -1,0 +1,1722 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0072)http://www.kerneltravel.net/kernel-book/第六章%20Linux内存管理/6.2.4.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>页面管理机制的初步建立</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="6.2.4.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2007-08-15T07:48:00Z</o:Created>
+  <o:LastSaved>2007-08-15T07:48:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>1815</o:Words>
+  <o:Characters>10351</o:Characters>
+  <o:Lines>86</o:Lines>
+  <o:Paragraphs>24</o:Paragraphs>
+  <o:CharactersWithSpaces>12142</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: Wingdings;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="mso-outline-level: 1"><st1:chsdate w:st="on" 
+IsROCDate="False" IsLunarDate="False" Day="30" Month="12" Year="1899"><SPAN 
+lang=EN-US>6.2.4</SPAN></st1:chsdate><SPAN lang=EN-US> </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">页面管理机制的初步建立</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为了对页面管理机制<SPAN 
+class=GramE>作出</SPAN>初步准备，</SPAN><SPAN lang=EN-US>Linux</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">使用了一种叫</SPAN><SPAN 
+lang=EN-US>bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配器</SPAN><SPAN 
+lang=EN-US>(bootmem allocator)</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的机制，这种机制仅仅用在系统引导时，它为整个物理内存建立起一个页面位图。这个位图建立在从</SPAN><SPAN 
+lang=EN-US>start_pfn</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">开始的地方，也就是说，内核<SPAN 
+class=GramE>映象</SPAN>终点</SPAN><SPAN lang=EN-US>_end</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">上方的地方。这个位图用来管理低区（例如小于</SPAN><SPAN 
+lang=EN-US>896MB</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">），因为在</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">到</SPAN><SPAN 
+lang=EN-US>896MB</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的范围内，有些页面可能保留，有些页面可能有空洞，因此，建立这个位图的目的就是要搞清楚哪一些物理页面是可以动态分配的。用来存放位图的数据结构为</SPAN><SPAN 
+lang=EN-US>bootmem_data</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（在</SPAN><SPAN 
+lang=EN-US>mm/numa.c</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中）</SPAN> 
+<SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>typedef</SPAN> struct bootmem_data {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long node_boot_start;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long node_low_pfn;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>void</SPAN> *node_bootmem_map;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long last_offset;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long last_pos;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>} 
+bootmem_data_t;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo1; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>node_boot_start</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">表示存放</SPAN><SPAN 
+lang=EN-US>bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">位图的第一个页面（即内核<SPAN 
+class=GramE>映象</SPAN>结束处的第一个页面）。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo1; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>node_low_pfn</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">表示物理内存的顶点，最高不超过</SPAN><SPAN 
+lang=EN-US>896MB</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo1; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>node_bootmem_map</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指向</SPAN><SPAN 
+lang=EN-US>bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">位图</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo1; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>last_offset </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">用来存放在前一次分配中所分配的最后一个字节相对于</SPAN><SPAN 
+lang=EN-US>last_pos</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的位移量。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo1; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>last_pos </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">用来存放前一次分配的最后一个页面的页面号。这个域用在</SPAN><SPAN 
+lang=EN-US>__alloc_bootmem_core()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数中，通过合并相邻的内存来减少内部碎片。</SPAN> 
+</P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">下面介绍与</SPAN><SPAN 
+lang=EN-US>bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">相关的几个函数，这些函数位于</SPAN><SPAN 
+lang=EN-US>mm/bootmeme.c</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US>1. init_bootmem()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数</SPAN></P>
+<P class=MsoNormal><SPAN class=GramE><SPAN 
+lang=EN-US>unsigned</SPAN></SPAN><SPAN lang=EN-US> long __init init_bootmem 
+(unsigned long start, unsigned long pages)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US>{</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>max_low_pfn = pages;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>min_low_pfn = start;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return(</SPAN>init_bootmem_core(&amp;contig_page_data, 
+start, 0, pages));</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">这个函数仅在初始化时用来建立</SPAN><SPAN 
+lang=EN-US>bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配器。这个函数实际上是</SPAN><SPAN 
+lang=EN-US>init_bootmem_core()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数的封装函数。</SPAN><SPAN 
+lang=EN-US>init_bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）函数的参数</SPAN><SPAN 
+lang=EN-US>start</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">表示内核<SPAN 
+class=GramE>映象</SPAN>结束处的页面号，而</SPAN><SPAN lang=EN-US>pages</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">表示物理内存顶点所在的页面号。而函数</SPAN><SPAN 
+lang=EN-US>init_bootmem_core()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">就是对</SPAN><SPAN 
+lang=EN-US>contig_page_data</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">变量进行初始化。下面我们来看一下对该变量的定义：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN class=GramE><SPAN 
+lang=EN-US>int</SPAN></SPAN><SPAN lang=EN-US> numnodes = 1;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>/* 
+Initialized for UMA platforms */</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN class=GramE><SPAN 
+lang=EN-US>static</SPAN></SPAN><SPAN lang=EN-US> bootmem_data_t 
+contig_bootmem_data;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US>pg_data_t 
+contig_page_data = <SPAN class=GramE>{ bdata</SPAN>: &amp;contig_bootmem_data 
+};</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">变量</SPAN><SPAN 
+lang=EN-US>contig_page_data</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的类型就是前面介绍过的</SPAN><SPAN 
+lang=EN-US>pg_data_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">数据结构。每个</SPAN><SPAN 
+lang=EN-US>pg_data_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">数据结构代表着一片均匀的、连续的内存空间。在连续空间</SPAN><SPAN 
+lang=EN-US>UMA</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构中，只有一个节点</SPAN><SPAN 
+lang=EN-US>contig_page_data</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，而在</SPAN><SPAN 
+lang=EN-US>NUMA</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构或不连续空间</SPAN><SPAN 
+lang=EN-US>UMA</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构中，有多个这样的数据结构。系统中各个节点的</SPAN><SPAN 
+lang=EN-US>pg_data_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">数据结构通过</SPAN><SPAN 
+lang=EN-US>node_next</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">连接在一起成为一个链。有一个全局量</SPAN><SPAN 
+lang=EN-US>pgdat_list</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">则指向这个链。从上面的定义可以看出，</SPAN><SPAN 
+lang=EN-US>contig_page_data</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">是链中的第一个节点。这里假定整个物理空间为均匀的、连续的，以后若发现这个假定不能成立，则将新的</SPAN><SPAN 
+lang=EN-US>pg_data_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构加入到链中。</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN 
+lang=EN-US>pg_data_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构中有个指针</SPAN><SPAN 
+lang=EN-US>bdata</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，</SPAN><SPAN 
+lang=EN-US>contig_page_data</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">被初始化为指向</SPAN><SPAN 
+lang=EN-US>bootmem_data_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">数据结构。下面我们来看</SPAN><SPAN 
+lang=EN-US>init_bootmem_core</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）函数的具体代码：</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US>/*</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* Called once to set up the allocator 
+itself.</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;</SPAN>*/</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN class=GramE><SPAN 
+lang=EN-US>static</SPAN></SPAN><SPAN lang=EN-US> unsigned long __init 
+init_bootmem_core (pg_data_t *pgdat,</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long mapstart, unsigned long start, 
+unsigned long end)</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=PT-BR 
+style="mso-ansi-language: PT-BR">{<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=PT-BR 
+style="mso-ansi-language: PT-BR"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>bootmem_data_t *bdata = pgdat-&gt;bdata;<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=PT-BR 
+style="mso-ansi-language: PT-BR"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN class=GramE><SPAN lang=EN-US>unsigned</SPAN></SPAN><SPAN 
+lang=EN-US> long mapsize = ((end - start)+7)/8;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>pgdat</SPAN>-&gt;node_next = pgdat_list;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>pgdat_list = pgdat;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>mapsize</SPAN> = (mapsize + (sizeof(long) - 1UL)) &amp; 
+~(sizeof(long) - 1UL);</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+class=GramE>bdata</SPAN>-&gt;node_bootmem_map = phys_to_virt(mapstart &lt;&lt; 
+PAGE_SHIFT);</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>bdata</SPAN>-&gt;node_boot_start = (start &lt;&lt; 
+PAGE_SHIFT);</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>bdata</SPAN>-&gt;node_low_pfn = end;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/*</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>* Initially all pages are reserved - setup_<SPAN 
+class=GramE>arch(</SPAN>) has to</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>* register free RAM areas explicitly.</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*/</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>memset(</SPAN>bdata-&gt;node_bootmem_map, 0xff, 
+mapsize);</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> mapsize;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">下面对这一函数给予说明：</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">变量</SPAN><SPAN 
+lang=EN-US>mapsize</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">存放位图的大小。</SPAN><SPAN 
+lang=EN-US>(end - start)</SPAN><SPAN class=GramE><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">给出现</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">有的页面数，再加个</SPAN><SPAN 
+lang=EN-US>7</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">是为了向上取整，除以</SPAN><SPAN 
+lang=EN-US>8</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">就获得了所需的字节数（因为每个字节映射</SPAN><SPAN 
+lang=EN-US>8</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">个页面）。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">变量</SPAN><SPAN 
+lang=EN-US>pgdat_list</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">用来指向节点所形成的循环链表首部，因为只有一个节点，因此使</SPAN><SPAN 
+lang=EN-US>pgdat_list</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指向自己。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">接下来的一句使</SPAN><SPAN 
+lang=EN-US>memsize</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">成为下一个</SPAN><SPAN 
+lang=EN-US>4</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的倍数（</SPAN><SPAN 
+lang=EN-US>4</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为</SPAN><SPAN 
+lang=EN-US>CPU</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的字长）。例如，假设有</SPAN><SPAN 
+lang=EN-US>40</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">个物理页面，因此，我们可以得出</SPAN><SPAN 
+lang=EN-US>memsize</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为</SPAN><SPAN 
+lang=EN-US>5</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">个字节。所以，上面的操作就变为（</SPAN><SPAN 
+lang=EN-US>5</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">＋（</SPAN><SPAN 
+lang=EN-US>4</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">－</SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">））＆</SPAN><SPAN 
+lang=EN-US>~(4-1)</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">即</SPAN><SPAN 
+lang=EN-US>(00001000&amp;11111100)</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，最低的两位变为</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，其结果为</SPAN><SPAN 
+lang=EN-US>8</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。这就有效地使</SPAN><SPAN 
+lang=EN-US>memsize</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">变为</SPAN><SPAN 
+lang=EN-US>4</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的倍数。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>phys_to_virt(mapstart &lt;&lt; 
+PAGE_SHIFT)</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">把给定的物理地址转换为虚地址。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">用节点的起始物理地址初始化</SPAN><SPAN 
+lang=EN-US>node_boot_start</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（这里为</SPAN><SPAN 
+lang=EN-US>0x00000000</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">用物理内存节点的页面号初始化</SPAN><SPAN 
+lang=EN-US>node_low_pfn</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">初始化所有被保留的页面，即通过把页面中的所有位都置为</SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">来标记保留的页面</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">返回位图的大小。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US>2. free_bootmem()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">这个函数把给定范围的页面标记为空闲（即可用），也就是，把位图中某些位清</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，表示相应的物理内存可以投入分配。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">原函数为：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>void</SPAN> __init free_bootmem (unsigned long addr, unsigned long 
+size)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>{</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return(</SPAN>free_bootmem_core(contig_page_data.bdata, 
+addr, size));</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>}</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">从上面可以看出，</SPAN><SPAN 
+lang=EN-US>free_bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）是个封装函数，实际的工作是由</SPAN><SPAN 
+lang=EN-US>free_bootmem_core()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数完成的：</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN class=GramE><SPAN 
+lang=EN-US>static</SPAN></SPAN><SPAN lang=EN-US> void __init 
+free_bootmem_core(bootmem_data_t *bdata, unsigned long addr, unsigned long 
+size)</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US>{</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+class=GramE>unsigned</SPAN> long i;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long start;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/*</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>* <SPAN class=GramE>round</SPAN> down end of usable mem, partially free 
+pages are</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>* considered reserved.</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*/</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long sidx;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long eidx = (addr + size - 
+bdata-&gt;node_boot_start)/PAGE_SIZE;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long end = (addr + 
+size)/PAGE_SIZE;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (!size) BUG();</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN class=GramE>if</SPAN> (end &gt; 
+bdata-&gt;node_low_pfn)</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt; mso-outline-level: 1"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>BUG(</SPAN>);</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;</SPAN>/*</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>* Round up the beginning of the address.</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*/</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>start</SPAN> = (addr + PAGE_SIZE-1) / 
+PAGE_SIZE;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>sidx</SPAN> = start - 
+(bdata-&gt;node_boot_start/PAGE_SIZE);</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>for</SPAN> (i = sidx; i &lt; eidx; i++) {</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (!test_and_clear_bit(i, 
+bdata-&gt;node_bootmem_map))</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt; mso-outline-level: 1"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>BUG(</SPAN>);</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>}</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN lang=EN-US>}</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">对此函数的解释如下：</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 32.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">变量</SPAN><SPAN 
+lang=EN-US>edix</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">被初始化为页面总数。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 32.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">变量</SPAN><SPAN 
+lang=EN-US>end</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">被初始化为最后一个页面的页面号。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 32.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">进行两个可能的条件检查</SPAN><SPAN 
+lang=EN-US>.</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 32.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>start</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">初始化为第一个页面的页面号（向上取整），而</SPAN><SPAN 
+lang=EN-US>sidx(start index)</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">初始化为相对于</SPAN><SPAN 
+lang=EN-US>node_boot_start.</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的页面号。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 32.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">清位图中从</SPAN><SPAN 
+lang=EN-US>sidx</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">到</SPAN><SPAN 
+lang=EN-US>eidx</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的所有位，即把这些页面标记为可用。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US>3. reserve_bootmem()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">这个函数用来保留页面。为了保留一个页面，只需要在</SPAN><SPAN 
+lang=EN-US>bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">位图中把相应的位置为</SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">即可。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">原函数为：</SPAN><SPAN 
+lang=EN-US> </SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN><SPAN class=GramE>void</SPAN> __init reserve_bootmem (unsigned long addr, 
+unsigned long size)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN>{</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>reserve_bootmem_<SPAN class=GramE>core(</SPAN>contig_page_data.bdata, 
+addr, size);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>reserve_bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）为封装函数，实际调用的是</SPAN><SPAN 
+lang=EN-US>reserve_bootmem_core</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）函数：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN><SPAN class=GramE>static</SPAN> void __init 
+reserve_bootmem_core(bootmem_data_t *bdata, unsigned long addr, unsigned long 
+size)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US>{</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long i;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/*</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>* <SPAN class=GramE>round</SPAN> up, partially reserved pages are 
+considered</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>* <SPAN class=GramE>fully</SPAN> reserved.</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*/</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long sidx = (addr - 
+bdata-&gt;node_boot_start)/PAGE_SIZE;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long eidx = (addr + size - 
+bdata-&gt;node_boot_start + </SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>PAGE_SIZE-1)/PAGE_SIZE;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long end = (addr + size + 
+PAGE_SIZE-1)/PAGE_SIZE;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (!size) BUG();</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+class=GramE>if</SPAN> (sidx &lt; 0)</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>BUG(</SPAN>);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (eidx &lt; 0)</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>BUG(</SPAN>);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (sidx &gt;= eidx)</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>BUG(</SPAN>);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> ((addr &gt;&gt; PAGE_SHIFT) &gt;= 
+bdata-&gt;node_low_pfn)</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>BUG(</SPAN>);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (end &gt; bdata-&gt;node_low_pfn)</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>BUG(</SPAN>);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>for</SPAN> (i = sidx; i &lt; eidx; i++)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (test_and_set_bit(i, 
+bdata-&gt;node_bootmem_map))</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>printk(</SPAN>"hm, page %08lx reserved twice.\n", 
+i*PAGE_SIZE);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US>}</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">对此函数的解释如下：</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 32.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>sidx (start index)</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">初始化为相对于</SPAN><SPAN 
+lang=EN-US>node_boot_start</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的页面号</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 32.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">变量</SPAN><SPAN 
+lang=EN-US>eidx</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">初始化为页面总数（向上取整）。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 32.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">变量</SPAN><SPAN 
+lang=EN-US>end</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">初始化为最后一个页面的页面号（向上取整）。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 32.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">进行各种可能的条件检查</SPAN><SPAN 
+lang=EN-US>.</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 32.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">把位图中从</SPAN><SPAN 
+lang=EN-US>sidx</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">到</SPAN><SPAN 
+lang=EN-US>eidx</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的所有位置</SPAN><SPAN 
+lang=EN-US>1</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US>4</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">．</SPAN><SPAN 
+lang=EN-US>__alloc_bootmem()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">这个函数以循环轮转的方式从不同节点分配页面。因为在</SPAN><SPAN 
+lang=EN-US>i386</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">上只有一个节点，因此只循环一次。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数原型为：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>void</SPAN> * __alloc_bootmem (unsigned long size,</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long align, </SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long goal);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>void</SPAN> * __alloc_bootmem_core (bootmem_data_t *bdata, 
+</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long size,</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long align,</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long goal);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">其中</SPAN><SPAN 
+lang=EN-US>__alloc_bootmem()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为封装函数，实际调用的函数为</SPAN><SPAN 
+lang=EN-US>__alloc_bootmem_core </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（），因为</SPAN><SPAN 
+lang=EN-US>__alloc_bootmem_core </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）函数比较长，下面分片断来进行仔细分析：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long i, start = 0;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>void</SPAN> *ret;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long offset, remaining_size;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long areasize, preferred, incr;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long eidx = bdata-&gt;node_low_pfn - </SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>(<SPAN class=GramE>bdata</SPAN>-&gt;node_boot_start &gt;&gt; 
+PAGE_SHIFT);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">把</SPAN><SPAN 
+lang=EN-US>eidx</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">初始化为本节点中现有页面的总数。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>if</SPAN> (!size) BUG();</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>if</SPAN> (align &amp; (align-1))</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>BUG(</SPAN>);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt; mso-outline-level: 1"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">进行条件检查</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/*</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>* We try to 
+allocate bootmem pages above 'goal'</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>* <SPAN 
+class=GramE>first</SPAN>, then we try to allocate lower pages.</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*/</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>if</SPAN> (goal &amp;&amp; (goal &gt;= bdata-&gt;node_boot_start) 
+&amp;&amp; </SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-tab-count: 1"></SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>((goal &gt;&gt; PAGE_SHIFT) &lt; 
+bdata-&gt;node_low_pfn)) {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>preferred</SPAN> = goal - 
+bdata-&gt;node_boot_start;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>} 
+else</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>preferred</SPAN> = 0;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>preferred</SPAN> = ((preferred + align - 1) &amp; ~(align - 1)) 
+&gt;&gt; PAGE_SHIFT;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">开始分配后首选页的计算分为两步：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（</SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）如果</SPAN><SPAN 
+lang=EN-US>goal</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为非</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">且有效，则给</SPAN><SPAN 
+lang=EN-US>preferred</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">赋初值，否则，其初值为</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（</SPAN><SPAN 
+lang=EN-US>2</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）根据参数</SPAN><SPAN 
+lang=EN-US>align </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">来对齐</SPAN><SPAN 
+lang=EN-US>preferred</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的物理地址。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>areasize</SPAN> = (size+PAGE_SIZE-1)/PAGE_SIZE;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt; mso-outline-level: 1"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">获得所需页面的总数（向上取整）</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>incr</SPAN> = align &gt;&gt; PAGE_SHIFT ? : 1;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt; mso-outline-level: 1"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">根据对齐的大小来选择增加值。除非大于</SPAN><SPAN 
+lang=EN-US>4K</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（很少见），否则增加值为</SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>restart_scan:</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>for</SPAN> (i = preferred; i &lt; eidx; i += incr) 
+{</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long j;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;</SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;</SPAN><SPAN class=GramE>if</SPAN> 
+(test_bit(i, bdata-&gt;node_bootmem_map))</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>continue</SPAN>;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">这个循环用来从首选页面号开始，找到空闲的页面号。</SPAN><SPAN 
+lang=EN-US>test_bit()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">宏用来测试给定的位，如果给定位为</SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，则返回</SPAN><SPAN 
+lang=EN-US>1</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN class=GramE>for</SPAN> 
+(j = i + 1; j &lt; i + areasize; ++j) {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (j &gt;= eidx)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>goto</SPAN> fail_block;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (test_bit (j, 
+bdata-&gt;node_bootmem_map))</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>goto</SPAN> fail_block;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">这个循环用来查看在首次满足内存需求以后，是否还有足够的空闲页面。如果没有空闲页，就跳到</SPAN><I 
+style="mso-bidi-font-style: normal"><SPAN lang=EN-US>fail_block</SPAN></I><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN class=GramE>start</SPAN> = 
+i;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN class=GramE>goto</SPAN> 
+found;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt; mso-outline-level: 1"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">如果一直到了这里，则说明从</SPAN><SPAN 
+lang=EN-US>i</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">开始找到了足够的页面，跳过</SPAN><SPAN 
+lang=EN-US>fail_block</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">并继续。</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>fail_block<SPAN class=GramE>:;</SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>if</SPAN> (preferred) {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+class=GramE>preferred</SPAN> = 0;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN class=GramE>goto</SPAN> 
+restart_scan;<SPAN style="mso-spacerun: yes">&nbsp; </SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>return</SPAN> NULL;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">如果到了这里，从首选页面中没有找到满足需要的连续页面，就忽略</SPAN><SPAN 
+lang=EN-US>preferred</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的值，并从</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">开始扫描。如果</SPAN><SPAN 
+lang=EN-US>preferred</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为</SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，但没有找到满足需要的足够页面，则返回</SPAN><SPAN 
+lang=EN-US>NULL</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>found</SPAN>:</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">已经找到足够的内存，继续处理请求。</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (start &gt;= eidx)</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+class=GramE>BUG(</SPAN>);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt; mso-outline-level: 1"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">进行条件检查。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/*</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>* Is the 
+next page of the previous allocation-end the <SPAN 
+class=GramE>start</SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>* <SPAN 
+class=GramE>of</SPAN> this allocation's buffer? If yes then we can 
+'merge'</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>* <SPAN 
+class=GramE>the</SPAN> previous partial page with this allocation.</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*/</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>if</SPAN> (align &lt;= PAGE_SIZE &amp;&amp; bdata-&gt;last_offset 
+</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>&amp;&amp; bdata-&gt;last_pos+1 == start) {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>offset</SPAN> = (bdata-&gt;last_offset+align-1) &amp; 
+~(align-1);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN class=GramE>if</SPAN> 
+(offset &gt; PAGE_SIZE)</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>BUG(</SPAN>);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>remaining_size = 
+PAGE_SIZE-offset;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>if</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">语句检查下列条件：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（</SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）所请求对齐的值小于页的大小（</SPAN><SPAN 
+lang=EN-US>4k</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）。</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（</SPAN><SPAN 
+lang=EN-US>2</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）变量</SPAN><SPAN 
+lang=EN-US>last_offset</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为非</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。如果为</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，则说明前一次分配达到了一个非常好的页面边界，没有内部碎片。</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（</SPAN><SPAN 
+lang=EN-US>3</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）检查这次请求的内存是否与前一次请求的内存是相临的，如果是，则把两次分配合在一起进行。</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">如果以上三个条件都满足，则用前一次分配中最后一页剩余的空间初始化</SPAN><SPAN 
+lang=EN-US>remaining_size</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes"></SPAN></SPAN>&nbsp;</P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN class=GramE>if</SPAN> 
+(size &lt; remaining_size) {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>areasize</SPAN> = 0;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>// 
+last_pos unchanged</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>bdata</SPAN>-&gt;last_offset = offset+size;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>ret</SPAN> = phys_to_virt(bdata-&gt;last_pos*PAGE_SIZE 
+</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>+ <SPAN class=GramE>offset</SPAN> + 
+bdata-&gt;node_boot_start);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">如果请求内存的大小小于前一次分配中最后一页中的可用空间，则没必要分配任何新的页。变量</SPAN><SPAN 
+lang=EN-US>last_offset</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">增加到新的偏移量，而</SPAN><SPAN 
+lang=EN-US>last_pos</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">保持不变，因为没有增加新的页。把这次新分配的起始地址存放在变量</SPAN><SPAN 
+lang=EN-US>ret</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中。宏</SPAN><SPAN 
+lang=EN-US>phys_to_virt()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">返回给定物理地址的虚地址。</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>} else {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>remaining_size = size - remaining_size;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>areasize</SPAN> = 
+(remaining_size+PAGE_SIZE-1)/PAGE_SIZE;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>ret</SPAN> = phys_to_virt(bdata-&gt;last_pos*PAGE_SIZE 
+</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>+ <SPAN class=GramE>offset</SPAN> + 
+bdata-&gt;node_boot_start);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>bdata</SPAN>-&gt;last_pos = 
+start+areasize-1;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>bdata</SPAN>-&gt;last_offset = 
+remaining_size;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">所请求的大小大于剩余的大小。首先求出所需的页面数，然后更新变量</SPAN><SPAN 
+lang=EN-US>last_pos </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">和</SPAN><SPAN 
+lang=EN-US> last_offset</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">例如，在前一次分配中，如果分配了</SPAN><SPAN 
+lang=EN-US>9k</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，则占用</SPAN><SPAN 
+lang=EN-US>3</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">个页面，内部碎片为</SPAN><SPAN 
+lang=EN-US>12k-9k=3k</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。因此，</SPAN><SPAN 
+lang=EN-US>page_offset</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为</SPAN><SPAN 
+lang=EN-US>1k</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，且剩余大小为</SPAN><SPAN 
+lang=EN-US>3k</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。如果新的请求为</SPAN><SPAN 
+lang=EN-US>1k</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，则第</SPAN><SPAN 
+lang=EN-US>3</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">个页面本身就能满足要求，但是，如果请求的大小为</SPAN><SPAN 
+lang=EN-US>10k</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，则需要新分配</SPAN><SPAN 
+lang=EN-US>((10 k- 3k) + PAGE_SIZE-1)/PAGE_SIZE</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，即</SPAN><SPAN 
+lang=EN-US>2</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">个页面，因此，</SPAN><SPAN 
+lang=EN-US>page_offset</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为</SPAN><SPAN 
+lang=EN-US>3k</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>bdata</SPAN>-&gt;last_offset &amp;= ~PAGE_MASK;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>} else 
+{</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>bdata</SPAN>-&gt;last_pos = start + areasize - 1;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>bdata</SPAN>-&gt;last_offset = size &amp; ~PAGE_MASK;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN class=GramE>ret</SPAN> 
+= phys_to_virt(start * PAGE_SIZE + </SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>bdata</SPAN>-&gt;node_boot_start);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">如果因为某些条件未满足而导致不能进行合并，则执行这段代码，我们刚刚把</SPAN><SPAN 
+lang=EN-US>last_pos </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">和</SPAN><SPAN 
+lang=EN-US>last_offset</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">直接设置为新的值，而未考虑它们原先的值。</SPAN><SPAN 
+lang=EN-US>last_pos</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的<SPAN 
+class=GramE>值还要</SPAN>加上所请求的页面数，而新</SPAN><SPAN 
+lang=EN-US>page_offset</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">值的计算就是屏蔽<SPAN 
+class=GramE>掉除了</SPAN>获得页偏移量位的所有位，即“</SPAN><SPAN lang=EN-US>size &amp;<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>PAGE_MASK</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">”，</SPAN><SPAN 
+lang=EN-US> PAGE_MASK </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为</SPAN><SPAN 
+lang=EN-US> 0x00000FFF</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，用</SPAN><SPAN 
+lang=EN-US>PAGE_MASK</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的求<SPAN 
+class=GramE>反正好</SPAN>得到页的偏移量。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>/*</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>* Reserve 
+the area now:</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*/</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>for</SPAN> (i = start; i &lt; start+areasize; i++)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (test_and_set_bit(i, 
+bdata-&gt;node_bootmem_map))</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>BUG(</SPAN>);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>memset(</SPAN>ret, 0, size);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>return</SPAN> ret;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">现在，我们有了内存，就需要保留它。宏</SPAN><SPAN 
+lang=EN-US>test_and_set_bit()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">用来测试并置位，如果某位原先的值为</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，则它返回</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，如果为</SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，则返回</SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。还有一个条件判断语句，进行条件判断（这种条件出现的可能性非常小，除非</SPAN><SPAN 
+lang=EN-US>RAM</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">坏）。然后，把这块内存初始化为</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，并返回给调用它的函数。</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US>5. free_all_bootmem()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">这个函数用来在引导时释放页面，并清除</SPAN><SPAN 
+lang=EN-US>bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配器。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数原型为：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>void</SPAN> free_all_bootmem (void);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>void</SPAN> free_all_bootmem_core(pg_data_t *pgdat);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">同前面的函数调用形式类似，</SPAN><SPAN 
+lang=EN-US>free_all_bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）为封装函数，实际调用</SPAN><SPAN 
+lang=EN-US>free_all_bootmem_core</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）函数。下面，我们对</SPAN><SPAN 
+lang=EN-US>free_all_bootmem_core</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）函数分片断来介绍：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>struct</SPAN> page *page = pgdat-&gt;node_mem_map;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN lang=PT-BR style="mso-ansi-language: PT-BR">bootmem_data_t 
+*bdata = pgdat-&gt;bdata;<o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=PT-BR style="mso-ansi-language: PT-BR"><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN class=GramE><SPAN lang=EN-US>unsigned</SPAN></SPAN><SPAN 
+lang=EN-US> long i, count, total = 0;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long idx;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>if</SPAN> (!bdata-&gt;node_bootmem_map) BUG();</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>count</SPAN> = 0;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>idx</SPAN> = bdata-&gt;node_low_pfn - (bdata-&gt;node_boot_start 
+</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>&gt;&gt; PAGE_SHIFT);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">把</SPAN><SPAN 
+lang=EN-US>idx</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">初始化为从内核<SPAN 
+class=GramE>映象</SPAN>结束处到内存顶点处的页面数。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>for</SPAN> (i = 0; i &lt; idx; i++, page++) {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN class=GramE>if</SPAN> 
+(!test_bit(i, bdata-&gt;node_bootmem_map)) {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>count</SPAN>++;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>ClearPageReserved(</SPAN>page);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>set_page_<SPAN class=GramE>count(</SPAN>page, 1);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>__free_<SPAN class=GramE>page(</SPAN>page);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">搜索</SPAN><SPAN 
+lang=EN-US>bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">位图，找到空闲页，并把</SPAN><SPAN 
+lang=EN-US>mem_map</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中对应的项标记为空闲。</SPAN><SPAN 
+lang=EN-US>set_page_count()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数把</SPAN><SPAN 
+lang=EN-US>page</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构的</SPAN><SPAN 
+lang=EN-US>count</SPAN><SPAN class=GramE><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">域置</SPAN></SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，而</SPAN><SPAN 
+lang=EN-US>__free_page()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">真正的释放页面，并修改伙伴（</SPAN><SPAN 
+lang=EN-US>buddy</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）系统的位图。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>total</SPAN> += count;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/*</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>* Now free 
+the allocator bitmap itself, it's not</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>* needed 
+anymore:</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*/</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>page</SPAN> = virt_to_page(bdata-&gt;node_bootmem_map);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>count</SPAN> = 0;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>for</SPAN> (i = 0; i &lt; 
+((bdata-&gt;node_low_pfn-(bdata-&gt;node_boot_start </SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>&gt;&gt; 
+PAGE_SHIFT))/8 + PAGE_SIZE-1)/PAGE_SIZE;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>i++<SPAN class=GramE>,page</SPAN>++) {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>count</SPAN>++;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>ClearPageReserved(</SPAN>page);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>set_page_<SPAN class=GramE>count(</SPAN>page, 1);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>__free_<SPAN class=GramE>page(</SPAN>page);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">获得</SPAN><SPAN 
+lang=EN-US>bootmem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">位图的地址，</SPAN> 
+<SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">并释放它所在的页面。</SPAN><SPAN 
+lang=EN-US><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp; </SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>total</SPAN> += count;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>bdata</SPAN>-&gt;node_bootmem_map = NULL;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>return</SPAN> total;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">把该存储节点的</SPAN><SPAN 
+lang=EN-US>bootmem_map</SPAN><SPAN class=GramE><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">域置为</SPAN></SPAN><SPAN 
+lang=EN-US>NULL</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，并返回空闲页面的总数。</SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

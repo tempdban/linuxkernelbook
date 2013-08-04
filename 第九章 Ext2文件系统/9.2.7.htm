@@ -1,0 +1,946 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0071)http://www.kerneltravel.net/kernel-book/第九章%20Ext2文件系统/9.2.7.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>Ext2的目录项及文件的定位</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="9.2.7.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-16T10:09:00Z</o:Created>
+  <o:LastSaved>2007-08-16T10:09:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>770</o:Words>
+  <o:Characters>4393</o:Characters>
+  <o:Lines>36</o:Lines>
+  <o:Paragraphs>10</o:Paragraphs>
+  <o:CharactersWithSpaces>5153</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" 
+Month="12" Year="1899"><B style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">9.2.7</SPAN></B></st1:chsdate><B 
+style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Ext2</SPAN></B><B 
+style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">的目录项及文件的定位<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">文件系统一个很重要的问题就是文件的定位，如何通过一个路径来找到一个文件的具体位置，这就要依靠<SPAN 
+lang=EN-US>ext2_dir_entry</SPAN>这个结构。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="mso-layout-grid-align: none"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">1</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">．<SPAN 
+lang=EN-US>Ext2</SPAN>目录项结构<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">在<SPAN 
+lang=EN-US>Ext2</SPAN>中，目录是一种特殊的文件，它是由<SPAN 
+lang=EN-US>ext2_dir_entry</SPAN>这个结构组成的列表。这个结构是变长的，这样可以减少磁盘空间的浪费，但是，它还是有一定的长度方面的限制，一是文件名最长只能为<SPAN 
+lang=EN-US>255</SPAN>个字符。二是尽管文件名长度可以不限（在<SPAN 
+lang=EN-US>255</SPAN>个字符之内），但系统自动将之变成<SPAN lang=EN-US>4</SPAN>的整数<SPAN 
+class=GramE>倍</SPAN>，不足的地方用<SPAN lang=EN-US>null</SPAN>字符（<SPAN 
+lang=EN-US>\0</SPAN>）填充。目录中有文件和子目录，每一项对应一个<SPAN 
+lang=EN-US>ext2_dir_entry</SPAN>。该结构在<SPAN 
+lang=EN-US>include/Linux/ext2_fs.h</SPAN>中定义如下：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>/*<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* Structure of a directory 
+entry<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>*/<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>#define EXT2_NAME_LEN 
+255<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">struct</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"> 
+ext2_dir_entry {<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>__u32<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>inode;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* Inode number */<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>__u16<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>rec_len;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;</SPAN>/* Directory entry 
+length */<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>__u16<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>name_len;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* Name length */<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>char</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>name[EXT2_NAME_LEN];<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* File name 
+*/<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">};<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">这是老版本的定义方式，在<SPAN 
+lang=EN-US>ext2_fs.h</SPAN>中还有一种新的定义方式：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>/*<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* The new version of the directory 
+entry.<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>Since EXT2 structures 
+are<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* stored in <SPAN 
+class=GramE>intel</SPAN> byte order, and the name_len field could never 
+be<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* <SPAN class=GramE>bigger</SPAN> than 
+255 chars, it's safe to reclaim the extra byte for the<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* <SPAN class=GramE>file_type</SPAN> 
+field.<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>*/<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">struct</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"> 
+ext2_dir_entry_2 {<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>__u32<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>inode;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* Inode number */<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>__u16<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>rec_len;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* Directory entry length */<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>__u8<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; 
+</SPAN>name_len;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* Name length */<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>__u8<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; 
+</SPAN>file_type;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>char</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>name[EXT2_NAME_LEN];<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* File name 
+*/<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">};<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">其二者的差异在于，一是新版中结构名改为<SPAN 
+lang=EN-US>ext2_dir_entry_2</SPAN>；二是老版本中<SPAN 
+lang=EN-US>ext2_dir_entry</SPAN>中的<SPAN 
+lang=EN-US>name_len</SPAN>为无符号短整数，而新版中则改为<SPAN 
+lang=EN-US>8</SPAN>位的无符号字符，腾出一半用作文件类型。目前已定义的文件类型为：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>*<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* Ext2 directory file types.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Only the low 3 bits are used.<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>The<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* <SPAN class=GramE>other</SPAN> bits 
+are reserved for now.<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>*/<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">enum</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"> 
+{<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>EXT2_FT_UNKNOWN,<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp; </SPAN>/*</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">未知<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>EXT2_FT_REG_FILE, <SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp; 
+</SPAN>/*</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">常规文件<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>EXT2_FT_DIR,<SPAN style="mso-tab-count: 1">&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1"></SPAN>/*</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">目录文件<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN>EXT2_FT_CHRDEV,<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp; </SPAN>/*</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">字符设备文件<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>EXT2_FT_BLKDEV,<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp; </SPAN>/*</SPAN><SPAN 
+class=GramE><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">块设备</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">文件<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>EXT2_FT_FIFO,<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-tab-count: 1"></SPAN>/*</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">命名管道文件<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>EXT2_FT_SOCK,<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-tab-count: 1"></SPAN>/*</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">套接<SPAN 
+class=GramE>字文件</SPAN><SPAN lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>EXT2_FT_SYMLINK, <SPAN style="mso-tab-count: 1"></SPAN>/*</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">符号<SPAN 
+class=GramE>连文件</SPAN><SPAN lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>EXT2_FT_MAX<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-tab-count: 1"></SPAN>/*</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">文件类型的最大个数<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">};<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">2</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">．各种文件类型如何使用数据块<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">我们说，不管哪种类型的文件，每个文件都对应一个<SPAN 
+lang=EN-US>inode</SPAN>结构，在<SPAN lang=EN-US>inode</SPAN>结构中有一个指向数据块的指针<SPAN 
+lang=EN-US>i_blaock</SPAN>，用来标识分配给文件的数据块。但是<SPAN 
+lang=EN-US>Ext2</SPAN>所定义的文件类型以不同的方式使用数据块。有些类型的文件不存放数据，因此，根本不需要数据块，下面对不同文件类型如何使用数据<SPAN 
+class=GramE>块给予</SPAN>说明。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">（<SPAN 
+lang=EN-US>1</SPAN>）常规文件<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">常规文件时最常用的文件。常规文件在刚创建时是空的，并不需要数据块，只有在开始有数据时才需要数据块；可以用系统调用<SPAN 
+lang=EN-US>truncate()</SPAN>清空一个常规文件。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">（<SPAN 
+lang=EN-US>2</SPAN>）目录文件<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>Ext2</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">以一种特殊的方式实现了目录，这种文件的数据块中存放的就是<SPAN 
+lang=EN-US>ext2_dir_entry_2</SPAN>结构。如前所述，这个结构的最后一个域是可变长度数组，因此该结构的长度是可变的。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">在<SPAN 
+lang=EN-US>ext2_dir_entry_2</SPAN>结构中，因为<SPAN 
+lang=EN-US>rec_len</SPAN>域是目录项的长度，把它与目录项的起始地址相加就得到下一个目录项的起始地址，因此说，<SPAN 
+lang=EN-US>rec_len</SPAN>可以被解释为指向下一个有效目录项的指针。为了删除一个目录项，把<SPAN 
+lang=EN-US>ext2_dir_entry_2</SPAN>的<SPAN lang=EN-US>inode</SPAN><SPAN 
+class=GramE>域置为</SPAN><SPAN lang=EN-US>0</SPAN>并适当增加前一个有效目录项<SPAN 
+lang=EN-US>rec_len</SPAN>域的值就可以了。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">（<SPAN 
+lang=EN-US>3</SPAN>）符号连<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">如果符号连的路径名小于<SPAN 
+lang=EN-US>60</SPAN>个字符，就把它存放在索引节点的<SPAN lang=EN-US>i_blaock</SPAN>域，该域是由<SPAN 
+lang=EN-US>15</SPAN>个<SPAN lang=EN-US>4</SPAN>字节整数组成的数组，因此无需数据块。但是，如果路径名大于<SPAN 
+lang=EN-US>60</SPAN>个字符，就需要一个单独的数据块。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">（<SPAN 
+lang=EN-US>4</SPAN>）设备文件、管道和套接字<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">这些类型的文件不需要数据块。所有必要的信息都存放在索引节点中。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">3</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">．文件的定位<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">文件的定位是一个复杂的过程，我们先看一个具体的例子，然后再结合上面的数据结构具体介绍一下如何找到一个目录项的过程。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">如果要找的文件为普通文件，则可通过文件所对应的索引节点找到文件的具体位置，如果是一个目录文件，则也可通过相应的索引节点找到目录文件具体所在，然后再从这个目录文件中进行下一步查找，来看一个具体的例子。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">假设路径为<SPAN 
+lang=EN-US>/home/user1/file1</SPAN>，<SPAN lang=EN-US>home</SPAN>和<SPAN 
+lang=EN-US>user1</SPAN>是目录名，而<SPAN 
+lang=EN-US>file1</SPAN>为文件名。为了找到这个文件，有两种途径，一是从根目录开始查找，二是从当前目录开始查找。假设我们从根目录查找，则必须先找到根目录的节点，这个节点的位置在<SPAN 
+lang=EN-US>VFS</SPAN>中的超级块中已经给出，然后可找到根目录文件，其中必有<SPAN 
+lang=EN-US>home</SPAN>所对应的目录项，由此可先找到<SPAN lang=EN-US>home</SPAN>节点，从而<SPAN 
+lang=EN-US>home</SPAN>的目录文件，然后依次是<SPAN 
+lang=EN-US>user1</SPAN>的节点和目录文件，最后，在该目录文件中的<SPAN 
+lang=EN-US>file1</SPAN>目录项中找到<SPAN lang=EN-US>file1</SPAN>的节点，至此，已经可以找到<SPAN 
+lang=EN-US>file1</SPAN>文件的具体所在了。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">目录中还有两个特殊的子目录：“<B 
+style="mso-bidi-font-weight: normal"><SPAN lang=EN-US>.</SPAN></B>”<SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN></SPAN>和 </SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">“</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><B 
+style="mso-bidi-font-weight: normal">. .</B></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">”，分别代表当前目录和父目录。它们是无法被删除的，其作用就是用来进行相对路径的查找。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">现在，我们来分析一下<SPAN 
+lang=EN-US>fs/ext2/dir.c</SPAN>中的函数<SPAN 
+lang=EN-US>ext2_find_entry</SPAN>（），该函数从磁盘上找到并读入当前节点的目录项，其代码及解释如下：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>/*<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>*<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>ext2_find_<SPAN 
+class=GramE>entry()</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>*<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>* finds an entry in 
+the specified directory with the wanted name.</SPAN> It<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* <SPAN class=GramE>returns</SPAN> the 
+page in which the entry was found, and the entry itself<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN lang=PT-BR 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR">* 
+(as a parameter - res_dir). </SPAN><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">Page 
+is returned mapped and unlocked.<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* Entry is guaranteed to be 
+valid.<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>*/<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">typedef 
+struct ext2_dir_entry_2 ext2_dirent</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">；<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">struct</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"> 
+ext2_dir_entry_2 * ext2_find_entry (struct inode * dir,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> dentry *dentry, struct page ** 
+res_page)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">{<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>const char *name 
+= dentry-&gt;d_name.name; </SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">／<SPAN 
+lang=EN-US>*</SPAN>目录项名<SPAN lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>int 
+namelen = dentry-&gt;d_name.len;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">／<SPAN 
+lang=EN-US>*</SPAN>目录项名的长度<SPAN lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>unsigned reclen = EXT2_DIR_REC_LEN(namelen); </SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">／<SPAN 
+lang=EN-US>*</SPAN>目录项的长度<SPAN lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long start, n;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>unsigned long npages = dir_pages(dir);<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">／<SPAN 
+lang=EN-US>*</SPAN>把以字节为单位的文件大小<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 252pt; TEXT-INDENT: 36pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">转换为物理页面数<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> page *page = NULL;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>ext2_dirent * de;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">／<SPAN 
+lang=EN-US>*de</SPAN>为要返回的<SPAN lang=EN-US>Ext2</SPAN>目录<SPAN 
+class=GramE>项结构</SPAN><SPAN lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* OFFSET_CACHE */<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*res_page = NULL;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>start = dir-&gt;u.ext2_i.i_dir_start_lookup; </SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">／<SPAN 
+lang=EN-US>*</SPAN>目录项在内存的起始位置<SPAN lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (start &gt;= npages)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;</SPAN><SPAN 
+class=GramE>start</SPAN> = 0;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>n = start;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>do</SPAN> {<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>char</SPAN> *kaddr;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>page = ext2_get_page(dir, n); </SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">／<SPAN 
+lang=EN-US>*</SPAN>从页面高速缓存中获得目录<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 252pt; TEXT-INDENT: 36pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">项所在</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">的页面<SPAN 
+lang=EN-US>*</SPAN>／<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (!IS_ERR(page)) {<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 36pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>kaddr = page_address(page);</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">／<SPAN 
+lang=EN-US>*</SPAN>获得<SPAN lang=EN-US>page</SPAN>所对应的内核<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 252pt; TEXT-INDENT: 36pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">虚拟地址<SPAN 
+lang=EN-US>*</SPAN>／<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>de = (ext2_dirent *) kaddr;</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">／<SPAN 
+lang=EN-US>*</SPAN>获得该目录<SPAN class=GramE>项结构</SPAN>的<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 288pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">起始地址<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>kaddr += PAGE_CACHE_SIZE - reclen; </SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">／<SPAN 
+lang=EN-US>* PAGE_CACHE_SIZE <o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 180pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">的大小为<SPAN 
+lang=EN-US>1</SPAN>个页面的大小，假定所有的目录<SPAN class=GramE>项结构</SPAN>都存放在一个页面内<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>while ((char *) de &lt;= kaddr) {<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">／<SPAN 
+lang=EN-US>*</SPAN>循环查找，直到<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 288pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">找到匹配的目录项<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (ext2_match (namelen, name, 
+de))<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>goto</SPAN> found;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>de</SPAN> = ext2_next_entry(de);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>}<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>ext2_put_page(page); 
+/*</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">释放目录<SPAN 
+class=GramE>项所在</SPAN>的页面<SPAN lang=EN-US>*</SPAN>／<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>}<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (++n &gt;= npages)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>n = 0;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>} 
+while (<SPAN class=GramE>n !</SPAN>= start);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> NULL;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">found</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">:<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*res_page = page;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>dir</SPAN>-&gt;u.ext2_i.i_dir_start_lookup = 
+n;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> de;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">}<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">通过代码的注释<SPAN 
+lang=EN-US>,</SPAN>读者应当很容易明理解其含义<SPAN lang=EN-US>.<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

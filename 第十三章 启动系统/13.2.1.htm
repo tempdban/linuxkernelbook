@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0070)http://www.kerneltravel.net/kernel-book/第十三章%20启动系统/13.2.1.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>处理器对初始化的影响</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="13.2.1.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-17T14:42:00Z</o:Created>
+  <o:LastSaved>2007-08-17T14:42:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>133</o:Words>
+  <o:Characters>760</o:Characters>
+  <o:Lines>6</o:Lines>
+  <o:Paragraphs>1</o:Paragraphs>
+  <o:CharactersWithSpaces>892</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" 
+Month="12" Year="1899"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">13.2.1</SPAN></st1:chsdate><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"> 
+</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">处理器对初始化的影响<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">每个操作系统都是基于计算机的硬件设备的，不管它的设计，实现，还是特性，都要依赖于一定的硬件。所有的硬件中，中央处理器<SPAN 
+lang=EN-US>(CPU)</SPAN>对它的影响最大。我们知道，<SPAN 
+lang=EN-US>Linux</SPAN>是一个可以运行于多个不同平台的操作系统，但这并不意味着它可以抛开不同种类计算机的硬件特性。事实上，<SPAN 
+lang=EN-US>Linux</SPAN>是靠在不同机器上运行不同的代码来实现跨平台特性的。<SPAN 
+lang=EN-US>Linux</SPAN>巧妙的把与设备相关的代码按照设备型号分类安排，以便在编译时把对应的部分编入内核。如果你看过了在<SPAN 
+lang=EN-US>/usr/sur/arch</SPAN>目录下组织的源文件，就会发现，所有<SPAN 
+lang=EN-US>Intel386</SPAN>相关的代码在一个子目录下，而与<SPAN 
+lang=EN-US>Spark</SPAN>相关的代码在另一个子目录下。代码在编译时会得到关于平台的信息，根据这个信息，编译器决定到底包含哪一段代码。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">以上这些是为了说明一点，即操作系统必须支持硬件设备特别是<SPAN 
+lang=EN-US>CPU</SPAN>的特性，反过来说，硬件设备也决定操作系统的特性。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">具有代表性的<SPAN 
+lang=EN-US>Intel80386</SPAN>处理器大家一定不会陌生，它支持多任务并发执行，它的结构和机能完全是为此设计的。根据对<SPAN 
+lang=EN-US>80386</SPAN>保护模式的了解<SPAN lang=EN-US>(</SPAN>详见第二章<SPAN 
+lang=EN-US>)</SPAN>，我们可以看出，操作系统根据<SPAN lang=EN-US>80386</SPAN>提供的机制，对计算机的资源<SPAN 
+lang=EN-US>(</SPAN>主存储器空间、执行时间及外围设备<SPAN 
+lang=EN-US>)</SPAN>进行分配和保护。通过把这些资源分配给系统中的各个任务，并对资源进行保护，是所有的任务得以有效的运行直至完成。<SPAN 
+lang=EN-US>80386</SPAN>的存储管理及保护机制，保护<SPAN lang=EN-US>(</SPAN>系统中的<SPAN 
+lang=EN-US>)</SPAN>每一个任务不被另外的任务破坏。例如，操作系统通过使用存储管理机制，保证分配给不同任务的存储区互不重叠<SPAN 
+lang=EN-US>(</SPAN>共享存储区域除外<SPAN 
+lang=EN-US>)</SPAN>；通过使用保护机制，保证系统中任何一个用户任务都不能<SPAN 
+class=GramE>访问分</SPAN>配给操作系统的存储区域。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">请注意，<SPAN 
+lang=EN-US>80386</SPAN>提供保护机制，也提供段页式的两层内存管理，但在操作系统初始化之前，它<SPAN 
+class=GramE>却运行</SPAN>于一个既不支持保护机制，也不支持<SPAN 
+class=GramE>页机制</SPAN>的实模式下的。在这个模式下，根本没法实现多任务并发处理，所以，在一个要求实现多任务并发处理的操作系统的初始化程序中，就必须加入使<SPAN 
+lang=EN-US>80386</SPAN>进入保护模式的代码。这就是处理器对启动任务影响的一个例子。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

@@ -1,0 +1,381 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0064)http://www.kerneltravel.net/kernel-book/第三章中断机制/3.5.4.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>软中断、bh及tasklet的初始化</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="3.5.4.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2007-08-14T09:56:00Z</o:Created>
+  <o:LastSaved>2007-08-14T09:56:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>242</o:Words>
+  <o:Characters>1380</o:Characters>
+  <o:Lines>11</o:Lines>
+  <o:Paragraphs>3</o:Paragraphs>
+  <o:CharactersWithSpaces>1619</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal 
+style="TEXT-ALIGN: left; mso-outline-level: 1; mso-layout-grid-align: none" 
+align=left><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" 
+Month="12" Year="1899"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">3.5.4</SPAN></st1:chsdate><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"> 
+</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">软中断、<SPAN 
+lang=EN-US>bh</SPAN>及<SPAN lang=EN-US>tasklet</SPAN>的初始化<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 16.2pt; TEXT-INDENT: -16.2pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l0 level1 lfo1; tab-stops: list 16.2pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">1．</SPAN></SPAN><![endif]><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">Tasklet</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">的初始化<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 16.2pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">Tasklet</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">的初始化是由<SPAN 
+lang=EN-US>tasklet_ init()</SPAN>函数完成的：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN class=GramE>void</SPAN> 
+tasklet_init(struct tasklet_struct *t,<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>void</SPAN> (*func)(unsigned long), unsigned long 
+data)<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">{<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>t</SPAN>-&gt;next = NULL;<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>t</SPAN>-&gt;state = 0;<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN>atomic_<SPAN 
+class=GramE>set(</SPAN>&amp;t-&gt;count, 0);<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>t</SPAN>-&gt;func = func;<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>t</SPAN>-&gt;data = data;<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">}<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">其中，<SPAN 
+lang=EN-US>atomic_set()</SPAN>为原子操作<SPAN lang=EN-US>,</SPAN>它把<SPAN 
+lang=EN-US>t-&gt;count</SPAN>置为<SPAN lang=EN-US>0</SPAN>。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">2</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">．软中断的初始化<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">首先通过<SPAN 
+lang=EN-US>open_softirq()</SPAN>函数打开软中断：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN class=GramE>void</SPAN> 
+open_softirq(int nr, void (*action)(struct softirq_action*), void 
+*data)<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR">{<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>softirq_vec[nr].data = data;<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">softirq_<SPAN 
+class=GramE>vec[</SPAN>nr].action = action;<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">｝<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">然后，通过<SPAN 
+lang=EN-US>softirq_init()</SPAN>函数对软中断进行初始化：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">void</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"> 
+__init softirq_init()<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">{<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>int</SPAN> i;<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>for</SPAN> (i=0; i&lt;32; i++)<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>tasklet_<SPAN class=GramE>init(</SPAN>bh_task_vec+i, bh_action, 
+i);<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>open_<SPAN class=GramE>softirq(</SPAN>TASKLET_SOFTIRQ, tasklet_action, 
+NULL);<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>open_<SPAN class=GramE>softirq(</SPAN>HI_SOFTIRQ, tasklet_hi_action, 
+NULL);<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">}<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">对于<SPAN 
+lang=EN-US>bh</SPAN>的<SPAN lang=EN-US>32</SPAN>个<SPAN 
+lang=EN-US>tasklet_struct</SPAN>，调用<SPAN 
+lang=EN-US>tasklet_init</SPAN>以后，它们的函数指针<SPAN lang=EN-US>func</SPAN>全部指向<SPAN 
+lang=EN-US>bh_action</SPAN>（）函数，也就是建立了<SPAN lang=EN-US>bh</SPAN>的执行机制，但具体的<SPAN 
+lang=EN-US>bh</SPAN>函数还没有与之<SPAN class=GramE>挂勾</SPAN>，就<SPAN 
+class=GramE>像具体</SPAN>的中断服务例程还没有挂入中断服务队列一样。同样，调用<SPAN 
+lang=EN-US>open_softirq</SPAN>（）以后，软中断<SPAN 
+lang=EN-US>TASKLET_SOFTIRQ</SPAN>的服务例程为<SPAN 
+lang=EN-US>tasklet_action</SPAN>（），而软中断<SPAN 
+lang=EN-US>HI_SOFTIRQ</SPAN>的服务例程为<SPAN 
+lang=EN-US>tasklet_hi_action</SPAN>（）。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">3</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">．<SPAN 
+lang=EN-US>Bh</SPAN>的初始化<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><B style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>bh</SPAN></B><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">的初始化是由<SPAN 
+lang=EN-US>init_bh()</SPAN>完成的：<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">void</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"> 
+init_bh(int nr, void (*routine)(void))<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">{<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>bh_<SPAN class=GramE>base[</SPAN>nr] = routine;<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>mb(</SPAN>);<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>}<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">这里调用的函数<SPAN 
+lang=EN-US>mb()</SPAN>与<SPAN 
+lang=EN-US>CPU</SPAN>中执行指令的流水线有关，我们对此不进行进一步讨论。下面看一下几个具体<SPAN 
+lang=EN-US>bh</SPAN>的初始化（在<SPAN lang=EN-US>kernel/sched.c</SPAN>中）：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>init_<SPAN 
+class=GramE>bh(</SPAN>TIMER_BH,timer_bh);<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>init_<SPAN 
+class=GramE>bh(</SPAN>TUEUE_BH,tqueue_bh);<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>init_<SPAN 
+class=GramE>bh(</SPAN>IMMEDIATE_BH,immediate_bh);<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">初始化以后，<SPAN 
+lang=EN-US>bh_base[TIMER_BH]</SPAN>处理定时器队列<SPAN 
+lang=EN-US>timer_bh</SPAN>，每个时钟中断都会激活<SPAN 
+lang=EN-US>TIMER_BH</SPAN>，在第五章将会看到，这意味着大约每隔<SPAN 
+lang=EN-US>10ms</SPAN>这个队列运行一次。<SPAN 
+lang=EN-US>bh_base[TUEUE_BH]</SPAN>处理周期性的任务队列<SPAN 
+lang=EN-US>tqueue_bh</SPAN>，而<SPAN 
+lang=EN-US>bh_base[IMMEDIATE_BH]</SPAN>通常被驱动程序所调用，请求某个设备服务的内核函数可以链接到<SPAN 
+lang=EN-US>IMMEDIATE_BH</SPAN>所管理的队列<SPAN 
+lang=EN-US>immediate_bh</SPAN>中，在该队列中排队等待。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

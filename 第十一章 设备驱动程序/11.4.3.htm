@@ -1,0 +1,1426 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0077)http://www.kerneltravel.net/kernel-book/第十一章%20%20设备驱动程序/11.4.3.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>一个字符设备驱动程序的实例</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="11.4.3.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2007-08-17T04:04:00Z</o:Created>
+  <o:LastSaved>2007-08-17T04:04:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>807</o:Words>
+  <o:Characters>4601</o:Characters>
+  <o:Lines>38</o:Lines>
+  <o:Paragraphs>10</o:Paragraphs>
+  <o:CharactersWithSpaces>5398</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	FONT-WEIGHT: bold; TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-font-kerning: 1.0pt; mso-bidi-font-weight: normal
+}
+LI.MsoNormal {
+	FONT-WEIGHT: bold; TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-font-kerning: 1.0pt; mso-bidi-font-weight: normal
+}
+DIV.MsoNormal {
+	FONT-WEIGHT: bold; TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-font-kerning: 1.0pt; mso-bidi-font-weight: normal
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" 
+Month="12" Year="1899"><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">11.4.3</SPAN></st1:chsdate><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">一个字符设备驱动程序的实例<SPAN 
+lang=EN-US> <o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">下面我们通过一个实例对字符设备以及编写驱动程序的方法进行说明，通过下面的分析我们可以了解一个设备驱动程序的编写过程以及注意事项。虽然这个驱动程序没有什么实用价值，但是我们也可以通过它对一个驱动程序的编写特别是字符设备驱动程序有一定的认识。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">一个设备驱动程序在结构上是非常相似的，在<SPAN 
+lang=EN-US> Linux </SPAN>中<SPAN lang=EN-US>, </SPAN>驱动程序一般用<SPAN 
+lang=EN-US>C</SPAN>语言编写，有时也支持一些汇编和<SPAN lang=EN-US>C++</SPAN>语言。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">1</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">．头文件、宏定义和全局变量<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">一个典型的设备驱动程序一般都包含有一个专用头文件，这个头文件中包含一些系统函数的声明、设备寄存器的地址、寄存器状态位和控制位的定义以及用于此设备驱动程序的全局变量的定义，另外大多数驱动程序还使用一些标准的头文件：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">param.h<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">包含一些内核参数。<SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">dir.h<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">包含一些目录参数。<SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">user.h<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">用户区域的定义 
+。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">tty.h<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">终端和命令列表的定义。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">fs.h<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">其中包括<SPAN 
+lang=EN-US> Buffer header </SPAN>信息。<SPAN lang=EN-US> 
+<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">下面是一些必要的头文件<SPAN 
+lang=EN-US> <o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#include 
+&lt;linux/kernel.h&gt;<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#include 
+&lt;linux/module.h&gt; <o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#if 
+CONFIG_MODVERSIONS==1<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>/* 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">处理<SPAN 
+lang=EN-US> CONFIG_MODVERSIONS */<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#define 
+MODVERSIONS<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#include 
+&lt;linux/modversions.h&gt;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#endif<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/* 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">下面是针对字符设备的头文件 
+<SPAN lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#include 
+&lt;linux/fs.h&gt;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#include 
+&lt;linux/wrapper.h&gt;<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/* 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">对于不同的版本我们需要做一些必要的事情<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#ifndef 
+KERNEL_VERSION<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#define 
+KERNEL_<SPAN class=GramE>VERSION(</SPAN>a,b,c) 
+((a)*65536+(b)*256+(c))<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#endif<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#if 
+LINUX_VERSION_CODE &gt; KERNEL_<SPAN 
+class=GramE>VERSION(</SPAN>2,4,0)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#include 
+&lt;asm/uaccess.h<SPAN class=GramE>&gt;<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>/</SPAN>* for copy_to_user */<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#endif<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#define 
+SUCCESS 0<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/* 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">声明设备<SPAN 
+lang=EN-US> */<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/* 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">这是本设备的名字，它将会出现在<SPAN 
+lang=EN-US> /proc/devices */<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#define 
+DEVICE_NAME "char_dev"<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/* 
+</SPAN><SPAN class=GramE><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">定义此</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">设备消息缓冲的最大长度<SPAN 
+lang=EN-US> */<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#define 
+BUF_<SPAN class=GramE>LEN<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>100</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/* 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">为了防止不同的进程在同一个时间使用此设备，<SPAN 
+class=GramE>定义此</SPAN>静态变量跟踪其状态<SPAN lang=EN-US> */<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">static 
+int Device_Open = 0</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">；<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/* 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当提出请求的时候，设备将读写的内容放在下面的数组中<SPAN 
+lang=EN-US> */<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">static 
+char Message[BUF_LEN]</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">；<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/* 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">在进程读取这个内容的时候，这个指针是指向读取的位置<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">static 
+char *Message_Ptr </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">；<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/* 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">在这个文件中，主设备号作为全局变量以便于这个设备在注册和释放的时候使用。<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">static</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+int Major;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">2</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">．<SPAN 
+lang=EN-US>open </SPAN>（）函数<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">功能：无论一个进程何时试图去打开这个设备都会调用这个函数。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">static</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+int device_open(struct inode *inode, <o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>struct</SPAN> file *file)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">{<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>static</SPAN> int 
+counter = 0;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#ifdef 
+DEBUG<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>printk</SPAN> 
+("device_open(%p,%p)\n", inode, file);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=PT-BR 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-ansi-language: PT-BR">#endif<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=PT-BR 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-ansi-language: PT-BR"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=PT-BR 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-ansi-language: PT-BR"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>printk("Device: %d.%d\n", 
+<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=PT-BR 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-ansi-language: PT-BR"><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">inode</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">-&gt;i_rdev 
+&gt;&gt; 8, inode-&gt;i_rdev &amp; 0xFF);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 34.2pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/* 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">这个设备是一个独占设备，为了避免同时有两个进程使用这一个设备我们需要采取一定的措施<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>if</SPAN> 
+(Device_Open)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>return</SPAN> -EBUSY;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Device_Open++;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 34.2pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/* 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">下面是初始化消息 
+， 注意不要使读写内容的长度超出缓冲区的长度，特别是运行在内核模式时，否则如果出现缓冲上溢则可能导致系统的崩溃。<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+class=GramE>sprintf(</SPAN>Message, <o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>"If I told you once, I told you %d times 
+- %s",<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>counter</SPAN>++,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>"Hello, 
+world\n");<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Message_Ptr = 
+Message;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 24pt; TEXT-INDENT: 10.2pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/*</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当这个文件被打开的时候，我们必须确认该模块还没有被移走并且增加此模块的用户数目。（在移走一个模块的时候会根据这个数字去决定可否移去，如果不是<SPAN 
+lang=EN-US> 0 </SPAN>则表明还有进程正在使用这个模块，不能移走。）<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>MOD_INC_USE_COUNT;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>return</SPAN> 
+SUCCESS;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">}<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">3</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">．<SPAN 
+lang=EN-US>release ( ) </SPAN>函数<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">功能： 
+当一个进程试图关闭这个设备特殊文件的时候调用这个函数。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#if 
+LINUX_VERSION_CODE &gt;= KERNEL_<SPAN 
+class=GramE>VERSION(</SPAN>2,4,0)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">static</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+int device_release(struct inode *inode, <o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-tab-count: 3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+class=GramE>struct</SPAN> file *file)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#else 
+<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">static</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+void device_release(struct inode *inode, <o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-tab-count: 3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>struct</SPAN> file *file)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#endif<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">{<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#ifdef 
+DEBUG<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>printk</SPAN> 
+("device_release(%p,%p)\n", inode, file);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#endif<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">为下一个使用这个设备的进程做准备。<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Device_Open --;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 34.2pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">/* 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">减少这个模块使用者的数目，否则一旦你打开这个模块以后，你永远都不能释放掉它。<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>MOD_DEC_USE_COUNT;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#if 
+LINUX_VERSION_CODE &gt;= KERNEL_<SPAN 
+class=GramE>VERSION(</SPAN>2,4,0)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>return</SPAN> 
+0;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#endif<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">}<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">　４．<SPAN 
+lang=EN-US>read ( ) </SPAN>函数<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">功能：当一个进程已经打开此设备文件以后并且试图去读它的时候调用这个函数。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#if 
+LINUX_VERSION_CODE &gt;= KERNEL_<SPAN 
+class=GramE>VERSION(</SPAN>2,4,0)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">static</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+ssize_t device_read(struct file *file,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>char *buffer,<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">把读出的数据放到这个缓冲区<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>size_t length,<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">缓冲区的长度<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>loff_t *offset)<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">文件中的偏移<SPAN 
+lang=EN-US> */<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#else<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">static</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+int device_read(struct inode *inode,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> file *file,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>char</SPAN> *buffer,<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>int 
+length)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#endif<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">{<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">实际上读出的字节数<SPAN 
+lang=EN-US> */<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>int</SPAN> bytes_read 
+= 0;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">如果读到缓冲区的末尾，则返回<SPAN 
+lang=EN-US>0 </SPAN>，类似文件的结束。<SPAN lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>if</SPAN> 
+(*Message_Ptr == 0)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>return</SPAN> 0;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">将数据放入缓冲区中<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>while</SPAN> (length 
+&amp;&amp; *Message_Ptr)<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>{<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 36pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">由于缓冲区是在用户空间而不是内核空间，所以我们必须使用 
+<SPAN lang=EN-US>copu_to_user()</SPAN>函数将内核空间中的数据拷贝到用户空间。<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>copy_to_<SPAN 
+class=GramE>user(</SPAN>buffer++,*(Message_Ptr++), 
+length--);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>bytes_read 
+++;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>}<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#ifdef 
+DEBUG<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN class=GramE>printk</SPAN> 
+("Read %d bytes, %d left\n",<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>bytes_read, 
+length);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#endif<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>/* Read </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">函数返回一个真正读出的字节数<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>return</SPAN> 
+bytes_read;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">}<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">5. 
+write ( )<SPAN style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">函数<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">功能：当试图将数据写入这个设备文件的<SPAN 
+class=GramE>时侯</SPAN>，这个函数被调用<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#if 
+LINUX_VERSION_CODE &gt;= KERNEL_<SPAN 
+class=GramE>VERSION(</SPAN>2,4,0)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">static</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+ssize_t device_write(struct file *file,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>const</SPAN> char *buffer,<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>size_t</SPAN> length,<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>loff_t *offset)<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#else<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">static</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+int device_write(struct inode *inode,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> file *file,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>const</SPAN> char *buffer,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>int</SPAN> length) <o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#endif<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">{<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>int</SPAN> 
+i;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#ifdef 
+DEBUG<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>printk</SPAN> 
+("device_write(%p,%s,%d)", file, buffer, length);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#endif<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">#if 
+LINUX_VERSION_CODE &gt;= KERNEL_<SPAN 
+class=GramE>VERSION(</SPAN>2,4,0)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>copy_from_user(Message, 
+buffer</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">，<SPAN 
+lang=EN-US>length);<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Message_Ptr = 
+Message;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">返回写入的字节数<SPAN 
+lang=EN-US> */<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>return</SPAN> 
+i;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">}<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">6.</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">这个设备驱动程序提供给文件系统的接口<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当一个进程试图对我们生成的设备进行操作的时候就利用下面这个结构，这个结构就是我们提供给操作系统的接口，它的指针保存在设备表中，在<SPAN 
+lang=EN-US>init_module</SPAN>（）中被传递给操作系统。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">struct</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+file_operations Fops = {<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>read</SPAN>:<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>device_read, 
+<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>write</SPAN>:<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; 
+</SPAN>device_write,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>open</SPAN>: <SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>device_open,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>release</SPAN>: 
+device_release<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>};<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>7. </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">模块的初始化和模块的卸载<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">这个函数用来初始化这个模块 
+</SPAN><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; FONT-FAMILY: 'Times New Roman'; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">—</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">注册</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">该字符设备。<SPAN 
+lang=EN-US>init_module </SPAN>（）函数调用<SPAN 
+lang=EN-US>module_register_chrdev</SPAN>，把设备驱动程序添加到内核的字符设备驱动程序表中，它返回这个驱动程序所使用的主设备号。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">int</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+init_module()<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">{<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">试图注册设备<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Major = module_register_<SPAN 
+class=GramE>chrdev(</SPAN>0, <o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>DEVICE_NAME,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>&amp;Fops);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">失败的时候返回负值<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>if</SPAN> (Major &lt; 
+0) {<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>printk</SPAN> ("%s device failed with %d\n",<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>"Sorry, registering the 
+character",<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; 
+</SPAN>Major);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>return</SPAN> Major;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>}<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>printk</SPAN> ("%s The 
+major device number is %d.\n",<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>"Registeration is a success.<SPAN 
+class=GramE>",</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>Major);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>printk</SPAN> ("If you 
+want to talk to the device driver,\n");<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>printk</SPAN> ("you'll 
+have to create a device file. \n");<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>printk</SPAN> ("We 
+suggest you use:\n");<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>printk</SPAN> ("mknod 
+&lt;name&gt; c %d &lt;minor&gt;\n", Major);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>printk</SPAN> ("You 
+can try different minor numbers %s",<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>"<SPAN class=GramE>and</SPAN> see what 
+happens.\n");<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>return</SPAN> 
+0;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">}<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">这个函数的功能是卸载模块，主要是从<SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN>/proc </SPAN>中 
+取消注册的设备特殊文件。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">void</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+cleanup_module()<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">{<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>int</SPAN> 
+ret;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">取消注册的设备<SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>ret</SPAN> = 
+module_unregister_chrdev(Major, DEVICE_NAME);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">如果出错则显示出错信息<SPAN 
+lang=EN-US> */ <o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>if</SPAN> (ret &lt; 
+0)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>printk(</SPAN>"Error in unregister_chrdev: %d\n", 
+ret);<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">}<o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

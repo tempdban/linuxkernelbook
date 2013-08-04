@@ -1,0 +1,635 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0069)http://www.kerneltravel.net/kernel-book/第九章%20Ext2文件系统/9.3.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word"><HEAD><TITLE>文件的访问权限和安全</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="9.3.files/filelist.xml" rel=File-List><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2007-08-16T10:10:00Z</o:Created>
+  <o:LastSaved>2007-08-16T10:10:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>452</o:Words>
+  <o:Characters>2583</o:Characters>
+  <o:Lines>21</o:Lines>
+  <o:Paragraphs>6</o:Paragraphs>
+  <o:CharactersWithSpaces>3029</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<STYLE>@font-face {
+	font-family: Wingdings;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-font-kerning: 1.0pt; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-font-kerning: 1.0pt; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-font-kerning: 1.0pt; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">9.3<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">文件的访问权限和安全<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">Linux</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">作为一种网络操作系统，允许多个用户使用。为了保护用户的个人文件不被其他用户侵犯，<SPAN 
+lang=EN-US>Linux</SPAN>提供了文件权限的机制。这种机制使得一个文件或目录归一个特定的用户所有，这个用户有权对他所拥有的文件或目录进行存取或其他操作，也可以设置其他用户对这些文件或目录的操作权限。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">Linux</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">还用到了用户组的概念。每个用户在建立用户目录时都被放到至少一个用户组中（当然，系统管理员可以将用户编进多个用户组中）。用户组通常是根据使用计算机的用户的种类来划分的。例如，普通用户通常属于<SPAN 
+lang=EN-US>usrs</SPAN>组。另外，还有几个系统定义的组（如<SPAN lang=EN-US>bin</SPAN>和<SPAN 
+lang=EN-US>admin</SPAN>），系统使用这些组来控制对资源的访问。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">普通文件的权限有三部分：读、写和执行。分别用“<SPAN 
+lang=EN-US>r</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">、“<SPAN 
+lang=EN-US>w</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">、“<SPAN 
+lang=EN-US>x</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">来表示。目录也有这三种表示方式，分别表示：列出目录内容、在目录中建立或删除文件、进入和退出目录。以一个例子来解释文件权限的概念。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">我们用带<SPAN 
+lang=EN-US>-l</SPAN>选项的<SPAN lang=EN-US>ls</SPAN>命令来显示包括文件权限的长格式信息。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">/ 
+<SPAN class=GramE>$<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>ls</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>-l<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN>/home/user1/file1<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">-<SPAN 
+class=GramE>rw-</SPAN>r--r--<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>1<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>user1<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>usrs<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>490<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>JUN<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>28<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>21:50<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>file1<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">在这个文件的长格式信息中，第一列代表的就是文件的类型和权限。其中，第一个字母表示文件的类型，“<SPAN 
+lang=EN-US>-</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">表明这是一个普通文件。接下来九个字符每三个一组依次代表文件的所有者、所有者所在用户组和组外其他用户对该文件的访问权限，代表文件权限的三个字符依次是读、写和执行权限，当用户没有相应的权限时，<SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN>系统在该权限对应的位置上用“<SPAN lang=EN-US>-</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">表示。所以，本<SPAN 
+class=GramE>例表示</SPAN>用户<SPAN 
+lang=EN-US>user1</SPAN>自己对该文件有读和写的权限，但没有执行权限，而<SPAN 
+lang=EN-US>user1</SPAN>所在<SPAN 
+lang=EN-US>usrs</SPAN>组的其他用户和组外的用户对该文件只有读权限，没有写和执行权限。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">有时候，我们会看到权限的<SPAN 
+class=GramE>执行位</SPAN>上出现了“<SPAN lang=EN-US>s</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">，而不是“<SPAN 
+lang=EN-US>x</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">。这涉及<SPAN 
+class=GramE>到进程</SPAN>中的概念。一个进程，除了进程标识号（<SPAN 
+lang=EN-US>PID</SPAN>）外，还有四个标识号表示进程的权限。它们是：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 45.25pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l1 level1 lfo1; tab-stops: list 45.25pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">real 
+user ID<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">实际用户标识号<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 45.25pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l1 level1 lfo1; tab-stops: list 45.25pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">real<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>group ID<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">实际用户组标识号<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 45.25pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l1 level1 lfo1; tab-stops: list 45.25pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">effective<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>user<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>ID<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">有效用户标识号<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 45.25pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l0 level1 lfo2; tab-stops: list 45.25pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">effective<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>group<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>ID<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">有效用户组标识号<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 1cm; TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">实际用户标识号就是运行该进程的用户的<SPAN 
+lang=EN-US>UID</SPAN>，实际用户组标识号就是运行该进程的用户的<SPAN 
+lang=EN-US>GID</SPAN>。一般情况下，有效用户标识号、有效用户组标识号分别和实际用户标识号、实际用户组标识号相同。但如果设置<SPAN 
+lang=EN-US>setuid</SPAN>位和<SPAN 
+lang=EN-US>setgid</SPAN>位，则这两个标识号在对文件进行操作时自动转换成该文件所有者和所有组的标识号。<SPAN 
+lang=EN-US>setuid</SPAN>位和<SPAN lang=EN-US>setgid</SPAN><SPAN 
+class=GramE>位设置</SPAN>与否，就是看文件<SPAN class=GramE>权限位</SPAN>上是否有“<SPAN 
+lang=EN-US>s</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">，如果用户的执行<SPAN 
+class=GramE>权限位</SPAN>为“<SPAN lang=EN-US>s</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">，则设置了<SPAN 
+lang=EN-US>setuid</SPAN>位，如果用户组的执行<SPAN class=GramE>权限位</SPAN>为“<SPAN 
+lang=EN-US>s</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">，则设置了<SPAN 
+lang=EN-US>setgid</SPAN>位。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">这两个<SPAN 
+class=GramE>标识位</SPAN>的设置正确与否关系到整个系统的安全，所以非同小可，我们以两个例子来说明。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">/bin/passwd</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">就是一个设置了<SPAN 
+lang=EN-US>setuid</SPAN>位的文件。当<SPAN lang=EN-US>/bin/passwd</SPAN>被执行时，它要在<SPAN 
+lang=EN-US>/etc</SPAN>目录下找一个也叫<SPAN 
+lang=EN-US>passwd</SPAN>的文件，该文件是个文本文件，里面记录了全部用户的数据，如口令、用户标识号等。该文件显然不能让超级用户以外的人修改，所以该文件的存取权限是<SPAN 
+lang=EN-US>rw-r--r--</SPAN>。但是，普通用户在更改它自己的口令时，必须改动这个文件，解决这个问题的方法便是设置<SPAN 
+lang=EN-US>setuid</SPAN>的位，使指令在被执行时有和<SPAN 
+lang=EN-US>root</SPAN>相同的权利，这样就可以修改这个文件了。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">setuid</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">位的设立是有风险的！如果某个普通进程执行一个设置了<SPAN 
+lang=EN-US>setuid</SPAN>位，且所有者是“<SPAN lang=EN-US>root</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">的文件，立刻具有了超级用户的权利，万一该程序有<SPAN 
+lang=EN-US>BUG</SPAN>，就留下了被人入侵系统的可能。因此，把文件按性质分类，再用设置<SPAN 
+lang=EN-US>setgid</SPAN>位来达到分享的目标是一个不错的办法。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">Linux</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">中有一个叫<SPAN 
+lang=EN-US>/etc/kmem</SPAN>的字符设备文件，目的为存储一些核心程序要用到的数据。当用户注册到系统时所输入的口令都存在其中，所以这个文件不能给普通用户读写，以免给企图侵入系统者可乘之机，但将使用权限设为“<SPAN 
+lang=EN-US>rw-------</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">也不行，这样一般用户无法用<SPAN 
+lang=EN-US>ps</SPAN>等显示系统状态的指令（这类显示系统状态的指令必须要读取<SPAN 
+lang=EN-US>kmem</SPAN>的内容）。如果将存取权限设置成“<SPAN 
+lang=EN-US>rw-r-----</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">，再把组标识号改成与<SPAN 
+lang=EN-US>kmem</SPAN>一样，最后再设置<SPAN lang=EN-US>setgid</SPAN>位，这样，无论谁执行<SPAN 
+lang=EN-US>ps</SPAN>，该进程的组标识号都变得和<SPAN lang=EN-US>ps</SPAN>一样，从而就能读取<SPAN 
+lang=EN-US>kmem</SPAN>的数据了。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">作为一个系统管理员，能用<SPAN 
+lang=EN-US>setgid</SPAN>来代替<SPAN lang=EN-US>setuid</SPAN>就尽量用<SPAN 
+lang=EN-US>setgid</SPAN>，因为它的风险小得多！<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">还有一个不引人注意的现象，就是在其他用户的执行<SPAN 
+class=GramE>权限位</SPAN>上可能出现“<SPAN lang=EN-US>t</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">，而不是“<SPAN 
+lang=EN-US>x</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">，这表示该文件被装入内存后，将一直保留在内存中，<SPAN 
+class=GramE>好象</SPAN><SPAN lang=EN-US>dos</SPAN>下<SPAN 
+lang=EN-US>TSR</SPAN>程序，这样可以减少程序的装入时间，增加程序的反应速度。因此，系统管理员可以对一些使用频率较高的工具程序设置该位。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">创建一个新文件时，需要提供文件的访问权限位，但是，新文件的<SPAN 
+class=GramE>权限位</SPAN>并不就是根据这个数设置的，还必须参考另一个值：文件权限的掩码，这是一个<SPAN 
+lang=EN-US>9</SPAN>位的二进制数，对应于<SPAN lang=EN-US>9</SPAN>个权限位，如果这个数某一位上置<SPAN 
+lang=EN-US>1</SPAN>，则新创建文件相应<SPAN class=GramE>权限位</SPAN>被强制置<SPAN 
+lang=EN-US>0</SPAN>，而不管所提供的<SPAN 
+class=GramE>权限位</SPAN>是怎样的。这种机制使的一个新文件在创建时被限制为一个合适的权限。可以用<SPAN 
+lang=EN-US>umask</SPAN>命令看到这个值，它以<SPAN lang=EN-US>3</SPAN>位八进制数显示，默认为<SPAN 
+lang=EN-US>022</SPAN>，即<SPAN 
+lang=EN-US>000010010</SPAN>，所以一个新文件创建时，除了文件拥有者外，其它用户是没有写权限的。在<SPAN 
+lang=EN-US>VFS</SPAN>的<SPAN lang=EN-US>fs_struct</SPAN>结构中有一个<SPAN 
+lang=EN-US>umask</SPAN>域，存储的就是这个文件权限的掩码。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">文件建立后，文件拥有者可以用<SPAN 
+lang=EN-US>chmod</SPAN>改变访问权限。每一组<SPAN 
+class=GramE>权限位</SPAN>的设置可以用一个八进制数表示，这样，用三个八进制数就可以表示<SPAN 
+lang=EN-US>9</SPAN>个<SPAN class=GramE>权限位</SPAN>了。例如<SPAN lang=EN-US>chmod<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>755<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/home/user1/file1</SPAN>， 
+则该文件的权限表示为<SPAN lang=EN-US> wxr-xr-xr</SPAN>。如果要设置<SPAN 
+lang=EN-US>setuid</SPAN>、<SPAN lang=EN-US>setgid</SPAN>位，则需要用到第四个八进制数，该数为<SPAN 
+lang=EN-US>4</SPAN>，则<SPAN lang=EN-US>setuid</SPAN>位被设置；该数为<SPAN 
+lang=EN-US>2</SPAN>，则<SPAN lang=EN-US>setgid</SPAN>位被设置，该数为<SPAN 
+lang=EN-US>1</SPAN>，则是其他用户的<SPAN class=GramE>执行位</SPAN>被设置成“<SPAN 
+lang=EN-US>t</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt; mso-ascii-font-family: 宋体">”</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">Ext2</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">索引节点中的<SPAN 
+lang=EN-US>i_mode</SPAN>就是用来存储文件的属性、用户标识号、用户组标识号和访问权限等信息的，这是一个<SPAN 
+lang=EN-US>16</SPAN>位的字段，其中<SPAN lang=EN-US>0</SPAN>到<SPAN 
+lang=EN-US>8</SPAN>位用来表示文件的访问权限，第<SPAN lang=EN-US>9</SPAN>位用来控制文件是否驻留内存，<SPAN 
+lang=EN-US>10</SPAN>、<SPAN lang=EN-US>11</SPAN>位即<SPAN 
+lang=EN-US>setgid</SPAN>、<SPAN lang=EN-US>setuid</SPAN>位，<SPAN 
+lang=EN-US>12</SPAN>到<SPAN lang=EN-US>15</SPAN>位的组合用来表示文件类型。如表<SPAN 
+lang=EN-US>9.1</SPAN>所示：<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">表<SPAN 
+lang=EN-US>9.1<SPAN 
+style="mso-tab-count: 3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp; </SPAN>imode</SPAN>字段各位的含义<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<TABLE class=MsoNormalTable 
+style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; MARGIN-LEFT: 5.4pt; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-top-alt: solid black 1.0pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black 1.0pt; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt" 
+cellSpacing=0 cellPadding=0 border=1>
+  <TBODY>
+  <TR style="HEIGHT: 22.65pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 94.65pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-top-alt: 1.0pt; mso-border-left-alt: 1.0pt; mso-border-right-alt: .5pt; mso-border-bottom-alt: .5pt; mso-border-color-alt: black; mso-border-style-alt: solid" 
+    vAlign=top width=158 colSpan=2>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">位<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 138.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=230>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">符号常量<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 175.45pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=292>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">含义<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 21.8pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 43.9pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 21.8pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=73 rowSpan=7>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">12~15</SPAN><SPAN 
+      style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">位的组合<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 50.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 21.8pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=85>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">1100<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 138.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 21.8pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=230>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">S_IFSOCK 
+      <o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 175.45pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 21.8pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=292>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">套接字<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 22.65pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 50.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=85>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">1010<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 138.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=230>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">S_IFLNK<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 175.45pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=292>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">符号链接文件<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 22.65pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 50.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=85>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">1000<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 138.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=230>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">S_IFREG<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 175.45pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=292>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">普通文件<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 22.65pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 50.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=85>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">0110<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 138.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=230>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">S_IFBLK<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 175.45pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=292>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      class=GramE><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">块设备</SPAN></SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">文件<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 22.65pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 50.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=85>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">0100<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 138.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=230>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">S_IFDIR<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 175.45pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=292>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">目录<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 22.65pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 50.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=85>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">0010<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 138.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=230>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">S_IFCHR<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 175.45pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=292>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">字符设备文件<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 22.65pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 50.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=85>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">0001<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 138.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=230>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">S_IFIFO<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 175.45pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=292>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">命名管道<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 22.65pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 94.65pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=158 colSpan=2>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">11<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 138.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=230>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">S_ISUID<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 175.45pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=292>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">用户<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 22.65pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 94.65pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=158 colSpan=2>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">10<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 138.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=230>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">S_ISGID<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 175.45pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=292>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">用户组<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 22.65pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 94.65pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=158 colSpan=2>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">9<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 138.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=230>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">S_ISVTX<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 175.45pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=292>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">文件是否驻留内存<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR 
+    style="HEIGHT: 22.65pt; page-break-inside: avoid; mso-yfti-lastrow: yes"><TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 94.65pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=158 colSpan=2>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">0~8<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 138.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=230>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">rwx-rwx-rwx<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 175.45pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 22.65pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=292>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">文件的访问权限<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">这个表中的符号常量都是在<SPAN 
+lang=EN-US>include/Linux/stat.h</SPAN>中定义的。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

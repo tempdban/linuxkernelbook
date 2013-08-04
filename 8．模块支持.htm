@@ -1,0 +1,400 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0055)http://www.kerneltravel.net/kernel-book/8．模块支持.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word"><HEAD><TITLE>模块支持</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="8．模块支持.files/filelist.xml" rel=File-List><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2007-08-27T04:28:00Z</o:Created>
+  <o:LastSaved>2007-08-27T04:28:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>224</o:Words>
+  <o:Characters>1282</o:Characters>
+  <o:Lines>10</o:Lines>
+  <o:Paragraphs>3</o:Paragraphs>
+  <o:CharactersWithSpaces>1503</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@font-face {
+	font-family: TimesNewRomanPSMT;
+}
+@font-face {
+	font-family: Courier-Oblique;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal><SPAN lang=EN-US>8</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">．模块支持</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable 
+style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-alt: solid windowtext .5pt; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt; mso-border-insideh: .5pt solid windowtext; mso-border-insidev: .5pt solid windowtext" 
+cellSpacing=0 cellPadding=0 border=1>
+  <TBODY>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: windowtext 1pt solid; WIDTH: 26.4pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt" 
+    width=44 rowSpan=3>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">模块装入</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 120.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt" 
+    vAlign=top width=201>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数名</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 78.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt" 
+    vAlign=top width=131>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">功能</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数形成</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">参数</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">描述</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 120.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=201>
+      <P class=MsoNormal><SPAN lang=EN-US>request_module</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 78.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=131>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">试图装入一个内核模块</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B style="mso-bidi-font-weight: normal">request_module 
+      </B>(const char * <I 
+      style="mso-bidi-font-style: normal">module_nam</I>e)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-FAMILY: Courier-Oblique">module_name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为模块名</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">使用用户态模块装入程序装入一个模块。成功返回</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">0</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">，失败返回一个负数。注意，一个成功的装入并不意味着这个模块在自己出错时就能卸载和退出。调用者必须检查他们所提出的请求是可用的，而不是盲目地调用。</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT"><o:p></o:p></SPAN></P>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">如果自动装入模块的功能被启用，那么这个函数就不起作用。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 120.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=201>
+      <P class=MsoNormal><SPAN lang=EN-US>call_usermodehelper</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 78.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=131>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">启动一个用户态的应用程序</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int call_usermodehelper (char * path, char ** argv, char ** 
+      envp);</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>path</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为应用程序的路径名，</SPAN><SPAN 
+      lang=EN-US>argv</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为以空字符结束的参数列表，</SPAN><SPAN 
+      lang=EN-US>envp</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为以空字符结束的环境列表。</SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">运行用户空间的一个应用程序。该应用程序被异步启动。它作为</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">keventd</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">的子进程来运行，并具有</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">root</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">的全部权能。</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">Keventd</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">在退出时默默地获得子进程。</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT"><o:p></o:p></SPAN></P>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">必须<SPAN 
+      class=GramE>从进程</SPAN>的上下文中调用该函数，成功返回</SPAN><SPAN lang=EN-US 
+      style="FONT-FAMILY: TimesNewRomanPSMT">0</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">，失败返回一个负数。</SPAN> 
+      </P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: windowtext 1pt solid; WIDTH: 26.4pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    width=44 rowSpan=5>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">内部模块支持</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 120.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=201>
+      <P class=MsoNormal><SPAN lang=EN-US>inter_module_register</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 78.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=131>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">注册一组新的内部模块数据</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>void inter_module_register (const char * im_name, struct module 
+      * owner, const void * userdata)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>im_name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为确定数据的任意字符串，必须唯一，</SPAN><SPAN 
+      lang=EN-US>owner</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为正在注册数据的模块，通常用</SPAN><SPAN 
+      lang=EN-US>THIS_MODULE </SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，</SPAN><SPAN 
+      lang=EN-US>userdata</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指向要注册的任意用户数据。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">检查</SPAN><SPAN 
+      lang=EN-US>im_name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">还没有被注册，如果已注册就发出“抱怨”。对新数据，则把它追加到</SPAN><SPAN 
+      lang=EN-US>inter_module_entry</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">链表。</SPAN></P>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 120.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=201>
+      <P class=MsoNormal><SPAN lang=EN-US>inter_module_unregister</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 78.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=131>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">注销一组内部模块数据</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>void inter_module_unregister (const char * 
+    im_name)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>im_name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为确定数据的任意字符串，必须唯一。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">检查</SPAN><SPAN 
+      lang=EN-US>im_name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">已经注册，如果没有注册就发出“抱怨”。</SPAN> 
+      <SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">对现有的数据，则把它从</SPAN><SPAN 
+      lang=EN-US>inter_module_entry</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">链表中删除。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 120.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=201>
+      <P class=MsoNormal><SPAN lang=EN-US>inter_module_get</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 78.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=131>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">从另一模块返回任意的用户数据</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>const void * inter_module_get (const char * 
+    im_name)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>im_name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为确定数据的任意字符串，必须唯一。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">如果</SPAN><SPAN 
+      lang=EN-US>im_name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">还没有注册，则返回</SPAN><SPAN 
+      lang=EN-US>NULL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。增加模块拥有者的引用计数，如果失败则返回</SPAN><SPAN 
+      lang=EN-US>NULL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，否则返回用户数据。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 120.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=201>
+      <P class=MsoNormal><SPAN lang=EN-US>inter_module_get_request</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 78.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=131>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">内部模块自动调用</SPAN><SPAN 
+      lang=EN-US>request_module</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>const void * inter_module_get_request (const char * im_name, 
+      const char * modname)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>im__name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为确定数据的任意字符串，必须唯一；</SPAN><SPAN 
+      lang=EN-US>modname</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为期望注册</SPAN><SPAN 
+      lang=EN-US>m_name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的模块。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">如果</SPAN><SPAN 
+      lang=EN-US>inter_module_get</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">失败，调用</SPAN><SPAN 
+      lang=EN-US>request_module</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，然后重试。</SPAN></P>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid; mso-yfti-lastrow: yes">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 120.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=201>
+      <P class=MsoNormal><SPAN lang=EN-US>inter_module_put</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 78.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=131>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">释放来自另一个模块的数据</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>void inter_module_put (const char * im_name)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>im__name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为确定数据的任意字符串，必须唯一。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">如果</SPAN><SPAN 
+      lang=EN-US>im_name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">还没有被注册，则“抱怨”，否则减少模块拥有者的引用计数。</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

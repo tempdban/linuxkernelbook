@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0065)http://www.kerneltravel.net/kernel-book/第一章走进linux/1.6.1.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>多版本的内核源代码</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="1.6.1.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2007-08-14T02:09:00Z</o:Created>
+  <o:LastSaved>2007-08-14T02:09:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>85</o:Words>
+  <o:Characters>486</o:Characters>
+  <o:Lines>4</o:Lines>
+  <o:Paragraphs>1</o:Paragraphs>
+  <o:CharactersWithSpaces>570</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal 
+style="TEXT-ALIGN: left; mso-outline-level: 1; mso-layout-grid-align: none" 
+align=left><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" 
+Month="12" Year="1899"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">1.6.1</SPAN></st1:chsdate><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'"> 
+</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">多版本的内核源代码</SPAN><SPAN 
+lang=EN-US style="COLOR: black; mso-font-kerning: 0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">对不同的内核版本，系统调用一般是相同的。新版本也许可以增加一个新的系统调用，但旧的系统调用将依然不变，这对于保持向后兼容是非常必要的</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">—</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">一个新的内核版本不能打破常规的过程。在大多数情况下，设备文件将仍然相同，而另一方面，版本之间的内部接口有所变化。</SPAN><SPAN 
+lang=EN-US style="COLOR: black; mso-font-kerning: 0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>Linux</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">内核源代码有一个简单的数字系统，任何偶数内核</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">(</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">如</SPAN><st1:chsdate 
+w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" Month="12" 
+Year="1899"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">2.0.30</SPAN></st1:chsdate><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">)</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">是一个稳定的版本，而奇数内核</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">(</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">如</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">2.1.42)</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">是正在发展中的内核。这本书是基于稳定的</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">2.4.16 
+</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">源代码树。发展中的内核总是有最新的特点，支持最新的设备，尽管它们还不稳定，也不是你所想要的，但它们是发展最新而又稳定的内核的基础。</SPAN><SPAN 
+lang=EN-US style="COLOR: black; mso-font-kerning: 0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">目前，较新而又稳定的内核版本是</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">2.2.x</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">和</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">2.4.x</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">，因为版本之间稍有差别，因此，如果你想让一个新驱动程序模块既支持</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">2.2.x</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">，也支持</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">2.4.x</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">，就需要根据内核版本对模块进行条件编译。</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">对内核源代码的修改是以补丁文件的形式发布的。</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">patch</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">实用程序用来对内核源文件进行一系列的修订，例如，如果你有</SPAN><st1:chsdate 
+w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" Month="12" 
+Year="1899"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">2.4.9</SPAN></st1:chsdate><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">内核源代码，而<SPAN 
+class=GramE>你想移到</SPAN></SPAN><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">2.4.16</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">，你可以获得</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">2.4.16</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">的补丁文件，应用</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">patch</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">来修订</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">2.4.9</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-ascii-font-family: Arial; mso-hansi-font-family: Arial">源文件。例如：</SPAN><SPAN 
+lang=EN-US style="COLOR: black; mso-font-kerning: 0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">$ 
+<SPAN class=GramE>cd</SPAN> /usr/src/linux<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: Arial; mso-font-kerning: 0pt; mso-bidi-font-family: 'Times New Roman'">$ 
+<SPAN class=GramE>patch</SPAN> -p1 &lt; patch-<st1:chsdate w:st="on" 
+IsROCDate="False" IsLunarDate="False" Day="30" Month="12" 
+Year="1899">2.4.16</st1:chsdate><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

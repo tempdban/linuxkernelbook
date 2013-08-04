@@ -1,0 +1,547 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0064)http://www.kerneltravel.net/kernel-book/第三章中断机制/3.2.1.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:v = 
+"urn:schemas-microsoft-com:vml" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>外部中断向量的设置</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="3.2.1.files/filelist.xml" rel=File-List><LINK 
+href="3.2.1.files/editdata.mso" rel=Edit-Time-Data><!--[if !mso]>
+<STYLE>v\:* {
+	BEHAVIOR: url(#default#VML)
+}
+o\:* {
+	BEHAVIOR: url(#default#VML)
+}
+w\:* {
+	BEHAVIOR: url(#default#VML)
+}
+.shape {
+	BEHAVIOR: url(#default#VML)
+}
+</STYLE>
+<![endif]--><o:SmartTagType downloadurl="" name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><o:SmartTagType 
+downloadurl="" name="chmetcnv" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2007-08-14T09:07:00Z</o:Created>
+  <o:LastSaved>2007-08-14T09:07:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>301</o:Words>
+  <o:Characters>1717</o:Characters>
+  <o:Lines>14</o:Lines>
+  <o:Paragraphs>4</o:Paragraphs>
+  <o:CharactersWithSpaces>2014</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="mso-outline-level: 1"><st1:chsdate w:st="on" 
+IsROCDate="False" IsLunarDate="False" Day="30" Month="12" Year="1899"><B 
+style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">3.2. 
+1</SPAN></B></st1:chsdate><B style="mso-bidi-font-weight: normal"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"> </SPAN></B><B 
+style="mso-bidi-font-weight: normal"><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">外部中断向量的设置</SPAN></B><B 
+style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p></o:p></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">前面我们已经提到，<SPAN 
+lang=EN-US>Linux</SPAN>把向量<SPAN lang=EN-US>0</SPAN>～<SPAN 
+lang=EN-US>31</SPAN>分配给异常和非屏蔽中断，而把<SPAN lang=EN-US>32</SPAN>～<SPAN 
+lang=EN-US>47</SPAN>之间的向量分配给可屏蔽中断，可屏蔽中断的向量是通过对中断控制器的编程来设置的。前面介绍了<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv>中断控制器，下面我们通过对其初始化的介绍，来了解如何设置中断向量。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><st1:chmetcnv w:st="on" TCSC="0" NumberType="1" Negative="False" 
+HasSpace="False" SourceValue="8259" UnitName="a"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">8259A</SPAN></st1:chmetcnv><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">通过两个端口来进行数据传送，对于单块的<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv>或者<SPAN 
+class=GramE>是级连</SPAN>中的<st1:chmetcnv w:st="on" TCSC="0" NumberType="1" 
+Negative="False" HasSpace="False" SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv><SPAN lang=EN-US>_1</SPAN>来说，这两个端口是<SPAN 
+lang=EN-US>0x20</SPAN>和<SPAN lang=EN-US>0x21</SPAN>。对于<st1:chmetcnv w:st="on" 
+TCSC="0" NumberType="1" Negative="False" HasSpace="False" SourceValue="8259" 
+UnitName="a"><SPAN lang=EN-US>8259A</SPAN></st1:chmetcnv><SPAN 
+lang=EN-US>_2</SPAN>来说，这两个端口是<SPAN lang=EN-US>0xA0</SPAN>和<SPAN 
+lang=EN-US>0xA1</SPAN>。<st1:chmetcnv w:st="on" TCSC="0" NumberType="1" 
+Negative="False" HasSpace="False" SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv>有两种编程方式，一是初始化方式，二是工作方式。在操作系统启动时，需要对<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8959" UnitName="a"><SPAN 
+lang=EN-US>8959A</SPAN></st1:chmetcnv>做一些初始化工作，这就是初始化方式编程。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><B style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></B></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">先简单介绍一下<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv>内部的四个中断命令字（<SPAN 
+lang=EN-US>ICW</SPAN>）寄存器的功能，它们都是用来启动初始化编程的：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>ICW1</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">：初始化命令字。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>ICW2</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">：中断向量寄存器，初始化时写入高五位作为中断向量的高五位，然后在中断响应<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">时由<SPAN 
+lang=EN-US>8259</SPAN>根据中断源（哪个管脚）自动填入形成完整的<SPAN 
+lang=EN-US>8</SPAN>位中断向量（或叫中断类<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">型号）。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>ICW3</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">：<SPAN 
+lang=EN-US> 8259</SPAN><SPAN class=GramE>的级连命令字</SPAN>，用来区分主片和从片。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>ICW4</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">：指定中断嵌套方式、数据缓冲选择、中断结束方式和<SPAN 
+lang=EN-US>CPU</SPAN>类型。</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><st1:chmetcnv w:st="on" TCSC="0" NumberType="1" Negative="False" 
+HasSpace="False" SourceValue="8259" UnitName="a"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">8259A</SPAN></st1:chmetcnv><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">初始化的目的是写入有关命令字，<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv>内部有相应的寄存器来锁存这些命令字，以控制<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv>工作。有关的硬件知识笔者就不详细描述了，请读者查阅有关可编程中断控制器的资料，我们<SPAN 
+class=GramE>只具体把</SPAN><SPAN lang=EN-US>Linux</SPAN>对<st1:chmetcnv w:st="on" 
+TCSC="0" NumberType="1" Negative="False" HasSpace="False" SourceValue="8259" 
+UnitName="a"><SPAN lang=EN-US>8259A</SPAN></st1:chmetcnv>的初始化讲解一下<B 
+style="mso-bidi-font-weight: normal"><SPAN lang=EN-US>,</SPAN></B>代码在<SPAN 
+lang=EN-US>/arch/i386/kernel/i8259.c</SPAN>的函数<SPAN 
+lang=EN-US>init_<st1:chmetcnv w:st="on" TCSC="0" NumberType="1" Negative="False" 
+HasSpace="False" SourceValue="8259" 
+UnitName="a">8259A</st1:chmetcnv>()</SPAN>中<B 
+style="mso-bidi-font-weight: normal"><SPAN 
+lang=EN-US>:<o:p></o:p></SPAN></B></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; MARGIN-LEFT: 36pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><!--[if gte vml 1]><v:shapetype id=_x0000_t88 coordsize = 
+"21600,21600" o:spt = "88" filled = "f" path = 
+" m0,0 qx10800@0 l10800@2 qy21600@11,10800@3 l10800@1 qy0,21600 e" adj = 
+"1800,10800"><v:formulas><v:f eqn = "sum #0 0 0 "></v:f><v:f eqn = 
+"sum 21600 0 #0 "></v:f><v:f eqn = "sum #1 0 #0 "></v:f><v:f eqn = 
+"sum #1 #0 0 "></v:f><v:f eqn = "prod #0 9598 32768 "></v:f><v:f eqn = 
+"sum 21600 0 @4 "></v:f><v:f eqn = "sum 21600 0 #1 "></v:f><v:f eqn = 
+"min #1 @6 "></v:f><v:f eqn = "prod @7 1 2 "></v:f><v:f eqn = 
+"prod #0 2 1 "></v:f><v:f eqn = "sum 21600 0 @9 "></v:f><v:f eqn = 
+"sum #1 0 0 "></v:f></v:formulas><v:path o:connectlocs="0,0;21600,@11;0,21600" 
+arrowok = "t" o:connecttype = "custom" textboxrect = 
+"0,@4,7637,@5"></v:path><v:handles><v:h yrange="0,@8" 
+position="center,#0"></v:h><v:h yrange="@9,@10" 
+position="bottomRight,#1"></v:h></v:handles></v:shapetype><v:shape 
+id=_x0000_s1026 
+style="MARGIN-TOP: 0px; Z-INDEX: 1; LEFT: 0px; MARGIN-LEFT: 133.25pt; WIDTH: 10.25pt; POSITION: absolute; HEIGHT: 53.25pt; TEXT-ALIGN: left" 
+type = "#_x0000_t88" coordsize = "21600,21600" o:allowincell = "f"></v:shape><![endif]--><![if !vml]><span
+style='mso-ignore:vglayout;position:relative;z-index:1'><span style='left:0px;
+position:absolute;left:177px;top:-1px;width:15px;height:73px'><img width=15
+height=73 src="3.2.1.files/image001.gif" v:shapes="_x0000_s1026"></span></span><![endif]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>outb(0xff, 0x21);<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>/* </SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">送数据到工作寄存器<SPAN 
+lang=EN-US>OCW1(</SPAN>又称中断屏蔽字<SPAN lang=EN-US>),<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; MARGIN-LEFT: 144pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">屏蔽所有外部中断<SPAN 
+lang=EN-US>, </SPAN>因为此时系统尚未初始化完毕<SPAN lang=EN-US>,<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>outb(0xff, 0xA1);<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">不能接收任何外部中断请求<SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>outb_p(0x11, 0x20); 
+</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">／＊送</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">0x11</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">到</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">ICW1</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（通过端口</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">0x20</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">），启动初始化编程。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-tab-count: 4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">0x11</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">表示外部中断请求信号为上升沿有效，系统中有<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-tab-count: 7">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">多片<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8295" UnitName="a"><SPAN 
+lang=EN-US>8295A</SPAN></st1:chmetcnv>级连，还表示要向<SPAN 
+lang=EN-US>ICW4</SPAN>送数据＊／<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>outb_p(0x20 + 0, 0x21); /* </SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">送<SPAN 
+lang=EN-US>0x20</SPAN>到<SPAN lang=EN-US>ICW2</SPAN>，写入高五位作为中断</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">向</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">量的高五<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; MARGIN-LEFT: 85pt; TEXT-INDENT: 21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">位，低<SPAN 
+lang=EN-US>3</SPAN>位根据中断源（管脚）填入中断号<SPAN lang=EN-US>0</SPAN>～<SPAN 
+lang=EN-US>7</SPAN>，<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; MARGIN-LEFT: 108pt; TEXT-INDENT: 36pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">因此把<SPAN 
+lang=EN-US>IRQ0-7</SPAN>映射到向量<SPAN lang=EN-US>0x20-0x27 */ 
+<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; MARGIN-LEFT: 108pt; TEXT-INDENT: 36pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>outb_p(0x04, 0x21); /* </SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">送<SPAN 
+lang=EN-US>0x04</SPAN>到<SPAN lang=EN-US>ICW3</SPAN>，<SPAN 
+lang=EN-US>ICW3</SPAN>是<SPAN lang=EN-US>8259</SPAN><SPAN 
+class=GramE>的级连命令字</SPAN>，<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; MARGIN-LEFT: 108pt; TEXT-INDENT: 36pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>0x04</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">表示<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv><SPAN lang=EN-US>-1</SPAN>是主片 <SPAN 
+lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; MARGIN-LEFT: 108pt; TEXT-INDENT: 36pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR">outb_p(0x11, 
+0xA0); <SPAN style="mso-spacerun: yes">&nbsp;</SPAN>/* </SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">用</SPAN><SPAN 
+lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR">ICW1</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">初始化</SPAN><SPAN 
+lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR"> 
+<st1:chmetcnv w:st="on" TCSC="0" NumberType="1" Negative="False" 
+HasSpace="False" SourceValue="8259" UnitName="a">8259A</st1:chmetcnv>-2 */ 
+<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>outb_p(0x20 + 8, 0xA1); /* </SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">用</SPAN><SPAN 
+lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR">ICW2</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">把</SPAN><st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8259" UnitName="a"><SPAN lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR">8259A</SPAN></st1:chmetcnv><SPAN 
+lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR">-2</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">的</SPAN><SPAN 
+lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR">IRQ0-7</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">映射到</SPAN><SPAN 
+lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR"> 
+0x28-0x<st1:chmetcnv w:st="on" TCSC="0" NumberType="1" Negative="False" 
+HasSpace="False" SourceValue="2" UnitName="F">2f</st1:chmetcnv> 
+*/<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>outb_p(0x02, 0xA1); <SPAN style="mso-spacerun: yes">&nbsp;&nbsp;</SPAN>/* 
+</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">送</SPAN><SPAN 
+lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR">0x04</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">到</SPAN><SPAN 
+lang=PT-BR 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR">ICW3</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">。表示<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv><SPAN lang=EN-US>-2 </SPAN>是从片，<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; MARGIN-LEFT: 108pt; TEXT-INDENT: 36pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">并连接在<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv><SPAN lang=EN-US>_1</SPAN>的<SPAN 
+lang=EN-US>2</SPAN>号管脚上<SPAN lang=EN-US>*/<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-shading: white; mso-pattern: gray-25 auto" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>outb_p(0x01, 0xA1); /* </SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">把<SPAN 
+lang=EN-US>0x01</SPAN>送到<SPAN lang=EN-US>ICW4 */<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">最后一句有四方面含义：① 
+中断嵌套方式为一般嵌套方式。当某个中断正在服务时，本级中断及更低级的中断都被屏蔽，只有更高级的中断才能响应。注意，这对于多片<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv><SPAN 
+class=GramE>级连的</SPAN>中断系统来说，当某从片中一个中断正在服务时，主片即将这个从片的所有中断屏蔽，所以此时即使本片有比正在服务的中断级别更高的中断<SPAN 
+class=GramE>源发出</SPAN>请求，也不能得到响应，即不能中断嵌套。②<SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><st1:chmetcnv w:st="on" TCSC="0" 
+NumberType="1" Negative="False" HasSpace="False" SourceValue="8259" 
+UnitName="a">8259A</st1:chmetcnv></SPAN>数据线和系统总线之间不加三态缓冲器。一般来说，<SPAN 
+class=GramE>只有级连片数很多</SPAN>时才用到三态缓冲器；③<SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN>中断结束方式为正常方式（非自动结束方式）。即在中断服务结束时（中断服务程序末尾），要向<st1:chmetcnv w:st="on" 
+TCSC="0" NumberType="1" Negative="False" HasSpace="False" SourceValue="8259" 
+UnitName="a"><SPAN lang=EN-US>8259A</SPAN></st1:chmetcnv>芯片发送结束命令字<SPAN 
+lang=EN-US>EOI</SPAN>（送到工作寄存器<SPAN lang=EN-US>OCW2</SPAN>中），于是中断服务寄存器<SPAN 
+lang=EN-US>ISR</SPAN>中的当前<SPAN class=GramE>服务位</SPAN>被清<SPAN 
+lang=EN-US>0</SPAN>，<SPAN lang=EN-US>EOI</SPAN>命令字的格式有多种，在此<SPAN 
+class=GramE>不</SPAN>详述；④<SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>CPU</SPAN>类型为<SPAN lang=EN-US>x86</SPAN>系列。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">outb_p()</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">函数就是把第一个操作数拷贝到由第二个操作数指定的<SPAN 
+lang=EN-US>I/O</SPAN>端口，并通过一个空操作而产生一个暂停。<SPAN lang=EN-US> 
+<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">这里介绍了<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv>初始化的主要工作。最后要说明的是：<SPAN lang=EN-US>IBM 
+PC</SPAN>机的<SPAN 
+lang=EN-US>BIOS</SPAN>中固化有对中断控制器的初始化程序段，在计算机加电时，这段程序自动执行，读者感兴趣可以查阅资料看看它的源代码。典型的<SPAN 
+lang=EN-US>PC</SPAN>机将外部中断的中断向量分配为：<SPAN lang=EN-US>08H~0FH</SPAN>，<SPAN 
+lang=EN-US>70H~77H</SPAN>。但是<SPAN lang=EN-US>Linux</SPAN>对<st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="8259" UnitName="a"><SPAN 
+lang=EN-US>8259A</SPAN></st1:chmetcnv>作了重新初始化，修改了外部中断的中断向量的分配（<SPAN 
+lang=EN-US>20H~2FH</SPAN>），使中断向量的分配更加合理。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

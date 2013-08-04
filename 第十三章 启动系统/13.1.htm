@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0068)http://www.kerneltravel.net/kernel-book/第十三章%20启动系统/13.1.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:v = 
+"urn:schemas-microsoft-com:vml" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word"><HEAD><TITLE>初始化流程</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="13.1.files/filelist.xml" rel=File-List><LINK 
+href="13.1.files/editdata.mso" rel=Edit-Time-Data><!--[if !mso]>
+<STYLE>v\:* {
+	BEHAVIOR: url(#default#VML)
+}
+o\:* {
+	BEHAVIOR: url(#default#VML)
+}
+w\:* {
+	BEHAVIOR: url(#default#VML)
+}
+.shape {
+	BEHAVIOR: url(#default#VML)
+}
+</STYLE>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-17T14:39:00Z</o:Created>
+  <o:LastSaved>2007-08-17T14:39:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>38</o:Words>
+  <o:Characters>220</o:Characters>
+  <o:Lines>1</o:Lines>
+  <o:Paragraphs>1</o:Paragraphs>
+  <o:CharactersWithSpaces>257</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-font-kerning: 1.0pt; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-font-kerning: 1.0pt; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-font-kerning: 1.0pt; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">13.1 
+</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">初始化流程<SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">每一个操作系统都要有自己的初始化程序，<SPAN 
+lang=EN-US>Linux</SPAN>也不例外。那么，怎样初始化？我们首先看一下初始化的流程。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 24pt; mso-layout-grid-align: none"><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">图<SPAN 
+lang=EN-US>13.1</SPAN>初始化流程<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><!--[if gte vml 1]><o:wrapblock><v:group id=_x0000_s1026 
+style="MARGIN-TOP: 0px; Z-INDEX: 1; LEFT: 0px; MARGIN-LEFT: 144.2pt; WIDTH: 87.55pt; POSITION: absolute; HEIGHT: 213pt; TEXT-ALIGN: left" 
+coordsize = "1751,4260" coordorigin = "7639,6104" o:allowincell = 
+"f"><v:shapetype id=_x0000_t118 coordsize = "21600,21600" o:spt = "118" path = 
+" m0,4292 l21600,0,21600,21600,0,21600 xe"><v:stroke joinstyle = 
+"miter"></v:stroke><v:path 
+o:connectlocs="10800,2146;0,10800;10800,21600;21600,10800" gradientshapeok = "t" 
+o:connecttype = "custom" textboxrect = 
+"0,4291,21600,21600"></v:path></v:shapetype><v:shape id=_x0000_s1027 
+style="LEFT: 7742px; WIDTH: 1545px; POSITION: absolute; TOP: 6104px; HEIGHT: 785px" 
+type = "#_x0000_t118" coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 11.718pt; LEFT: auto; MARGIN-LEFT: 8.375pt; WIDTH: 62.125pt; TOP: auto; HEIGHT: 25.062pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">加电或复位</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><v:shapetype 
+id=_x0000_t67 coordsize = "21600,21600" o:spt = "67" path = 
+" m0@0 l@1@0@1,0@2,0@2@0,21600@0,10800,21600 xe" adj = "16200,5400"><v:stroke 
+joinstyle = "miter"></v:stroke><v:formulas><v:f eqn = "sum #0 0 0 "></v:f><v:f 
+eqn = "sum #1 0 0 "></v:f><v:f eqn = "sum height 0 #1 "></v:f><v:f eqn = 
+"sum 10800 0 #1 "></v:f><v:f eqn = "sum width 0 #0 "></v:f><v:f eqn = 
+"prod @4 @3 10800 "></v:f><v:f eqn = 
+"sum width 0 @5 "></v:f></v:formulas><v:path 
+o:connectlocs="10800,0;0,@0;10800,21600;21600,@0" o:connectangles="270,180,90,0" 
+o:connecttype = "custom" textboxrect = "@1,0,@2,@6"></v:path><v:handles><v:h 
+yrange="0,21600" xrange="0,10800" 
+position="#1,#0"></v:h></v:handles></v:shapetype><v:shape id=_x0000_s1028 
+style="LEFT: 8360px; WIDTH: 206px; POSITION: absolute; TOP: 6879px; HEIGHT: 387px" 
+type = "#_x0000_t67" coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.468pt; LEFT: auto; MARGIN-LEFT: 8.093pt; LAYOUT-FLOW: vertical-ideographic; TOP: auto; HEIGHT: 9.968pt"></v:textbox></v:shape><v:shapetype 
+id=_x0000_t202 coordsize = "21600,21600" o:spt = "202" path = 
+" m0,0 l0,21600,21600,21600,21600,0 xe"><v:stroke joinstyle = 
+"miter"></v:stroke><v:path gradientshapeok = "t" o:connecttype = 
+"rect"></v:path></v:shapetype><v:shape id=_x0000_s1029 
+style="LEFT: 7742px; WIDTH: 1545px; POSITION: absolute; TOP: 7169px; HEIGHT: 774px" 
+type = "#_x0000_t202" coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.718pt; LEFT: auto; MARGIN-LEFT: 8.375pt; WIDTH: 62.125pt; TOP: auto; HEIGHT: 30.75pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      lang=EN-US>BIOS</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">的启动</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><v:shape 
+id=_x0000_s1030 
+style="LEFT: 8360px; WIDTH: 206px; POSITION: absolute; TOP: 8040px; HEIGHT: 388px" 
+type = "#_x0000_t67" coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.75pt; LEFT: auto; MARGIN-LEFT: 8.093pt; LAYOUT-FLOW: vertical-ideographic; TOP: auto; HEIGHT: 10.031pt"></v:textbox></v:shape><v:shape 
+id=_x0000_s1031 
+style="LEFT: 7742px; WIDTH: 1648px; POSITION: absolute; TOP: 8428px; HEIGHT: 774px" 
+type = "#_x0000_t202" coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.656pt; LEFT: auto; MARGIN-LEFT: 8.375pt; WIDTH: 67.281pt; TOP: auto; HEIGHT: 30.75pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US><SPAN 
+      style="mso-spacerun: yes">&nbsp;</SPAN>Boot Loader</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><v:shape 
+id=_x0000_s1032 
+style="LEFT: 8360px; WIDTH: 206px; POSITION: absolute; TOP: 9202px; HEIGHT: 387px" 
+type = "#_x0000_t67" coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.343pt; LEFT: auto; MARGIN-LEFT: 8.093pt; LAYOUT-FLOW: vertical-ideographic; TOP: auto; HEIGHT: 10pt"></v:textbox></v:shape><v:shape 
+id=_x0000_s1033 
+style="LEFT: 7639px; WIDTH: 1751px; POSITION: absolute; TOP: 9589px; HEIGHT: 775px" 
+type = "#_x0000_t202" coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.968pt; LEFT: auto; MARGIN-LEFT: 8.5pt; WIDTH: 72.406pt; TOP: auto; HEIGHT: 30.812pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">操作系统初始化</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><w:wrap 
+type = "topandbottom"></w:wrap></v:group><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+ <table cellpadding=0 cellspacing=0>
+  <tr>
+   <td width=191 height=0></td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><img width=123 height=290 src="13.1.files/image001.gif" v:shapes="_x0000_s1026 _x0000_s1027 _x0000_s1028 _x0000_s1029 _x0000_s1030 _x0000_s1031 _x0000_s1032 _x0000_s1033"></td>
+  </tr>
+ </table>
+ </span><![endif]><!--[if gte vml 1]></o:wrapblock><![endif]--><BR 
+style="mso-ignore: vglayout" clear=all><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">图<SPAN 
+lang=EN-US>13.1</SPAN>中的加电或复位这一项代表操作者按下电源开关或复位按钮那一瞬间计算机完成的工作。<SPAN 
+lang=EN-US>BIOS</SPAN>的启动是紧跟其后的基于硬件的操作，它的主要作用就是完成硬件的初始化，稍后还要对<SPAN 
+lang=EN-US>BIOS</SPAN>进行详细的描述。<SPAN lang=EN-US> BIOS</SPAN>启动完成后，<SPAN 
+lang=EN-US>Boot Loader</SPAN><SPAN 
+class=GramE>将读操作系统</SPAN>代码，然后由操作系统来完成初始化剩下的所有工作。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

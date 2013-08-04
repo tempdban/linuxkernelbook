@@ -1,0 +1,498 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0077)http://www.kerneltravel.net/kernel-book/第十一章%20%20设备驱动程序/11.2.1.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:v = 
+"urn:schemas-microsoft-com:vml" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>I/O端口</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="11.2.1.files/filelist.xml" rel=File-List><LINK 
+href="11.2.1.files/editdata.mso" rel=Edit-Time-Data><!--[if !mso]>
+<STYLE>v\:* {
+	BEHAVIOR: url(#default#VML)
+}
+o\:* {
+	BEHAVIOR: url(#default#VML)
+}
+w\:* {
+	BEHAVIOR: url(#default#VML)
+}
+.shape {
+	BEHAVIOR: url(#default#VML)
+}
+</STYLE>
+<![endif]--><o:SmartTagType downloadurl="" name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-17T03:50:00Z</o:Created>
+  <o:LastSaved>2007-08-17T03:50:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>247</o:Words>
+  <o:Characters>1414</o:Characters>
+  <o:Lines>11</o:Lines>
+  <o:Paragraphs>3</o:Paragraphs>
+  <o:CharactersWithSpaces>1658</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: Wingdings;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	FONT-WEIGHT: bold; TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-font-kerning: 1.0pt; mso-bidi-font-weight: normal
+}
+LI.MsoNormal {
+	FONT-WEIGHT: bold; TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-font-kerning: 1.0pt; mso-bidi-font-weight: normal
+}
+DIV.MsoNormal {
+	FONT-WEIGHT: bold; TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-font-kerning: 1.0pt; mso-bidi-font-weight: normal
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" 
+Day="30" Month="12" Year="1899"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">11.2.1</SPAN></st1:chsdate><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"> 
+I/O</SPAN><SPAN style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">端口<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">每个连接到<SPAN 
+lang=EN-US>I/O</SPAN>总线上的设备都有自己的<SPAN lang=EN-US>I/O</SPAN>地址集，即所谓的<SPAN 
+lang=EN-US>I/O</SPAN>端口（<SPAN lang=EN-US>I/O port</SPAN>）。在<SPAN lang=EN-US>IBM 
+PC</SPAN>体系结构中，<SPAN lang=EN-US>I/O</SPAN>地址空间一共提供了<SPAN 
+lang=EN-US>65,536</SPAN>个<SPAN lang=EN-US>8</SPAN>位的<SPAN 
+lang=EN-US>I/O</SPAN>端口。可以把两个连续的<SPAN lang=EN-US>8</SPAN>位端口看成一个<SPAN 
+lang=EN-US>16</SPAN>位端口，但是这必须是从偶数地址开始。同理，也可以把两个连续的<SPAN 
+lang=EN-US>16</SPAN>位端口看成一个<SPAN lang=EN-US>32</SPAN>位端口，但是这必须是从<SPAN 
+lang=EN-US>4</SPAN>的整数<SPAN class=GramE>倍</SPAN>地址开始。有四条专用的汇编语言指令可以允许<SPAN 
+lang=EN-US>CPU</SPAN>对<SPAN lang=EN-US>I/O</SPAN>端口进行读写：它们分别是<SPAN 
+lang=EN-US>in</SPAN>、<SPAN lang=EN-US>ins</SPAN>、<SPAN 
+lang=EN-US>out</SPAN>和<SPAN lang=EN-US>outs</SPAN>。在执行其中的一条指令时，<SPAN 
+lang=EN-US>CPU</SPAN>使用地址总线选择所请求的<SPAN lang=EN-US>I/O</SPAN>端口，使用数据总线在<SPAN 
+lang=EN-US>CPU</SPAN>寄存器和端口之间传送数据。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">I/O</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">端口还可以被映射到物理地址空间：因此，处理器和<SPAN 
+lang=EN-US>I/O</SPAN>设备之间的通信就可以直接使用对内存进行操作的汇编语言指令（例如，<SPAN 
+lang=EN-US>mov</SPAN>、<SPAN lang=EN-US>and</SPAN>、<SPAN 
+lang=EN-US>or</SPAN>等等）。现代的硬件设备更倾向于映射<SPAN 
+lang=EN-US>I/O</SPAN>，因为这样处理的速度较快，并可以和<SPAN lang=EN-US>DMA</SPAN>结合起来使用。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">系统设计者的主要目的是提供对<SPAN 
+lang=EN-US>I/O</SPAN>编程的统一方法，但又不牺牲性能。为了达到这个目的，每个设备的<SPAN lang=EN-US>I/O 
+</SPAN>端口都被组织成如图<SPAN lang=EN-US>11.4</SPAN>所示的一组专用寄存器。<SPAN 
+lang=EN-US>CPU</SPAN>把要发给设备的命令写入控制寄存器（<SPAN lang=EN-US>control 
+register</SPAN>），并从状态寄存器（<SPAN lang=EN-US>status 
+register</SPAN>）中读出表示设备内部状态的值。<SPAN lang=EN-US>CPU</SPAN>还可以通过读取输入寄存器（<SPAN 
+lang=EN-US>input register</SPAN>）的内容从设备取得数据，也可以通过向输出寄存器（<SPAN lang=EN-US>output 
+register</SPAN>）中写入字节而把数据输出到设备。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><!--[if gte vml 1]><o:wrapblock><v:rect id=_x0000_s1026 
+style="MARGIN-TOP: 0px; Z-INDEX: 1; LEFT: 0px; MARGIN-LEFT: 163.1pt; WIDTH: 69.9pt; POSITION: absolute; HEIGHT: 26.1pt; TEXT-ALIGN: left" 
+coordsize = "21600,21600" o:allowincell = "f"><v:textbox 
+style="MARGIN-TOP: 4.718pt; LEFT: auto; MARGIN-LEFT: 8.656pt; WIDTH: 54.75pt; TOP: auto; HEIGHT: 18.156pt; mso-next-textbox: #_x0000_s1026"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">控制寄存器<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox><w:wrap 
+type = "topandbottom"></w:wrap></v:rect><v:rect id=_x0000_s1030 
+style="MARGIN-TOP: 0px; Z-INDEX: 5; LEFT: 0px; MARGIN-LEFT: 69.9pt; WIDTH: 46.6pt; POSITION: absolute; HEIGHT: 130.5pt; TEXT-ALIGN: left" 
+coordsize = "21600,21600" o:allowincell = "f"><v:textbox 
+style="MARGIN-TOP: 4.718pt; LEFT: auto; MARGIN-LEFT: 8.437pt; WIDTH: 31.468pt; TOP: auto; HEIGHT: 122.562pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;</SPAN><o:p></o:p></SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;</SPAN>C<o:p></o:p></SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;</SPAN>P<o:p></o:p></SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;</SPAN>U<o:p></o:p></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox><w:wrap 
+type = "topandbottom"></w:wrap></v:rect><v:rect id=_x0000_s1031 
+style="MARGIN-TOP: 0px; Z-INDEX: 6; LEFT: 0px; MARGIN-LEFT: 267.95pt; WIDTH: 46.6pt; POSITION: absolute; HEIGHT: 130.5pt; TEXT-ALIGN: left" 
+coordsize = "21600,21600" o:allowincell = "f"><v:textbox 
+style="MARGIN-TOP: 4.718pt; LEFT: auto; MARGIN-LEFT: 8.5pt; WIDTH: 31.468pt; TOP: auto; HEIGHT: 122.562pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+      <P class=MsoNormal><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">设备<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">I/O<o:p></o:p></SPAN></P>
+      <P class=MsoNormal><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">接口<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox><w:wrap 
+type = "topandbottom"></w:wrap></v:rect><v:line id=_x0000_s1032 
+style="Z-INDEX: 7; LEFT: 0px; POSITION: absolute; TEXT-ALIGN: left" from = 
+"116.5pt,0" to = "163.125pt,0" o:allowincell = "f"><v:stroke endarrow = 
+"block"></v:stroke><w:wrap type = "topandbottom"></w:wrap></v:line><v:line 
+id=_x0000_s1033 
+style="Z-INDEX: 8; LEFT: 0px; POSITION: absolute; TEXT-ALIGN: left; flip: x" 
+from = "116.5pt,0" to = "163.125pt,0" o:allowincell = "f"><v:stroke endarrow = 
+"block"></v:stroke><w:wrap type = "topandbottom"></w:wrap></v:line><v:line 
+id=_x0000_s1034 
+style="Z-INDEX: 9; LEFT: 0px; POSITION: absolute; TEXT-ALIGN: left; flip: x" 
+from = "116.5pt,0" to = "163.125pt,0" o:allowincell = "f"><v:stroke endarrow = 
+"block"></v:stroke><w:wrap type = "topandbottom"></w:wrap></v:line><v:line 
+id=_x0000_s1035 
+style="Z-INDEX: 10; LEFT: 0px; POSITION: absolute; TEXT-ALIGN: left" from = 
+"116.5pt,0" to = "163.125pt,0" o:allowincell = "f"><v:stroke endarrow = 
+"block"></v:stroke><w:wrap type = "topandbottom"></w:wrap></v:line><v:line 
+id=_x0000_s1036 
+style="Z-INDEX: 11; LEFT: 0px; POSITION: absolute; TEXT-ALIGN: left" from = 
+"233pt,0" to = "268pt,0" o:allowincell = "f"><v:stroke endarrow = 
+"block"></v:stroke><w:wrap type = "topandbottom"></w:wrap></v:line><v:line 
+id=_x0000_s1037 
+style="Z-INDEX: 12; LEFT: 0px; POSITION: absolute; TEXT-ALIGN: left; flip: x" 
+from = "233pt,0" to = "268pt,0" o:allowincell = "f"><v:stroke endarrow = 
+"block"></v:stroke><w:wrap type = "topandbottom"></w:wrap></v:line><v:line 
+id=_x0000_s1038 
+style="Z-INDEX: 13; LEFT: 0px; POSITION: absolute; TEXT-ALIGN: left; flip: x" 
+from = "233pt,0" to = "268pt,0" o:allowincell = "f"><v:stroke endarrow = 
+"block"></v:stroke><w:wrap type = "topandbottom"></w:wrap></v:line><v:line 
+id=_x0000_s1039 
+style="Z-INDEX: 14; LEFT: 0px; POSITION: absolute; TEXT-ALIGN: left" from = 
+"233pt,0" to = "268pt,0" o:allowincell = "f"><v:stroke endarrow = 
+"block"></v:stroke><w:wrap type = "topandbottom"></w:wrap></v:line><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+ <table cellpadding=0 cellspacing=0 align=left>
+  <tr>
+   <td width=92 height=0></td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><img width=332 height=183 src="11.2.1.files/image001.gif" v:shapes="_x0000_s1026 _x0000_s1030 _x0000_s1031 _x0000_s1032 _x0000_s1033 _x0000_s1034 _x0000_s1035 _x0000_s1036 _x0000_s1037 _x0000_s1038 _x0000_s1039"></td>
+  </tr>
+ </table>
+ </span><![endif]><!--[if gte vml 1]></o:wrapblock><![endif]--><BR 
+style="mso-ignore: vglayout" clear=all><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal><!--[if gte vml 1]><o:wrapblock><v:rect id=_x0000_s1027 
+style="MARGIN-TOP: 0px; Z-INDEX: 2; LEFT: 0px; MARGIN-LEFT: 163.1pt; WIDTH: 69.9pt; POSITION: absolute; HEIGHT: 26.1pt; TEXT-ALIGN: left" 
+coordsize = "21600,21600" o:allowincell = "f"><v:textbox 
+style="MARGIN-TOP: 4.718pt; LEFT: auto; MARGIN-LEFT: 8.656pt; WIDTH: 54.75pt; TOP: auto; HEIGHT: 18.156pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">控制寄存器<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox><w:wrap 
+type = "topandbottom"></w:wrap></v:rect><v:rect id=_x0000_s1028 
+style="MARGIN-TOP: 0px; Z-INDEX: 3; LEFT: 0px; MARGIN-LEFT: 163.1pt; WIDTH: 69.9pt; POSITION: absolute; HEIGHT: 26.1pt; TEXT-ALIGN: left" 
+coordsize = "21600,21600" o:allowincell = "f"><v:textbox 
+style="MARGIN-TOP: 4.718pt; LEFT: auto; MARGIN-LEFT: 8.656pt; WIDTH: 54.75pt; TOP: auto; HEIGHT: 18.156pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">控制寄存器<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox><w:wrap 
+type = "topandbottom"></w:wrap></v:rect><v:rect id=_x0000_s1029 
+style="MARGIN-TOP: 0px; Z-INDEX: 4; LEFT: 0px; MARGIN-LEFT: 163.1pt; WIDTH: 69.9pt; POSITION: absolute; HEIGHT: 26.1pt; TEXT-ALIGN: left" 
+coordsize = "21600,21600" o:allowincell = "f"><v:textbox 
+style="MARGIN-TOP: 4.718pt; LEFT: auto; MARGIN-LEFT: 8.656pt; WIDTH: 54.75pt; TOP: auto; HEIGHT: 18.156pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">控制寄存器<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox><w:wrap 
+type = "topandbottom"></w:wrap></v:rect><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+ <table cellpadding=0 cellspacing=0 align=left>
+  <tr>
+   <td width=216 height=0></td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><img width=100 height=41 src="11.2.1.files/image002.gif" v:shapes="_x0000_s1027 _x0000_s1028 _x0000_s1029"></td>
+  </tr>
+ </table>
+ </span><![endif]><!--[if gte vml 1]></o:wrapblock><![endif]--><BR 
+style="mso-ignore: vglayout" clear=all><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 21.25pt; TEXT-ALIGN: center; mso-outline-level: 1" 
+align=center><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">图<SPAN 
+lang=EN-US>11.4 </SPAN>专用<SPAN lang=EN-US>I/O</SPAN>端口<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">为了降低成本，通常把同一<SPAN 
+lang=EN-US>I/O</SPAN>端口用于不同目的。例如，某些位描述设备的状态，而其他位指定发布给设备的命令。同理，也可以把同一<SPAN 
+lang=EN-US>I/O</SPAN>端口用作输入寄存器或输出寄存器。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">那么如何访问<SPAN 
+lang=EN-US>I/O</SPAN>端口<SPAN lang=EN-US>? in</SPAN>、<SPAN 
+lang=EN-US>out</SPAN>、<SPAN lang=EN-US>ins</SPAN>和<SPAN 
+lang=EN-US>outs</SPAN>汇编语言指令都可以访问<SPAN lang=EN-US>I/O</SPAN>端口。<SPAN 
+lang=EN-US>Linux</SPAN>内核中定义了以下辅助函数来简化这种访问：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo1; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">inb( 
+)</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">、<SPAN 
+lang=EN-US>inw( )</SPAN>、<SPAN lang=EN-US>inl( )</SPAN>函数<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">分别从<SPAN 
+lang=EN-US>I/O</SPAN>端口读取<SPAN lang=EN-US>1</SPAN>、<SPAN 
+lang=EN-US>2</SPAN>或<SPAN lang=EN-US>4</SPAN>个连续字节。后缀“<SPAN 
+lang=EN-US>b</SPAN>”、“<SPAN lang=EN-US>w</SPAN>”、“<SPAN 
+lang=EN-US>l</SPAN>”分别代表一个字<SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>节（<SPAN lang=EN-US>8</SPAN>位）、一个字（<SPAN 
+lang=EN-US>16</SPAN>位）以及一个长整型（<SPAN lang=EN-US>32</SPAN>位）。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l4 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">inb_p( 
+)</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">、<SPAN 
+lang=EN-US>inw_p( )</SPAN>、<SPAN lang=EN-US>inl_p( 
+)<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">分别从<SPAN 
+lang=EN-US>I/O</SPAN>端口读取<SPAN lang=EN-US>1</SPAN>、<SPAN 
+lang=EN-US>2</SPAN>或<SPAN lang=EN-US>4</SPAN>个连续字节，然后执行一条“哑元（<SPAN 
+lang=EN-US>dummy</SPAN>，即空指令）”指令使<SPAN lang=EN-US>CPU</SPAN>暂停。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l5 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">outb( 
+)</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">、<SPAN 
+lang=EN-US>outw( )</SPAN>、<SPAN lang=EN-US>outl( )<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">分别向一个<SPAN 
+lang=EN-US>I/O</SPAN>端口写入<SPAN lang=EN-US>1</SPAN>、<SPAN 
+lang=EN-US>2</SPAN>或<SPAN lang=EN-US>4</SPAN>个连续字节。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l3 level1 lfo4; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">outb_p( 
+)</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">、<SPAN 
+lang=EN-US>outw_p( )</SPAN>、<SPAN lang=EN-US>outl_p( 
+)<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 42.5pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">分别向一个<SPAN 
+lang=EN-US>I/O</SPAN>端口写入<SPAN lang=EN-US>1</SPAN>、<SPAN 
+lang=EN-US>2</SPAN>或<SPAN lang=EN-US>4</SPAN>个连续字节，然后执行一条“哑元”指令使<SPAN 
+lang=EN-US>CPU</SPAN>暂停。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo5; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">insb( 
+)</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">、<SPAN 
+lang=EN-US>insw( )</SPAN>、<SPAN lang=EN-US>insl( )<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">分别从<SPAN 
+lang=EN-US>I/O</SPAN>端口读入以<SPAN lang=EN-US>1</SPAN>、<SPAN 
+lang=EN-US>2</SPAN>或<SPAN 
+lang=EN-US>4</SPAN>个字节为一组的连续字节序列。字节序列的长度由该函数的参数给出。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo6; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">outsb( 
+)</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">、<SPAN 
+lang=EN-US>outsw( )</SPAN>、<SPAN lang=EN-US>outsl( 
+)<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">分别向<SPAN 
+lang=EN-US>I/O</SPAN>端口写入以<SPAN lang=EN-US>1</SPAN>、<SPAN 
+lang=EN-US>2</SPAN>或<SPAN lang=EN-US>4</SPAN>个字节为一组的连续字节序列。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">虽然访问<SPAN 
+lang=EN-US>I/O</SPAN>端口非常简单，但是检测哪些<SPAN lang=EN-US>I/O</SPAN>端口已经分配给<SPAN 
+lang=EN-US>I/O</SPAN>设备可能就不这么简单，特别是对基于<SPAN 
+lang=EN-US>ISA</SPAN>总线的系统来说更是如此。通常，<SPAN 
+lang=EN-US>I/O</SPAN>设备驱动程序为了侦探硬件设备，需要盲目地向某一<SPAN 
+lang=EN-US>I/O</SPAN>端口写入数据；但是，如果其他硬件设备已经使用这个端口，那么系统就会崩溃。为了防止这种情况的发生，内核必须使用<SPAN 
+lang=EN-US>iotable</SPAN>表来<SPAN class=GramE>记录分</SPAN>配给每个硬件设备的<SPAN 
+lang=EN-US>I/O</SPAN>端口。任何设备驱动程序都可以使用下面三个函数：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">request_<SPAN 
+class=GramE>region(</SPAN> ) <o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 42.5pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">把一个给定区间的<SPAN 
+lang=EN-US>I/O</SPAN>端口分配给一个<SPAN lang=EN-US>I/O</SPAN>设备。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">check_<SPAN 
+class=GramE>region(</SPAN> ) <o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 42.5pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">检查一个给定区间的<SPAN 
+lang=EN-US>I/O</SPAN>端口是否空闲，或者其中一些是否已经分配给某个<SPAN lang=EN-US>I/O</SPAN>设备。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">release_<SPAN 
+class=GramE>region(</SPAN> ) <o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 42.5pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">释放以前分配给一个<SPAN 
+lang=EN-US>I/O</SPAN>设备的给定区间的<SPAN lang=EN-US>I/O</SPAN>端口。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">当前分配给<SPAN 
+lang=EN-US>I/O</SPAN>设备的<SPAN lang=EN-US>I/O</SPAN>地址可以从<SPAN 
+lang=EN-US>/proc/ioports</SPAN>文件中获得。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

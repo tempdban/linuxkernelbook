@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0067)http://www.kerneltravel.net/kernel-book/第七章%20进程间通信/7.1.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word"><HEAD><TITLE>管道</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="7.1.files/filelist.xml" rel=File-List><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-15T08:30:00Z</o:Created>
+  <o:LastSaved>2007-08-15T08:30:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>112</o:Words>
+  <o:Characters>639</o:Characters>
+  <o:Lines>5</o:Lines>
+  <o:Paragraphs>1</o:Paragraphs>
+  <o:CharactersWithSpaces>750</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-style-parent: ""; mso-pagination: none; mso-fareast-font-family: 宋体
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-style-parent: ""; mso-pagination: none; mso-fareast-font-family: 宋体
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-style-parent: ""; mso-pagination: none; mso-fareast-font-family: 宋体
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><B style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="FONT-SIZE: 12pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">7.1 
+</SPAN></B><B style="mso-bidi-font-weight: normal"><SPAN 
+style="FONT-SIZE: 12pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">管道<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">在进程之间通信的最简单的方法是通过一个文件，其中有一个进程写文件，而另一个进程从文件中读，这种方法比较简单，其优点体现在：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-SIZE: 9pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·只要进程对该文件具有访问权限，那么，两个进程间就可以进行通信。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-SIZE: 9pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·进程之间传递的数据量可以非常大。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 9pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">尽管如此，使用文件进行进程间通信也有两大缺点：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-SIZE: 9pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·空间的浪费。<SPAN 
+class=GramE>写进程</SPAN>只有确保把新数据加到文件的尾部，才能使<SPAN 
+class=GramE>读进程</SPAN>读到数据，对长时间存在<SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>的进程来说，这就可能使文件变得非常大。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-SIZE: 9pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·时间的浪费。如果<SPAN 
+class=GramE>读进程</SPAN>读数据比<SPAN class=GramE>写进程</SPAN>写数据快，那么，就可能出现<SPAN 
+class=GramE>读进程</SPAN>不断地读文件尾部，<SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>使<SPAN class=GramE>读进程</SPAN>做很多无用功。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 9pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">要克服以上缺点而又使进程间的通信相对简单，管道是一种较好的选择。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">所谓管道，是指用于连接一个<SPAN 
+class=GramE>读进程</SPAN>和一个写进程，以实现它们之间通信的共享文件，又称<SPAN 
+lang=EN-US>pipe</SPAN>文件。向管道<SPAN lang=EN-US>(</SPAN>共享文件<SPAN 
+lang=EN-US>)</SPAN>提供输入的发送进程<SPAN lang=EN-US>(</SPAN>即<SPAN 
+class=GramE>写进程</SPAN><SPAN 
+lang=EN-US>)</SPAN>，以字符流形式将大量的数据送入管道；而接受管道输出的接收进程<SPAN lang=EN-US>(</SPAN>即<SPAN 
+class=GramE>读进程</SPAN><SPAN 
+lang=EN-US>)</SPAN>，可从管道中接收数据。由于发送进程和接收进程是利用管道进行通信的，故又称管道通信。这种方式首创于<SPAN 
+lang=EN-US>Unix</SPAN>系统，因它能传送大量的数据，且很有效，故很多操作系统都引入了这种通信方式，<SPAN 
+lang=EN-US>Linux</SPAN>也不例外。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">为了协调双方的通信，管道通信机制必须提供以下三方面的协调能力：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-SIZE: 9pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·互斥。当一个进程正在对<SPAN 
+lang=EN-US>pipe</SPAN>进行读<SPAN lang=EN-US>/</SPAN>写操作时，另一个进程必须等待。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-SIZE: 9pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·同步。<SPAN 
+class=GramE>当写</SPAN><SPAN lang=EN-US>(</SPAN>输入<SPAN 
+lang=EN-US>)</SPAN>进程把一定数量<SPAN lang=EN-US>(</SPAN>如<SPAN 
+lang=EN-US>4KB)</SPAN>数据写入<SPAN lang=EN-US>pipe</SPAN>后，便去睡眠等待，直到读<SPAN 
+lang=EN-US>(</SPAN>输出<SPAN lang=EN-US>)</SPAN>进程取走数据后，再把它唤醒。当<SPAN 
+class=GramE>读进程</SPAN>读到一空<SPAN lang=EN-US>pipe</SPAN>时，也应睡眠等待，直至<SPAN 
+class=GramE>写进程</SPAN>将数据写入管道后，才将它唤醒。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-SIZE: 9pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·对方是否存在。只有确定对方已存在时，方能进行通信。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

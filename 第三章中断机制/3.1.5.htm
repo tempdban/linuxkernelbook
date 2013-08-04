@@ -1,0 +1,392 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0064)http://www.kerneltravel.net/kernel-book/第三章中断机制/3.1.5.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>相关汇编指令</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="3.1.5.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-14T09:05:00Z</o:Created>
+  <o:LastSaved>2007-08-14T09:05:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>145</o:Words>
+  <o:Characters>827</o:Characters>
+  <o:Lines>6</o:Lines>
+  <o:Paragraphs>1</o:Paragraphs>
+  <o:CharactersWithSpaces>971</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: Wingdings;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" 
+Day="30" Month="12" Year="1899"><B style="mso-bidi-font-weight: normal"><SPAN 
+lang=EN-US>3.1.5</SPAN></B></st1:chsdate><B 
+style="mso-bidi-font-weight: normal"><SPAN lang=EN-US> </SPAN></B><B 
+style="mso-bidi-font-weight: normal"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">相关汇编指令</SPAN><SPAN 
+lang=EN-US><o:p></o:p></SPAN></B></P>
+<P class=MsoNormal style="TEXT-INDENT: 23.4pt"><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为了有助于读者对中断实现过程的理解，下面介绍几条相关的汇编指令：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 49.8pt; TEXT-INDENT: -26.4pt; mso-list: l0 level1 lfo2; tab-stops: list 49.8pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">（1）<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">调用过程指令</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CALL<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 23.4pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指令格式：</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"> CALL<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">过程名</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 23.4pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">说明：在取出</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CALL</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指令之后及执行</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CALL</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指令之前，使指令指针寄存器</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">EIP</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指向紧接</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CALL</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指令的下一条指令。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CALL</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指令先将</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">EIP</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">值压入<SPAN 
+class=GramE>栈</SPAN>内，再进行控制转移。当遇到</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">RET</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指令时，<SPAN 
+class=GramE>栈</SPAN>内信息可使控制权直接回到</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CALL</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的下一条指令</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 49.8pt; TEXT-INDENT: -26.4pt; mso-list: l0 level1 lfo2; tab-stops: list 49.8pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">（2）<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">调用中断过程的指令</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">INT<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 23.4pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指令格式：</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">INT<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中断向量</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 23.4pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">说明：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">EFLAG</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">、</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CS</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">及</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">EIP</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">寄存器被压入<SPAN 
+class=GramE>栈</SPAN>内。控制权被转移到由中断向量指定的中断处理程序。在中断处理程序结束时，</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IRET</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指令又把控制权送回到刚才执行被中断的地方。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 49.8pt; TEXT-INDENT: -26.4pt; mso-list: l0 level1 lfo2; tab-stops: list 49.8pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">（3）<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">调用溢出处理程序的指令</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">INTO<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指令格式：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">INTO<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">说明：在溢出标志为</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">1</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">时，</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">INTO</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">调用中断向量为</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">4</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的异常处理程序。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">EFLAG</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">、</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CS</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">及</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">EIP</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">寄存器被压入<SPAN 
+class=GramE>栈</SPAN>内。控制权被转移到由中断向量</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">4</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指定的异常处理程序。在中断处理程序结束时，</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IRET</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指令又把控制权送回到刚才执行被中断的地方。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 49.8pt; TEXT-INDENT: -26.4pt; mso-list: l0 level1 lfo2; tab-stops: list 49.8pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">（4）<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中断返回指令</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IRET<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 23.4pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指令格式：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IRET<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 23.4pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">说明：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IRET</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">与中断调用过程相反：它将</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">EIP</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">、</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CS</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">及</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">EFLAGS</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">寄存器内容从<SPAN 
+class=GramE>栈</SPAN>中弹出，并将控制权返回到发生中断的地方。</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IRET</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">用在中断处理程序的结束处。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 49.8pt; TEXT-INDENT: -26.4pt; mso-list: l0 level1 lfo2; tab-stops: list 49.8pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">（5）<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">加载中断描述符表的指令</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">LIDT<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 23.4pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">格式：</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">LIDT<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>48</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">位的伪描述符</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 23.4pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">说明：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">LIDT</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">将指令中给定的</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">48</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">位伪描述符装入中断描述符寄存器</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IDTR</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。伪描述符和中断描述符表寄存器的结构相同，都是由两部分组成：在低字（低</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">16</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">位）中装的是界限，<SPAN 
+class=GramE>在高双字</SPAN>（高</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">32</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">位）中装的是基址。这条指令只能出现在内核的代码中。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 23.4pt"><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中断或异常处理程序执行的最后一条指令是返回指令</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IRET</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。这条指令将使</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CPU</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">进行如下操作后，把控制权转交给被中断的进程：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 44.65pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo1; tab-stops: list 44.65pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">从中断处理程序的内核<SPAN 
+class=GramE>栈</SPAN>中恢复相应寄存器的值。如图</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">3.4</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，如果一个硬错码被压入堆栈，则先弹出这个值，然后，依次将</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">EIP</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">、</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CS</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">及</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">EFLSG</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">从<SPAN 
+class=GramE>栈</SPAN>中弹出。</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 44.65pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo1; tab-stops: list 44.65pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">检查中断或异常处理程序的当前特权级（</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CPL</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）是否等于</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CS</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中的最低两位，如果是，这就意味着被中断的进程与中断处理程序都处于内核态，也就是没有更换堆栈，因此，</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IRET</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">终止执行，返回到被中断的进程。否则，转入下一步。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 44.65pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo1; tab-stops: list 44.65pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">从<SPAN 
+class=GramE>栈</SPAN>中装载</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">SS</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">和</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">ESP</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">寄存器，返回到用户态堆栈。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

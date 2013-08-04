@@ -1,0 +1,586 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0071)http://www.kerneltravel.net/kernel-book/第八章%20虚拟文件系统/8.3.2.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>索引节点高速缓存</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="8.3.2.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-15T09:09:00Z</o:Created>
+  <o:LastSaved>2007-08-15T09:09:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>787</o:Words>
+  <o:Characters>4486</o:Characters>
+  <o:Lines>37</o:Lines>
+  <o:Paragraphs>10</o:Paragraphs>
+  <o:CharactersWithSpaces>5263</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: Wingdings;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+P.MsoPlainText {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Times New Roman"
+}
+LI.MsoPlainText {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Times New Roman"
+}
+DIV.MsoPlainText {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Times New Roman"
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" 
+Month="12" Year="1899"><B style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">8.3.2</SPAN></B></st1:chsdate><B 
+style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN></B><B 
+style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">索引节点高速缓存<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US style="mso-font-kerning: 0pt">VFS</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">也用了一个高速缓存来加快对索引节点的访问，和块高速缓存不同的一点是每个缓冲区不用再分为两个部分了，因为</SPAN><SPAN 
+lang=EN-US style="mso-font-kerning: 0pt">inode</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">结构中已经有了类似于块高速缓存中缓冲区首部的域。索引节点高速缓存的实现代码</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">全部在</SPAN><SPAN 
+lang=EN-US>fs/inode.c</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">，这部分代码并没有随着内核版本的变化做很多的修改。</SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">．索引节点链表</SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">每个索引节点可能处于哈希表中，也可能同时处于下列“类型”链表的一种中：</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l5 level1 lfo1; tab-stops: list 21.25pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>"in_use" – </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">有效的索引节点，即</SPAN><SPAN 
+lang=EN-US> i_count &gt; 0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">且</SPAN><SPAN 
+lang=EN-US>i_nlink &gt; 0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">（参看前面的</SPAN><SPAN 
+lang=EN-US>inode</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">结构）</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l1 level1 lfo2; tab-stops: list 21.25pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>"dirty"<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>- </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">类似于</SPAN><SPAN 
+lang=EN-US> "in_use" </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">，但还“脏”</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l4 level1 lfo3; tab-stops: list 21.25pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>"unused" – </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">有效的索引节点但还没使用，即</SPAN><SPAN 
+lang=EN-US> i_count = 0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">。</SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">这几个链表定义如下：</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21pt"><SPAN class=GramE><SPAN 
+lang=EN-US>static</SPAN></SPAN><SPAN lang=EN-US> 
+LIST_HEAD(inode_in_use);</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21pt"><SPAN class=GramE><SPAN 
+lang=EN-US>static</SPAN></SPAN><SPAN lang=EN-US> 
+LIST_HEAD(inode_unused);</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21pt"><SPAN class=GramE><SPAN 
+lang=EN-US>static</SPAN></SPAN><SPAN lang=EN-US> struct list_head 
+*inode_hashtable;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+class=GramE><SPAN lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Courier New'">static</SPAN></SPAN><SPAN 
+lang=EN-US style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Courier New'"> 
+LIST_HEAD(anon_hash_chain); /* for inodes with NULL i_sb 
+*/<o:p></o:p></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN>因此，索引节点高速缓存的结构概述如下：</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo4; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>全局哈希表<SPAN 
+lang=EN-US>inode_hashtable</SPAN>，其中哈希值是根据每个超级块指针的值和<SPAN 
+lang=EN-US>32</SPAN>位索引节点号而得。对没有超级块的索引节点（<SPAN lang=EN-US>inode-&gt;i_sb == 
+NULL</SPAN>），则将其加入到<SPAN lang=EN-US>anon_hash_chain</SPAN>链表的首部。例如，<SPAN 
+lang=EN-US>net/socket.c</SPAN>中<SPAN lang=EN-US>sock_alloc()</SPAN>函数<SPAN 
+lang=EN-US>, </SPAN>通过调用<SPAN lang=EN-US>fs/inode.c</SPAN>中<SPAN 
+lang=EN-US>get_empty_inode()</SPAN>创建的套接字是一个匿名索引节点，这个节点就加入到了<SPAN 
+lang=EN-US>anon_hash_chain</SPAN>链表。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo4; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>正在使用的索引节点链表。全局变量<SPAN 
+lang=EN-US>inode_in_use</SPAN>指向该链表中的首元素和<SPAN class=GramE>尾元素</SPAN>。函数<SPAN 
+lang=EN-US>get_empty_inode()</SPAN>获得一个空节点，<SPAN 
+lang=EN-US>get_new_inode()</SPAN>获得一个新节点，通过这两个函数新分配的索引节点就加入到这个链表中。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo4; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>未用索引节点链表。全局变量<SPAN 
+lang=EN-US>inode_unused</SPAN>的<SPAN lang=EN-US>next</SPAN>域 和<SPAN 
+lang=EN-US>prev</SPAN><SPAN class=GramE>域分别</SPAN>指向该链表中的首元素和<SPAN 
+class=GramE>尾元素</SPAN>。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo4; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>脏索引节点链表。由相应超级块的<SPAN 
+lang=EN-US>s_dirty</SPAN>域指向该链表中的首元素和<SPAN class=GramE>尾元素</SPAN>。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo4; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>对<SPAN lang=EN-US>inode</SPAN>对象的缓存，定义如下：</P>
+<P class=MsoPlainText style="TEXT-INDENT: 20.4pt"><SPAN class=GramE><SPAN 
+lang=EN-US>static</SPAN></SPAN><SPAN lang=EN-US> kmem_cache_t * 
+inode_cachep</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 20.4pt">这是一个<SPAN 
+lang=EN-US>Slab</SPAN>缓存，用于分配和释放索引节点对象。</P>
+<P class=MsoPlainText><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN>索引节点的<SPAN 
+lang=EN-US>i_hash</SPAN>域指向哈希表，<SPAN lang=EN-US>i_list</SPAN>指向<SPAN 
+lang=EN-US>in_use</SPAN>、<SPAN lang=EN-US>unused </SPAN>或<SPAN lang=EN-US> 
+dirty</SPAN>某个链表。所有这些链表都受单个自旋锁<SPAN lang=EN-US>inode_lock</SPAN>的保护，其定义如下：</P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt"><SPAN 
+lang=EN-US>/*</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US>* A simple 
+spinlock to protect the list manipulations.</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US>*</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US>* NOTE! You 
+also have to own the lock if you change</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US>* <SPAN 
+class=GramE>the</SPAN> i_state of an inode while it is in use..</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt"><SPAN 
+lang=EN-US>*/</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt"><SPAN class=GramE><SPAN 
+lang=EN-US>static</SPAN></SPAN><SPAN lang=EN-US> spinlock_t inode_lock = 
+SPIN_LOCK_UNLOCKED;</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN>索引节点高速缓存的初始化是由<SPAN 
+lang=EN-US>inode_init()</SPAN>实现的，而这个函数是在系统启动时由<SPAN 
+lang=EN-US>init/main.c</SPAN>中的<SPAN lang=EN-US>start_kernel()</SPAN>函数调用的。<SPAN 
+lang=EN-US>inode_init</SPAN>（）只有一个参数，表示索引节点高速缓存所使用的物理页面数。因此，索引节点高速缓存可以根据可用物理内存的大小来进行配置，例如，如果物理内存足够大的话，就可以创建一个大的哈希表。</P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN>索引节点状态的信息存放在数据结构<SPAN 
+lang=EN-US>inodes_stat_t</SPAN>中，在<SPAN lang=EN-US>fs/fs.h</SPAN>中定义如下：</P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN class=GramE>struct</SPAN> 
+inodes_stat_t {</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>int</SPAN> nr_inodes;</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>int</SPAN> nr_unused;</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>int</SPAN> dummy[5];</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>};</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN class=GramE>extern</SPAN> 
+struct inodes_stat_t inodes_stat</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN>用户程序可以通过<SPAN 
+lang=EN-US>/proc/sys/fs/inode-nr </SPAN>和<SPAN lang=EN-US> 
+/proc/sys/fs/inode-state</SPAN>获得索引节点高速缓存中索引节点总数及未用索引节点数。</P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>2</SPAN>．索引节点高速缓存的工作过程</P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>为了帮助大家理解索引节点高速缓存如何工作，我们来跟踪一下在打开<SPAN 
+lang=EN-US>Ext2</SPAN>文件系统的一个常规文件时，相应索引节点的作用。</P>
+<P class=MsoPlainText><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText style="MARGIN-LEFT: 36pt"><SPAN class=GramE><SPAN 
+lang=EN-US>fd</SPAN></SPAN><SPAN lang=EN-US> = open("file", 
+O_RDONLY);</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 36pt"><SPAN class=GramE><SPAN 
+lang=EN-US>close(</SPAN></SPAN><SPAN lang=EN-US>fd);</SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 36pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>open()</SPAN>系统调用是由<SPAN 
+lang=EN-US>fs/open.c</SPAN>中的<SPAN lang=EN-US>sys_open</SPAN>函数实现的，而真正的工作是由<SPAN 
+lang=EN-US>fs/open.c</SPAN>中的<SPAN lang=EN-US>filp_open()</SPAN>函数完成的，<SPAN 
+lang=EN-US>filp_open()</SPAN>函数如下：</P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>struct</SPAN> file *filp_open(const char * filename, int flags, int 
+mode)</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US>{</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>int</SPAN> namei_flags, error;</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> nameidata nd;</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>namei_flags = flags;</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> ((namei_flags+1) &amp; O_ACCMODE)</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>namei_flags</SPAN>++;</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (namei_flags &amp; O_TRUNC)</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>namei_flags |= 2;</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>error</SPAN> = open_namei(filename, namei_flags, mode, 
+&amp;nd);</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (!error)</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> dentry_open(nd.dentry, nd.mnt, 
+flags);</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> ERR_PTR(error);</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US>}</SPAN></P>
+<P class=MsoPlainText style="MARGIN-LEFT: 4.8pt">其中<SPAN 
+lang=EN-US>nameidata</SPAN>结构在<SPAN lang=EN-US>fs.h</SPAN>中定义如下：</P>
+<P class=MsoPlainText style="MARGIN-LEFT: 4.8pt"><SPAN class=GramE><SPAN 
+lang=EN-US>struct</SPAN></SPAN><SPAN lang=EN-US> nameidata {</SPAN></P>
+<P class=MsoPlainText style="MARGIN-LEFT: 4.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> dentry *dentry;</SPAN></P>
+<P class=MsoPlainText style="MARGIN-LEFT: 4.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> vfsmount *mnt;</SPAN></P>
+<P class=MsoPlainText style="MARGIN-LEFT: 4.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> qstr last;</SPAN></P>
+<P class=MsoPlainText style="MARGIN-LEFT: 4.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> int flags;</SPAN></P>
+<P class=MsoPlainText style="MARGIN-LEFT: 4.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>int</SPAN> last_type;</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US>};</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN>这个数据结构是临时性的，其中，我们主要关注<SPAN 
+lang=EN-US>dentry</SPAN>和<SPAN lang=EN-US>mnt</SPAN>域。<SPAN 
+lang=EN-US>Dentry</SPAN>结构我们已经在前面介绍过，而<SPAN 
+lang=EN-US>vfsmount</SPAN>结构记录着所属文件系统的安装信息，例如文件系统的安装点、文件系统的根节点等。</P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>filp_open</SPAN>（）主要调用以下两个函数</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 40.8pt; TEXT-INDENT: -36pt; mso-list: l0 level1 lfo5; tab-stops: list 40.8pt"><![if !supportLists]><SPAN 
+lang=EN-US style="mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">（1）<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+lang=EN-US>open_namei()</SPAN>：填充目标文件所在目录的<SPAN lang=EN-US>dentry</SPAN>结构 和 
+所在文件系统的<SPAN lang=EN-US>vfsmount</SPAN>结构。在<SPAN 
+lang=EN-US>dentry</SPAN>结构中<SPAN 
+lang=EN-US>dentry-&gt;d_inode</SPAN>就指向目标文件的索引节点。这个函数比较复杂和庞大，在此为了突出主题，后面我们只介绍与主题相关的内容。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 40.8pt; TEXT-INDENT: -36pt; mso-list: l0 level1 lfo5; tab-stops: list 40.8pt"><![if !supportLists]><SPAN 
+lang=EN-US style="mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">（2）<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+lang=EN-US>dentry_open()</SPAN>：建立目标文件的一个“上下文”，即<SPAN 
+lang=EN-US>file</SPAN>数据结构，并让它与当前进程的<SPAN 
+lang=EN-US>task_strrct</SPAN>结构挂上钩。同时，在这个函数中，调用了具体文件系统的打开函数，即<SPAN 
+lang=EN-US>f_op-&gt;open()</SPAN>。该函数返回指向新建立的<SPAN 
+lang=EN-US>file</SPAN>结构的指针。</P>
+<P class=MsoPlainText style="MARGIN-LEFT: 4.8pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText style="MARGIN-LEFT: 4.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>open_namei()</SPAN>函数通过<SPAN 
+lang=EN-US>path_walk()</SPAN>与目录项高速缓存（即目录项哈希表）打交道，而<SPAN 
+lang=EN-US>path_walk()</SPAN>又调用具体文件系统的<SPAN 
+lang=EN-US>inode_operations-&gt;lookup()</SPAN>方法；该方法从磁盘找到并读入当前节点的目录项，然后通过<SPAN 
+lang=EN-US>iget(sb, ino),</SPAN>根据索引节点号从磁盘读入相应索引节点并在内存建立起相应的<SPAN 
+lang=EN-US>inode</SPAN>结构，这就到了我们讨论的索引节点高速缓存。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 4.8pt; TEXT-INDENT: 31.2pt">当索引节点读入内存后，通过调用<SPAN 
+lang=EN-US>d_add(dentry, inode)</SPAN>，就将<SPAN lang=EN-US>dentry</SPAN>结构和<SPAN 
+lang=EN-US>inode</SPAN>结构之间的链接关系建立起来。两个数据结构之间的联系是双向的。一方面，<SPAN 
+lang=EN-US>dentry</SPAN>结构中的指针<SPAN lang=EN-US>d_inode</SPAN>指向<SPAN 
+lang=EN-US>inode</SPAN>结构，这是一对一的关系，因为一个目录项只对应着一个文件。反之则不然，同一个文件可以有多个不同的文件名或路径（通过系统调用<SPAN 
+lang=EN-US>link()</SPAN>建立，注意与符号连接的区别，那是由<SPAN 
+lang=EN-US>symlink</SPAN>（）建立的），所以从<SPAN lang=EN-US>inode</SPAN>结构到<SPAN 
+lang=EN-US>dentry</SPAN>结构的方向是一对多的关系。因此，<SPAN lang=EN-US> inode</SPAN>结构的<SPAN 
+lang=EN-US>i_ dentry</SPAN>是个队列，<SPAN lang=EN-US>dentry</SPAN>结构通过其队列头部<SPAN 
+lang=EN-US>d_alias</SPAN>挂入相应<SPAN lang=EN-US>inode</SPAN>结构的队列中。</P>
+<P class=MsoPlainText style="MARGIN-LEFT: 36pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>为了进一步说明索引节点高速缓存，我们来进一步考察<SPAN 
+lang=EN-US>iget</SPAN>（）。当我们打开一个文件时，就调用了<SPAN lang=EN-US>iget</SPAN>（）函数，而<SPAN 
+lang=EN-US>iget</SPAN>真正调用的是<SPAN lang=EN-US>iget4(sb, ino, NULL, 
+NULL)</SPAN>函数，该函数代码如下：</P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>struct</SPAN> inode *iget4(struct super_block *sb, unsigned long 
+ino, find_inode_t find_actor, void *opaque)</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US>{</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> list_head * head = inode_hashtable + 
+hash(sb,ino);</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> inode * inode;</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>spin_<SPAN class=GramE>lock(</SPAN>&amp;inode_lock);</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>inode</SPAN> = find_inode(sb, ino, head, find_actor, 
+opaque);</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (inode) {</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>__<SPAN class=GramE>iget(</SPAN>inode);</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>spin_<SPAN class=GramE>unlock(</SPAN>&amp;inode_lock);</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>wait_on_<SPAN class=GramE>inode(</SPAN>inode);</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> inode;</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>}</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>spin_<SPAN class=GramE>unlock(</SPAN>&amp;inode_lock);</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/*</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>* get_new_<SPAN class=GramE>inode(</SPAN>) will do the right thing, 
+re-trying the search</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>* <SPAN 
+class=GramE>in</SPAN> case it had to block at any point.</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*/</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> get_new_inode(sb, ino, head, find_actor, 
+opaque);</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>}</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN>下面对以上代码给出进一步的解释：</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l3 level1 lfo6; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>inode</SPAN>结构中有个哈希表<SPAN 
+lang=EN-US>inode_hashtable</SPAN>，首先在<SPAN 
+lang=EN-US>inode_lock</SPAN>锁的保护下，通过<SPAN lang=EN-US>find_ 
+inode</SPAN>函数在哈希表中查找目标节点的<SPAN 
+lang=EN-US>inode</SPAN>结构，由于索引节点号只有在同一设备上时才是唯一的，因此，在哈希计算时要把索引节点所在设备的<SPAN 
+lang=EN-US>super_block</SPAN>结构的地址也结合进去。如果在哈希表中找到该节点，则其引用计数（<SPAN 
+lang=EN-US>i_count</SPAN>）加<SPAN lang=EN-US>1</SPAN>；如果<SPAN 
+lang=EN-US>i_count</SPAN>在增加之前为<SPAN 
+lang=EN-US>0</SPAN>，说明该节点不“脏”，则该节点当前肯定处于<SPAN lang=EN-US>inode_unused 
+list</SPAN>队列中，于是，就把该节点从这个队列删除而插入<SPAN 
+lang=EN-US>inode_in_use</SPAN>队列；最后，把<SPAN 
+lang=EN-US>inodes_stat.nr_unused</SPAN>减<SPAN lang=EN-US>1</SPAN>。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l3 level1 lfo6; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN>如果该节点当前被加锁，则必须等待，直到解锁，以便确保<SPAN 
+lang=EN-US>iget4()</SPAN>返回一个未加锁的节点。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l3 level1 lfo6; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>如果在哈希表中没有找到该节点，说明目标节点的<SPAN 
+lang=EN-US>inode</SPAN>结构还不在内存，因此，调用<SPAN 
+lang=EN-US>get_new_inode()</SPAN>从磁盘上读入相应的索引节点并建立起一个<SPAN 
+lang=EN-US>inode</SPAN>结构，并把该结构插入到哈希表中。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l3 level1 lfo6; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>对<SPAN 
+lang=EN-US>get_new_inode()</SPAN>给出进一步的说明，该函数从<SPAN 
+lang=EN-US>Slab</SPAN>缓存区中分配一个新的<SPAN 
+lang=EN-US>inode</SPAN>结构，但是这个分配操作有可能出现阻塞，于是，就应当解除保护哈希表的<SPAN 
+lang=EN-US>inode_lock</SPAN>自旋锁，以便在哈希表中再次进行搜索。如果这次在哈希表中找到这个索引节点，就通过<SPAN 
+lang=EN-US>__iget</SPAN>把该节点的引用计数加<SPAN 
+lang=EN-US>1</SPAN>，并撤销新分配的节点。如果在哈希表中还没有找到，就使用新分配的索引节点；因此，把该索引节点的<SPAN 
+class=GramE>一些域先初始化</SPAN>为必须的值，然后调用具体文件系统的<SPAN lang=EN-US> 
+sb-&gt;s_op-&gt;read_inode()</SPAN>域填充该节点的其他域。这就把我们从索引节点高速缓存带到了某个具体文件系统的代码中。当<SPAN 
+lang=EN-US>s_op-&gt;read_inode()</SPAN>方法正在从磁盘读索引节点时，该节点被加锁（<SPAN 
+lang=EN-US>i_state = I_LOCK</SPAN>）；当<SPAN 
+lang=EN-US>read_inode()</SPAN>返回时，该节点的锁被解除，并且唤醒所有等<SPAN 
+class=GramE>待者</SPAN>。</P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

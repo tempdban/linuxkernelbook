@@ -1,0 +1,1222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0059)http://www.kerneltravel.net/kernel-book/7．网络设备支持.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word"><HEAD><TITLE>网络设备支持</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="7．网络设备支持.files/filelist.xml" rel=File-List><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2007-08-27T04:27:00Z</o:Created>
+  <o:LastSaved>2007-08-27T04:27:00Z</o:LastSaved>
+  <o:Pages>4</o:Pages>
+  <o:Words>783</o:Words>
+  <o:Characters>4467</o:Characters>
+  <o:Lines>37</o:Lines>
+  <o:Paragraphs>10</o:Paragraphs>
+  <o:CharactersWithSpaces>5240</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<STYLE>@font-face {
+	font-family: Courier;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@font-face {
+	font-family: TimesNewRomanPSMT;
+}
+@font-face {
+	font-family: Courier-Oblique;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal><SPAN lang=EN-US>7</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">．网络设备支持</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<TABLE class=MsoNormalTable 
+style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-alt: solid windowtext .5pt; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt; mso-border-insideh: .5pt solid windowtext; mso-border-insidev: .5pt solid windowtext" 
+cellSpacing=0 cellPadding=0 border=1>
+  <TBODY>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: windowtext 1pt solid; WIDTH: 36.9pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt" 
+    width=62 rowSpan=28>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">驱动程序的支持</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数名</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">功能</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数形成</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">参数</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: windowtext 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="TEXT-ALIGN: center" align=center><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">描述</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>init_etherdev</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">注册以太网设备</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>truct net_device * <B 
+      style="mso-bidi-font-weight: normal">init_etherdev </B>(struct net_device 
+      * <I style="mso-bidi-font-style: normal">de</I>v, int <I 
+      style="mso-bidi-font-style: normal">sizeof_pri</I>v)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN lang=EN-US 
+      style="FONT-FAMILY: Courier-Oblique">dev</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为要填充的以太网设备结构，或者要分配一个新的结构时为</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">NULL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">，</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">sizeof_priv</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">是为这个以太网设备要分配的额外私有结构的大小。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">用以太网的<SPAN 
+      class=GramE>通用值</SPAN>填充这个结构的域。如果传递过来的</SPAN><SPAN lang=EN-US 
+      style="FONT-FAMILY: TimesNewRomanPSMT">dev</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">为</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">NULL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">，则构造一个新的结构，包括大小为</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">sizeof_priv</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">的私有数据区。强制将这个私有数据区在</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">32</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">字节（不是位）上对齐。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_add_pack</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">增加数据包处理程序</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>void <B style="mso-bidi-font-weight: normal">dev_add_pack 
+      </B>(struct packet_type * <I 
+      style="mso-bidi-font-style: normal">p</I>t)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>pt</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为数据包类型</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">把一个协议处理程序加到网络<SPAN 
+      class=GramE>栈</SPAN>，把参数传递来的</SPAN><SPAN lang=EN-US 
+      style="FONT-FAMILY: TimesNewRomanPSMT">&amp;packet_type</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">链接到内核链表中。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_remove_pack</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">删除数据包处理程序</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>void <B 
+      style="mso-bidi-font-weight: normal">dev_remove_pack </B>(struct 
+      packet_type * <I style="mso-bidi-font-style: normal">p</I>t)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>pt</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为数据包类型</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">删除由</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">dev_add_pack</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">曾加到内核的协议处理程序。把</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">&amp;packet_type 
+      </SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">从内核链表中删除，一旦该函数返回，这个结构还能再用。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+      </SPAN>__dev_get_by_name</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">根据名字找设备</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>struct net_device * <B 
+      style="mso-bidi-font-weight: normal">__dev_get_by_name </B>(const char * 
+      <I style="mso-bidi-font-style: normal">nam</I>e);</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为要查找的名字</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">根据名字找到一个接口。必须在</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">RTNL </SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">信号量或</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">dev_base_loc</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">k</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">锁的支持下调用。如果找到这个名字，则返回指向设备的指针，如果没有找到，则返回</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">NULL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">。引用计数器并没有增加，因此调用者必须小心地持有锁。</SPAN><SPAN 
+      style="FONT-FAMILY: TimesNewRomanPSMT"> </SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_get_by_name</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">根据名字找设备</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>struct net_device * <B 
+      style="mso-bidi-font-weight: normal">dev_get_by_name </B>(const char * <I 
+      style="mso-bidi-font-style: normal">nam</I>e)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为要查找的名字</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">根据名字找到一个接口。这个函数可以在任何上下文中调用并持有自己的锁。返回句柄的引用计数增加，调用者必须在其不使用时调用</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">dev_put</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">释放它，如果没有匹配的名字，则返回</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">NULL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_get</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">测试设备是否存在</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B style="mso-bidi-font-weight: normal">dev_get </B>(const 
+      char * <I style="mso-bidi-font-style: normal">nam</I>e)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>name</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为要测试的名字</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">测试名字是否存在。如果找到则返回真。为了确保在测试期间名字不被分配或删除，调用者必须持有</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">rtnl</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">信号量。这个函数主要用来与原来的驱动程序保持兼容。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; 
+    </SPAN>__dev_get_by_index</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">根据索引找设备</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>struct net_device * <B 
+      style="mso-bidi-font-weight: normal">__dev_get_by_index </B>(int <I 
+      style="mso-bidi-font-style: normal">ifinde</I>x)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-FAMILY: Courier-Oblique">ifindex</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为设备的索引</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">根据索引搜索一个接口。如果没有找到设备，则返回</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">NULL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">，找到则返回指向设备的指针。该设备的引用计数没有增加，因此调用者必须小心地关注加锁，调用者必须持有</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">RTNL </SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">信号量或</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">dev_base_loc</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">k</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">锁。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_get_by_index</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">根据名字找设备</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>struct net_device * <B 
+      style="mso-bidi-font-weight: normal">dev_get_by_index </B>(int <I 
+      style="mso-bidi-font-style: normal">ifinde</I>x)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-FAMILY: Courier-Oblique">ifindex</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为设备的索引</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">根据索引搜索一个接口。如果没有找到设备，则返回</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">NULL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">，找到则返回指向设备的指针。所返回设备的引用计数加</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">1</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">，因此，在用户调用</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">dev_put</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">释放设备之前，返回指针是安全的。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_alloc_name</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为设备分配一个名字</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B style="mso-bidi-font-weight: normal">dev_alloc_name 
+      </B>(struct net_device * <I style="mso-bidi-font-style: normal">de</I>v, 
+      const char * <I 
+style="mso-bidi-font-style: normal">nam</I>e)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-FAMILY: Courier-Oblique">dev</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为设备，</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">name </SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为格式化字符串。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">传递过来一个格式化字符串，例如</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">ltd</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">，该函数试图找到一个合适的</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT"> id</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">。设备较多时这是很低效的。调用者必须在分配名字和增加设备时持有</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">dev_base </SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">或</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT"> rtnl</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">锁，以避免重复。返回所分配的单元号或出错返回一个复数。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_alloc</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配一个网络设备和名字</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>struct net_device * <B 
+      style="mso-bidi-font-weight: normal">dev_alloc </B>(const char * <I 
+      style="mso-bidi-font-style: normal">nam</I>e, int * <I 
+      style="mso-bidi-font-style: normal">er</I>r)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-FAMILY: Courier-Oblique">name </SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为格式化字符串</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">,err</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为指向错误的指针</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">传递过来一个格式化字符串，例如</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">ltd</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">，函数给该名字分配一个网络设备和空间。如果没有可用内存，则返回</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">NULL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">。如果分配成功，<SPAN 
+      class=GramE>则名字</SPAN>被分配，指向设备的指针被返回。如果名字分配失败，则返回</SPAN><SPAN lang=EN-US 
+      style="FONT-FAMILY: TimesNewRomanPSMT">NULL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">，错误的原因放在</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">err</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">指向的变量中返回。调用者必须在做这一切时持有</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">dev_base </SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">或</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT"> RTNL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">锁，以避免重复分配名字。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; 
+      </SPAN>netdev_state_change</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">设备改变状态</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>void <B 
+      style="mso-bidi-font-weight: normal">netdev_state_change </B>(struct 
+      net_device * <I style="mso-bidi-font-style: normal">de</I>v)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-FAMILY: Courier-Oblique">name </SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为引起通告的设备</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">当一个设备状态改变时调用该函数。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_load</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">装入一个网络模块</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>void <B style="mso-bidi-font-weight: normal">dev_load 
+      </B>(const char * <I 
+      style="mso-bidi-font-style: normal">nam</I>e)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-FAMILY: Courier-Oblique">name </SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为接口的名字</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">如果网络接口不存在，并且进程具有合适的权限，则这个函数装入该模块。如果在内核中模块的装入是<SPAN 
+      class=GramE>不</SPAN>可用的，则装入操作就变为空操作。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_open</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为使用而准备一个接口</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B style="mso-bidi-font-weight: normal">dev_open 
+      </B>(struct net_device * <I 
+      style="mso-bidi-font-style: normal">de</I>v)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>device</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为要打开的设备</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">以从低层到上层的过程获得一个设备。设备的私有打开函数被调用，<SPAN 
+      class=GramE>然后多</SPAN>点传送链表被装入，最后设备被移到上层，</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: TimesNewRomanPSMT">并把</SPAN><SPAN 
+      lang=EN-US 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: Courier">NETDEV_UP</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: Courier">信号发送给网络设备的</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">notifier 
+      chain</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: Courier">。<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: Courier">在一个活动的接口调用该函数只能是个空操作。失败则返回一个负的错误代码。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_close</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">关闭一个接口</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B style="mso-bidi-font-weight: normal">dev_close 
+      </B>(struct net_device * <I 
+      style="mso-bidi-font-style: normal">de</I>v)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>dev</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为要关闭的设备</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">这个函数把活动的设备移到关闭状态。向网络设备的</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">notifier 
+      chain</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">发送一个</SPAN><SPAN 
+      lang=EN-US>NETDEV_GOING_DOWN</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。然后把设备变为不活动状态，并最终向</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">notifier 
+      chain</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">发</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">NETDEV_DOWN</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">信号。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN 
+    lang=EN-US>register_netdevice_notifier</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">注册一个网络通告程序块</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B 
+      style="mso-bidi-font-weight: normal">register_netdevice_notifier 
+      </B>(struct notifier_block * <I 
+      style="mso-bidi-font-style: normal">n</I>b)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>nb</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为通告程序</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">当网络设备的事件发生时，注册一个要调用的通告程序。作为参数传递来的通告程序被连接到内核结构，在其被注销前不能重新使用它。失败则返回一个负的错误码。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN 
+      lang=EN-US>unregister_netdevice_notifier</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">注销一个网络通告块</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B 
+      style="mso-bidi-font-weight: normal">unregister_netdevice_notifier 
+      </B>(struct notifier_block * <I 
+      style="mso-bidi-font-style: normal">n</I>b)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>nb</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为通告程序</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">取消由</SPAN><SPAN 
+      lang=EN-US 
+      style="FONT-FAMILY: TimesNewRomanPSMT">register_netdevice_notifer</SPAN><SPAN 
+      class=GramE><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">曾注册</SPAN></SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">的一个通告程序。把这个通告程序从内核结构中解除，然后还可以重新使用它。失败则返回一个负的错误码。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_queue_xmit</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">传送一个缓冲区</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B style="mso-bidi-font-weight: normal">dev_queue_xmit 
+      </B>(struct sk_buff * <I 
+      style="mso-bidi-font-style: normal">sk</I>b)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>skb</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为要传送的缓冲区</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">为了把缓冲区传送到一个网络设备，对缓冲区进行排队。调用者必须在调用这个函数前设置设备和优先级，并建立缓冲区。该函数也可以从中断中调用。失败返回一个负的错误码。成功并不<SPAN 
+      class=GramE>保证帧被传送</SPAN>，因为也可能由于拥塞或流量调整而撤销这个帧。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>netif_rx</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">把缓冲区传递到网络协议层</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>void <B style="mso-bidi-font-weight: normal">netif_rx 
+      </B>(struct sk_buff * <I 
+      style="mso-bidi-font-style: normal">sk</I>b)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>skb</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为要传送的缓冲区</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">这个函数从设备驱动程序接受一个数据包，并为上层协议的处理对其进行排队。该函数总能执行成功。在处理期间，可能因为拥塞控制而取消这个缓冲区。</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT"><o:p></o:p></SPAN></P>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>net_call_rx_atomic</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>void net_call_rx_atomic(void(fn) 
+      (void))</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>fn</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为要调用的函数</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">使一个函数的调用就协议层而言是原子的。</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT"><o:p></o:p></SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 48.65pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; HEIGHT: 48.65pt; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>register_gifconf</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; HEIGHT: 48.65pt; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">注册一个</SPAN><SPAN 
+      lang=EN-US>SIOCGIF</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">处理程序</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; HEIGHT: 48.65pt; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>int <B 
+      style="mso-bidi-font-weight: normal">register_gifconf </B>(unsigned int <I 
+      style="mso-bidi-font-style: normal">famil</I>y, gifconf_func_t * <I 
+      style="mso-bidi-font-style: normal">gifcon</I>f)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; HEIGHT: 48.65pt; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-FAMILY: Courier-Oblique">family</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为地址组，</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">gifconf</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为处理程序</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; HEIGHT: 48.65pt; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">注册由地址转储例程决定的协议。当另一个处理程序替代了由参数传递过来的处理程序时，才能释放或重用后者。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>netdev_set_master</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">建立主／从对</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B style="mso-bidi-font-weight: normal">netdev_set_master 
+      </B>(struct net_device * <I style="mso-bidi-font-style: normal">slav</I>e, 
+      struct net_device *</SPAN></P>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><I 
+      style="mso-bidi-font-style: normal"><SPAN lang=EN-US>maste</SPAN></I><SPAN 
+      lang=EN-US>r)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN lang=EN-US 
+      style="FONT-FAMILY: Courier-Oblique">slave</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为从设备，</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">master</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为主设备。</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique"><o:p></o:p></SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">改变从设备的主设备。传递</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">NULL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">以中断连接。调用者必须持有</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">RTNL</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">信号量。失败返回一个负错误码。成功则调整引用计数，</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">RTM_NEWLINK</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">发送给路由套接字，并且返回</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">0</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_set_allmulti</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">更新设备上多个计数</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>void <B style="mso-bidi-font-weight: normal">dev_set_allmulti 
+      </B>(struct net_device * <I style="mso-bidi-font-style: normal">de</I>v, 
+      int <I style="mso-bidi-font-style: normal">in</I>c)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>dev</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为设备，</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">inc</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为修改者。</SPAN><I 
+      style="mso-bidi-font-style: normal"><SPAN 
+      lang=EN-US><o:p></o:p></SPAN></I></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">把接收的所有多点传送<SPAN 
+      class=GramE>帧</SPAN>增加到设备或从设备删除。当设备上的引用计数依然大于</SPAN><SPAN lang=EN-US 
+      style="FONT-FAMILY: TimesNewRomanPSMT">0</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">时，接口保持着对所有接口的监听。一旦引用计数变为</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">0</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">，设备回转到正常的过滤操作。负的</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">inc</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">值用来在释放所有多点传送需要的某个资源时减少其引用计数。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_ioctl</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">网络设备的</SPAN><SPAN 
+      lang=EN-US>ioctl</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B style="mso-bidi-font-weight: normal">dev_ioctl 
+      </B>(unsigned int <I style="mso-bidi-font-style: normal">cm</I>d, void * 
+      <I style="mso-bidi-font-style: normal">ar</I>g)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN lang=EN-US 
+      style="FONT-FAMILY: Courier-Oblique">cmd</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为要发出的命令，</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">arg</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为用户空间</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">指向</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">ifreq</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">结构的指针。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      class=GramE><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">向设备</SPAN></SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">发布</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">ioctl</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">函数。这通常由用户空间的系统调用接口调用，但有时也用作其他目的。返回值为一个正数，则表示从系统调用返回，为负数，则表示出错。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>dev_new_index</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配一个索引</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B style="mso-bidi-font-weight: normal">dev_new_index </B>( 
+      <I style="mso-bidi-font-style: normal">voi</I>d)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">无</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">为新的设备号返回一个合适而唯一的值。调用者必须持有</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">rtnl</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">信号量以确保它返回唯一的值。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>netdev_finish_unregister</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">完成注册</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B 
+      style="mso-bidi-font-weight: normal">netdev_finish_unregister </B>(struct 
+      net_device * <I style="mso-bidi-font-style: normal">de</I>v)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>dev</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为设备。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">撤销或释放一个僵死的设备。成功返回</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">0</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">。</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT"><o:p></o:p></SPAN></P>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>unregister_netdevice</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">从内核删除设备</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>int <B 
+      style="mso-bidi-font-weight: normal">unregister_netdevice </B>(struct 
+      net_device * <I style="mso-bidi-font-style: normal">de</I>v)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>dev</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为设备。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">这个函数关闭设备接口并将其从<SPAN 
+      class=GramE>内核表</SPAN>删除。成功返回</SPAN><SPAN lang=EN-US 
+      style="FONT-FAMILY: TimesNewRomanPSMT">0</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">，失败则返回一个负数。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: windowtext 1pt solid; WIDTH: 36.9pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    width=62 rowSpan=5>
+      <P class=MsoNormal><SPAN lang=EN-US>8390</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">网卡</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>ei_open</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">打开／初始化网板</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B style="mso-bidi-font-weight: normal">ei_open </B>(struct 
+      net_device * <I style="mso-bidi-font-style: normal">de</I>v)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>dev</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为要初始化的网络设备。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">尽管很多注册的设备在每次启动时仅仅需要设置一次，但这个函数在每次打开设备时还彻底重新设置每件事。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>ei_close</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">关闭网络设备</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B style="mso-bidi-font-weight: normal">ei_close 
+      </B>(struct net_device * <I 
+      style="mso-bidi-font-style: normal">de</I>v)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>dev</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为要关闭的网络设备。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>ei_open</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的相反操作，在仅仅在完成“</SPAN><SPAN 
+      lang=EN-US 
+      style="FONT-FAMILY: TimesNewRomanPSMT">ifconfig&lt;devname&gt;down</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">”时使用</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>ei_interrupt</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">处理来自</SPAN><SPAN 
+      lang=EN-US>8390</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的中断</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>void <B style="mso-bidi-font-weight: normal">ei_interrupt 
+      </B>(int <I style="mso-bidi-font-style: normal">ir</I>q, void * <I 
+      style="mso-bidi-font-style: normal">dev_i</I>d, struct pt_regs * <I 
+      style="mso-bidi-font-style: normal">reg</I>s);</SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN lang=EN-US 
+      style="FONT-FAMILY: Courier-Oblique">irq</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为中断号，</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: Courier-Oblique">dev_id</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: Courier-Oblique; mso-hansi-font-family: Courier-Oblique">为指向</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">net_devicede 
+      </SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">指针，</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">regs</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">没有使用。</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT"><o:p></o:p></SPAN></P>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">处理以太网接口中断。我们通过网卡指定的函数从</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">8390</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">取回数据包，并在网络<SPAN 
+      class=GramE>栈</SPAN>触发它们。如果需要，我们也处理传输的完成并激活传输路径。我们也根据需要更新计数器并处理其他的事务。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>ethdev_init</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">初始化</SPAN><SPAN 
+      lang=EN-US>8390</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">设备结构的其余部分</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>int <B style="mso-bidi-font-weight: normal">ethdev_init 
+      </B>(struct net_device * <I 
+      style="mso-bidi-font-style: normal">de</I>v)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal><SPAN lang=EN-US>dev</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为要初始化的网络设备结构。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">初始化</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">8390</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">设备结构的其余部分。不要用</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">__init</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">（），因为这也由基于</SPAN><SPAN 
+      lang=EN-US style="FONT-FAMILY: TimesNewRomanPSMT">8390</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: TimesNewRomanPSMT; mso-hansi-font-family: TimesNewRomanPSMT">的模块驱动程序使用。</SPAN></P></TD></TR>
+  <TR style="page-break-inside: avoid; mso-yfti-lastrow: yes">
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 99.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=166>
+      <P class=MsoNormal><SPAN lang=EN-US>NS8390_init</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 89.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=149>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">初始化</SPAN><SPAN 
+      lang=EN-US>8390</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">硬件</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>void <B style="mso-bidi-font-weight: normal">NS8390_init 
+      </B>(struct net_device * <I style="mso-bidi-font-style: normal">de</I>v, 
+      int <I style="mso-bidi-font-style: normal">start</I>p)</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 131.25pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=219>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      lang=EN-US>dev</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为要初始化的设备，</SPAN><SPAN 
+      lang=EN-US>startp</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为布尔值，非</SPAN><SPAN 
+      lang=EN-US>0</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">启动芯片处理。</SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: windowtext 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 220.2pt; PADDING-TOP: 0cm; BORDER-BOTTOM: windowtext 1pt solid; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt" 
+    vAlign=top width=367>
+      <P class=MsoNormal style="mso-layout-grid-align: none"><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">必须持以锁才能调用该函数</SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

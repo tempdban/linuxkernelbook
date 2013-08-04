@@ -1,0 +1,323 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0064)http://www.kerneltravel.net/kernel-book/第三章中断机制/3.4.2.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>Linux对异常和中断的处理</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="3.4.2.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2007-08-14T09:39:00Z</o:Created>
+  <o:LastSaved>2007-08-14T09:39:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>203</o:Words>
+  <o:Characters>1160</o:Characters>
+  <o:Lines>9</o:Lines>
+  <o:Paragraphs>2</o:Paragraphs>
+  <o:CharactersWithSpaces>1361</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: Wingdings;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+P.MsoPlainText {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Times New Roman"
+}
+LI.MsoPlainText {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Times New Roman"
+}
+DIV.MsoPlainText {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Times New Roman"
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="mso-outline-level: 1"><st1:chsdate w:st="on" 
+IsROCDate="False" IsLunarDate="False" Day="30" Month="12" Year="1899"><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">3.4.2</SPAN></st1:chsdate><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"> 
+Linux</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">对异常和中断的处理</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">上面给出了硬件对异常和中断进行处理的一般步骤，下面将概要描述</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">Linux</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">对异常和中断的处理，具体的实现过程将在后面介绍。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">1</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">．异常处理</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>Linux</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">利用异常来达到两个截然不同的目的：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo2; tab-stops: list 21.25pt 48.5pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">给进程发送一个信号以通报一个反常情况</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo2; tab-stops: list 21.25pt 48.5pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">管理硬件资源</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="tab-stops: list 48.5pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">对于第一种情况，例如，如果进程执行了一个被</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">0</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">除的操作，</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">CPU</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">则会产生一个“除法错误”异常，并由相应的异常处理程序向当前进程发送一个</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">SIGFPE</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">信号。当前进程接收到这个信号后，就要采取若干必要的步骤，或者从错误中恢复，或者终止执行（如果这个信号没有相应的信号处理程序）。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21pt; tab-stops: list 48.5pt"><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">对于第二种情况，内核使用两种异常来有效地管理硬件资源，相应的处理程序也就更复杂。在这种情况下，异常并不表示一种错误情况：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 42.25pt; TEXT-INDENT: -21.25pt; mso-list: l5 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">用“设备不可用”异常来推迟装载浮点寄存器。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 42.25pt; TEXT-INDENT: -21.25pt; mso-list: l5 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">用“缺页”异常推迟把<SPAN 
+class=GramE>新页框分配给</SPAN>进程。</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt; tab-stops: list 48.5pt"><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">内核对异常处理程序的调用有一个标准的结构，它由以下三部分组成：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 42.5pt; TEXT-INDENT: -21.25pt; mso-list: l3 level1 lfo1; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">在内核<SPAN 
+class=GramE>栈</SPAN>中保存大多数寄存器的内容（由汇编语言实现）</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 42.5pt; TEXT-INDENT: -21.25pt; mso-list: l3 level1 lfo1; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">调用</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">C</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">编写的异常处理函数</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 42.5pt; TEXT-INDENT: -21.25pt; mso-list: l3 level1 lfo1; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">通过</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">ret_from_exception()</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">函数从异常退出。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.6pt"><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">关于内核对异常的具体处理在此不进行详细介绍，在第六章内存管理中我们将涉及到“缺页”异常处理程序，本节的重点放在中断处理。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>2</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">．中断处理</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN>当一个中断发生时，并不是所有的操作都具有相同的急迫性。事实上，把所有的操作都放进中断处理程序本身并不合适。需要时间长的、非重要的操作应该推后，因为当一个中断处理程序正在运行时，相应的<SPAN 
+lang=EN-US>IRQ</SPAN>中断线上再发出的信号就会被忽略。更重要的是，中断处理程序是代表进程执行的，它所代表的进程必需总处于<SPAN 
+lang=EN-US>TASK_RUNNING</SPAN>状态，否则，就可能出现系统僵死情形。因此，中断处理程序不能执行任何阻塞过程，如<SPAN 
+lang=EN-US>I/O</SPAN>设备操作。因此，<SPAN 
+lang=EN-US>Linux</SPAN>把一个中断要执行的操作分为下面的三类：</P>
+<P class=MsoPlainText>（<SPAN lang=EN-US>1</SPAN>）紧急的（<SPAN 
+lang=EN-US>Critical</SPAN>）<I style="mso-bidi-font-style: normal"><SPAN 
+lang=EN-US><o:p></o:p></SPAN></I></P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21pt">这样的操作诸如：中断到来时中断控制器做出应答，对中断控制器或设备控制器重新编程，或者对设备和处理器同时访问的数据结构进行修改。这些操作都是紧急的，应该被很快地执行，也就是说，紧急操作应该在一个中断处理程序内立即执行，而且是在禁用中断的状态下。</P>
+<P class=MsoPlainText>（<SPAN lang=EN-US>2</SPAN>）非紧急的（<SPAN 
+lang=EN-US>Noncritical</SPAN>）</P>
+<P class=MsoPlainText style="MARGIN-LEFT: 21pt">这样的操作<SPAN 
+class=GramE>如修改</SPAN>那些只有处理器才会访问的数据结构（例如，按下一个键后，读扫描码）。这些操作也要很快地完成，因此，它们由中断处理程序立即执行，但在启用中断的状态下。</P>
+<P class=MsoPlainText>（<SPAN lang=EN-US>3</SPAN>）非<SPAN 
+class=GramE>紧急可</SPAN>延迟的（<SPAN lang=EN-US>Noncritical deferrable</SPAN>）</P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>这样的操作如，把一个缓冲区的内容拷贝到一些进程的地址空间（例如，把键盘行缓冲区的内容发送到终端处理程序的进程）。这些操作可能被延迟较长的时间间隔而不影响内核操作：有兴趣的进程会等待需要的数据。非<SPAN 
+class=GramE>紧急可</SPAN>延迟的操作由一些被称为“下半部分”<SPAN lang=EN-US>(bottom 
+halves)</SPAN>的函数来执行。我们将在后面讨论“下半部分”。</P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>所有的中断处理程序都执行四个基本的操作：</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 42.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo4; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>在内核<SPAN class=GramE>栈</SPAN>中保存<SPAN 
+lang=EN-US>IRQ</SPAN>的值和寄存器的内容。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 42.25pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo5; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>给与<SPAN 
+lang=EN-US>IRQ</SPAN>中断线相连的中断控制器发送一个应答，这将允许在这条中断线上进一步发出中断请求。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 42.25pt; TEXT-INDENT: -21.25pt; mso-list: l6 level1 lfo6; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>执行共享这个<SPAN 
+lang=EN-US>IRQ</SPAN>的所有设备的中断服务例程（<SPAN lang=EN-US>ISR</SPAN>）。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 42.25pt; TEXT-INDENT: -21.25pt; mso-list: l4 level1 lfo7; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>跳到<SPAN lang=EN-US>ret_from_intr(<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>)</SPAN>的地址后终止。</P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

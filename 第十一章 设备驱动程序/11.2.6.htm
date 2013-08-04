@@ -1,0 +1,386 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0077)http://www.kerneltravel.net/kernel-book/第十一章%20%20设备驱动程序/11.2.6.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>驱动DMA工作</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="11.2.6.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-17T03:55:00Z</o:Created>
+  <o:LastSaved>2007-08-17T03:55:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>295</o:Words>
+  <o:Characters>1685</o:Characters>
+  <o:Lines>14</o:Lines>
+  <o:Paragraphs>3</o:Paragraphs>
+  <o:CharactersWithSpaces>1977</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: Wingdings;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	FONT-WEIGHT: bold; TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-font-kerning: 1.0pt; mso-bidi-font-weight: normal
+}
+LI.MsoNormal {
+	FONT-WEIGHT: bold; TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-font-kerning: 1.0pt; mso-bidi-font-weight: normal
+}
+DIV.MsoNormal {
+	FONT-WEIGHT: bold; TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-font-kerning: 1.0pt; mso-bidi-font-weight: normal
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" 
+Day="30" Month="12" Year="1899"><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">11.2.6</SPAN></st1:chsdate><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">驱动<SPAN 
+lang=EN-US>DMA</SPAN>工作<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">所有的<SPAN 
+lang=EN-US>PC</SPAN>都包含一个称为直接内存访问控制器或<SPAN 
+lang=EN-US>DMAC</SPAN>的辅助处理器，它可以用来控制在<SPAN lang=EN-US>RAM</SPAN>和<SPAN 
+lang=EN-US>I/O</SPAN>设备之间数据的传送。<SPAN lang=EN-US>DMAC</SPAN>一旦被<SPAN 
+lang=EN-US>CPU</SPAN>激活，就可以自行传送数据；当数据传送完成之后，<SPAN 
+lang=EN-US>DMAC</SPAN>发出一个中断请求。当<SPAN lang=EN-US>CPU</SPAN>和<SPAN 
+lang=EN-US>DMAC</SPAN>同时访问同一内存单元时，所产生的冲突由一个称为内存<SPAN 
+class=GramE>仲裁器</SPAN>的硬件电路来解决。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">使用<SPAN 
+lang=EN-US>DMAC</SPAN>最多的是磁盘驱动器和其他需要一次传送大量字节的慢速设备。因为<SPAN 
+lang=EN-US>DMAC</SPAN>的设置时间相当长，所以在传送数量很少的数据时直接使用<SPAN 
+lang=EN-US>CPU</SPAN>效率更高。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">原来的<SPAN 
+lang=EN-US>ISA</SPAN>总线所使用的第一个<SPAN lang=EN-US>DMAC</SPAN>非常复杂，难于对其进行编程。<SPAN 
+lang=EN-US>PCI</SPAN>和<SPAN lang=EN-US>SCSI</SPAN>总线所使用的最新<SPAN 
+lang=EN-US>DMAC</SPAN>依靠总线中的专用硬件电路，这就使设备驱动程序开发人员的开发工作变得简单。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">到现在为止，我们已区分了三类内存地址：逻辑地址、线性地址以及物理地址，前两个在<SPAN 
+lang=EN-US>CPU</SPAN>内部使用，最后一个是<SPAN 
+lang=EN-US>CPU</SPAN>从物理上驱动数据总线所用的内存地址。但是，还有第四种内存地址，称为总线地址：它是除<SPAN 
+lang=EN-US>CPU</SPAN>之外的硬件设备驱动数据总线所用的内存地址。在<SPAN 
+lang=EN-US>PC</SPAN>体系结构中，总线地址和物理地址是一致的；但是在其他体系结构中，例如<SPAN 
+lang=EN-US>Sun</SPAN>的<SPAN lang=EN-US>SPARC</SPAN>和<SPAN 
+lang=EN-US>Compaq</SPAN>的<SPAN lang=EN-US>Alpha</SPAN>体系结构中，这两种地址是不同的。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">从根本上说，内核为什么应该关心总线地址呢？这是因为在<SPAN 
+lang=EN-US>DMA</SPAN>操作中数据传送不用<SPAN lang=EN-US>CPU</SPAN>的参与：<SPAN 
+lang=EN-US>I/O</SPAN>设备和<SPAN lang=EN-US>DMAC</SPAN>直接驱动数据总线。因此，在内核开始<SPAN 
+lang=EN-US>DMA</SPAN>操作时，必须把所涉及的内存缓冲区总线地址或写入<SPAN lang=EN-US>DMAC</SPAN>适当的<SPAN 
+lang=EN-US>I/O</SPAN>端口、或写入<SPAN lang=EN-US>I/O</SPAN>设备适当的<SPAN 
+lang=EN-US>I/O</SPAN>端口。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">很多<SPAN 
+lang=EN-US>I/O</SPAN>驱动程序都使用直接内存访问控制器（<SPAN 
+lang=EN-US>DMAC</SPAN>）来加快操作的速度。<SPAN lang=EN-US>DMAC</SPAN>与设备的<SPAN 
+lang=EN-US>I/O</SPAN>控制器相互作用共同实现数据传送；后文中我们还会看到，内核中包含一组易用的例程来对<SPAN 
+lang=EN-US>DMAC</SPAN>进行编程。当数据传送完成时，<SPAN lang=EN-US>I/O</SPAN>控制器通过<SPAN 
+lang=EN-US>IRQ</SPAN>向<SPAN lang=EN-US>CPU</SPAN>发出信号。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">当设备驱动程序为某个<SPAN 
+lang=EN-US>I/O</SPAN>设备建立<SPAN 
+lang=EN-US>DMA</SPAN>操作时，必须使用总线地址指定所用的内存缓冲区。内核提供两个宏<SPAN 
+lang=EN-US>virt_to_bus</SPAN>和<SPAN 
+lang=EN-US>bus_to_virt</SPAN>，分别把虚拟地址转换成总线地址或把总线地址转换成虚拟地址。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">与<SPAN 
+lang=EN-US>IRQ</SPAN>一样，<SPAN 
+lang=EN-US>DMAC</SPAN>也是一种资源，必须把这种资源动态地分配给需要它的设备驱动程序。驱动程序开始和结束<SPAN 
+lang=EN-US>DMA</SPAN>操作的方法依赖于总线的类型。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">1.ISA</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">总线的<SPAN 
+lang=EN-US>DMA<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">每个<SPAN 
+lang=EN-US>ISA DMAC</SPAN>只能控制有限<SPAN 
+class=GramE>个</SPAN>通道。每个通道都包括一组独立的内部寄存器，所以，<SPAN 
+lang=EN-US>DMAC</SPAN>就可以同时控制几个数据的传送。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">设备驱动程序通常使用下面的方式来申请和释放<SPAN 
+lang=EN-US>ISA 
+DMAC</SPAN>。设备驱动程序照样要靠一个引用计数器来检测什么时候任何进程都不再访问设备文件。驱动程序执行以下操作：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="tab-stops: list 42.5pt"><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">(1) 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">在设备文件的<SPAN 
+lang=EN-US>open( )</SPAN>方法中把设备的引用计数器加<SPAN lang=EN-US>1</SPAN>。如果原来的值是<SPAN 
+lang=EN-US>0</SPAN>，那么，驱动程序执行以下操作：<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l3 level1 lfo2"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">调用<SPAN 
+lang=EN-US>request_irq( )</SPAN>来分配<SPAN lang=EN-US>ISA DMAC</SPAN>所使用的<SPAN 
+lang=EN-US>IRQ</SPAN>中断号<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l3 level1 lfo2"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">调用<SPAN 
+lang=EN-US>request_dma( )</SPAN>来分配<SPAN lang=EN-US>DMA</SPAN>通道<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l3 level1 lfo2"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">通知硬件设备应该使用<SPAN 
+lang=EN-US>DMA</SPAN>并产生中断<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l3 level1 lfo2"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">如果需要，为<SPAN 
+lang=EN-US>DMA</SPAN>缓冲区分配一个存储区域<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 18pt; TEXT-INDENT: -18pt; tab-stops: list 18.0pt 42.5pt; mso-list: l2 level1 lfo1"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">(2)<SPAN style="FONT: 7pt 'Times New Roman'"> 
+</SPAN></SPAN></SPAN><![endif]><SPAN class=GramE><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">当必须</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">启动<SPAN 
+lang=EN-US>DMA</SPAN>操作时，在设备文件的<SPAN lang=EN-US>read</SPAN>（）和<SPAN 
+lang=EN-US>write</SPAN>（）方法执行以下操作：<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l4 level1 lfo3"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">调用<SPAN 
+lang=EN-US>set_dma_mode( )</SPAN>把通道<SPAN class=GramE>设置成读</SPAN><SPAN 
+lang=EN-US>/</SPAN>写模式。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l4 level1 lfo3"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">调用<SPAN 
+lang=EN-US>set_dma_addr( )</SPAN>来设置<SPAN 
+lang=EN-US>DMA</SPAN>缓冲区的总线地址。（因为只有最低的<SPAN lang=EN-US>24</SPAN>位地址会发给<SPAN 
+lang=EN-US>DMAC</SPAN>，所以缓冲区必须在<SPAN lang=EN-US>RAM</SPAN>的前<SPAN 
+lang=EN-US>16MB</SPAN>中。）<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l4 level1 lfo3"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">调用<SPAN 
+lang=EN-US>set_dma_count( )</SPAN>来设置要发送的字节数。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l4 level1 lfo3"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">调用<SPAN 
+lang=EN-US>set_dma_dma( )</SPAN>来启用<SPAN lang=EN-US>DMA</SPAN>通道。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l4 level1 lfo3"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">把当前进程加入该设备的等待队列，并把它挂起。当<SPAN 
+lang=EN-US>DMAC</SPAN>完成数据传送操作时，设备的<SPAN 
+lang=EN-US>I/O</SPAN>控制器就发出一个中断，相应的中断处理程序会唤醒正在睡眠的进程。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l4 level1 lfo3"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">进程一旦被唤醒，就立即调用<SPAN 
+lang=EN-US>disable_dma( )</SPAN>来禁用这个<SPAN lang=EN-US>DMA</SPAN>通道。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l4 level1 lfo3"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">调用<SPAN 
+lang=EN-US>get_dma_residue( )</SPAN>来检查是否所有的数据都已被传送。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 36pt; TEXT-INDENT: -36pt; tab-stops: list 36.0pt 42.5pt; mso-list: l1 level1 lfo4"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">（3）<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">在设备文件的<SPAN 
+lang=EN-US>release</SPAN>方法中，减少设备的引用计数器。如果该<SPAN class=GramE>值变成</SPAN><SPAN 
+lang=EN-US>0</SPAN>，就执行以下操作：<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l0 level1 lfo5"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">禁用<SPAN 
+lang=EN-US>DMA</SPAN>和对这个硬件设备上的相应中断<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l0 level1 lfo5"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">调用<SPAN 
+lang=EN-US>free_dma( )</SPAN>来释放<SPAN lang=EN-US>DMA</SPAN>通道<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; tab-stops: list 21.25pt 63.75pt; mso-list: l0 level1 lfo5"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">调用<SPAN 
+lang=EN-US>free_irq( )</SPAN>来释放<SPAN lang=EN-US>DMA</SPAN>所使用的<SPAN 
+lang=EN-US>IRQ</SPAN>线<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">2</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">．<SPAN 
+lang=EN-US>PCI</SPAN>总线的<SPAN lang=EN-US>DMA<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">PCI</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">总线对于<SPAN 
+lang=EN-US>DMA</SPAN>的使用要简单得多，因为<SPAN lang=EN-US>DMAC</SPAN>是集成到<SPAN 
+lang=EN-US>I/O</SPAN>接口内部的。在<SPAN lang=EN-US>open</SPAN>方法中，设备驱动程序照样必须分配一条<SPAN 
+lang=EN-US>IRQ</SPAN>线来通知<SPAN lang=EN-US>DMA</SPAN>操作的完成。但是，并没有必要分配一个<SPAN 
+lang=EN-US>DMA</SPAN>通道，因为每个硬件设备都直接控制<SPAN lang=EN-US>PCI</SPAN>总线的电信号。要启动<SPAN 
+lang=EN-US>DMA</SPAN>操作，设备驱动程序在硬件设备的某个<SPAN lang=EN-US>I/O</SPAN>端口中简单地写入<SPAN 
+lang=EN-US>DMA</SPAN>缓冲区的总线地址、传送方向以及数据大小；然后驱动程序就挂起当前进程。在最后一个进程关闭这个文件对象时，<SPAN 
+lang=EN-US>release</SPAN>方法负责释放这条<SPAN lang=EN-US>IRQ</SPAN>线。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

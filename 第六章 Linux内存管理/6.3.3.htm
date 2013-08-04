@@ -1,0 +1,2260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0072)http://www.kerneltravel.net/kernel-book/第六章%20Linux内存管理/6.3.3.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:v = 
+"urn:schemas-microsoft-com:vml" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>Slab分配机制</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="6.3.3.files/filelist.xml" rel=File-List><LINK 
+href="6.3.3.files/editdata.mso" rel=Edit-Time-Data><!--[if !mso]>
+<STYLE>v\:* {
+	BEHAVIOR: url(#default#VML)
+}
+o\:* {
+	BEHAVIOR: url(#default#VML)
+}
+w\:* {
+	BEHAVIOR: url(#default#VML)
+}
+.shape {
+	BEHAVIOR: url(#default#VML)
+}
+</STYLE>
+<![endif]--><o:SmartTagType downloadurl="" name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><o:SmartTagType 
+downloadurl="" name="chmetcnv" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2007-08-15T07:54:00Z</o:Created>
+  <o:LastSaved>2007-08-15T07:54:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>2125</o:Words>
+  <o:Characters>12119</o:Characters>
+  <o:Lines>100</o:Lines>
+  <o:Paragraphs>28</o:Paragraphs>
+  <o:CharactersWithSpaces>14216</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: Wingdings;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="mso-outline-level: 1"><st1:chsdate w:st="on" 
+IsROCDate="False" IsLunarDate="False" Day="30" Month="12" Year="1899"><SPAN 
+lang=EN-US>6.3.3</SPAN></st1:chsdate><SPAN lang=EN-US> Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配机制</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN class=GramE><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">采用伙伴</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">算法分配内存时，每次至少分配一个页面。但当请求分配的内存大小为几十个字节或几百个字节时应该如何处理？如何在一个页面中分配小的内存区，小内存区的分配所产生的内碎片又如何解决？</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN>Linux2.0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">采用的解决办法是建立了</SPAN><SPAN 
+lang=EN-US>13</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">个空闲区链表，它们的大小从</SPAN><SPAN 
+lang=EN-US>32</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">字节到</SPAN><SPAN 
+lang=EN-US>132056</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">字节。从</SPAN><SPAN 
+lang=EN-US>Linux2.2</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">开始，</SPAN><SPAN 
+lang=EN-US>MM</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的开发者采用了一种叫做</SPAN><SPAN 
+lang=EN-US>slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的分配模式，该模式早在</SPAN><SPAN 
+lang=EN-US>1994</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">年就被开发出来，用于</SPAN><SPAN 
+lang=EN-US>Sun Microsystem Solaris 2.4</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">操作系统中。</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的提出主要是基于以下考虑：</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 32.65pt; TEXT-INDENT: -21.25pt; mso-list: l3 level1 lfo1; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">内核对内存区的分配取决于所存放数据的类型。例如，当给用户<SPAN 
+class=GramE>态进程</SPAN>分配页面时，内核调用</SPAN><SPAN 
+lang=EN-US>get_free_page()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数，并用</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">填充这个页面。</SPAN> 
+<SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">而给内核的数据结构分配页面时，事情没有这么简单，例如，要对数据结构所在的内存进行初始化、在不用时要收回它们所占用的内存。因此，</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中引入了对象这个概念，所谓对象就是存放一组数据结构的内存区，其方法就是构造<SPAN 
+class=GramE>或析构</SPAN>函数，构造函数用于初始化数据结构所在的内存区，<SPAN 
+class=GramE>而析构函数</SPAN>收回相应的内存区。但为了便于理解，你也可以把对象直接看作内核的数据结构。为了避免重复初始化对象，</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配模式并不丢弃已分配的对象，而是释放但把它们依然保留在内存中。当以后又要请求分配同一对象时，就可以从内存获取而不用进行初始化，这是在</SPAN><SPAN 
+lang=EN-US>Solaris </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中引入</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的基本思想。</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 32.65pt; TEXT-INDENT: 24pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">实际上，</SPAN><SPAN 
+lang=EN-US>Linux</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中对</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配模式有所改进，它对内存区的处理并不需要进行初始化或回收。出于效率的考虑，</SPAN><SPAN 
+lang=EN-US>Linux</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">并不调用对象的构造<SPAN 
+class=GramE>或析构</SPAN>函数，而是把指向这两个函数的指针都置为空。</SPAN><SPAN 
+lang=EN-US>Linux</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中引入</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的主要目的是为了减少对伙伴算法的调用次数。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 38.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">实际上，内核经常反复使用某一内存区。例如，只要内核创建一个新的进程，就要为该进程相关的数据结构（</SPAN><SPAN 
+lang=EN-US>task_struct</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">、打开文件对象等）分配内存区。当进程结束时，收回这些内存区。因为进程的创建和撤销非常频繁，因此，</SPAN><SPAN 
+lang=EN-US>Linux</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的早期版本把大量的时间花费在反复分配或回收这些内存区上。从</SPAN><SPAN 
+lang=EN-US>Linux2.2</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">开始，把那些频繁使用的页面保存在高速缓存中并重新使用。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 38.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">可以根据对内存区的使用频率来对它分类。对于预期频繁使用的内存区，可以创建一组特定大小的专用缓冲区进行处理，以避免内碎片的产生。对于较少使用的内存区，可以创建一组通用缓冲区（如</SPAN><SPAN 
+lang=EN-US>Linux2.0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中所使用的</SPAN><SPAN 
+lang=EN-US>2</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的<SPAN 
+class=GramE>幂</SPAN>次方）来处理，即使这种处理模式产生碎片，也对整个系统的性能影响不大。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 38.65pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">硬件高速缓存的使用，又为尽量减少对伙伴算法的调用提供了另一个理由，因为对伙伴算法的每次调用都会“弄脏”硬件高速缓存，因此，这就增加了对内存的平均访问次数。</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配模式把对象分组放进缓冲区（尽管英文中使用了</SPAN><SPAN 
+lang=EN-US>Cache</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">这个词，但实际上指的是内存中的区域，而不是指硬件高速缓存）。因为缓冲区的组织和管理与硬件高速缓存的命中率密切相关，因此，</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">缓冲区并非由各个对象直接构成，而是由一连串的“大块（</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）”构成，而每个大块中则包含了若干个同种类型的对象，这些对象或已被分配，或空闲，如图</SPAN><SPAN 
+lang=EN-US>6.12</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">所示。一般而言，对象分两种，一种是大对象，一种是小对象。所谓小对象，是指在一个页面中可以容纳下好几个对象的那种。例如，一个</SPAN><SPAN 
+lang=EN-US>inode</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构大约占</SPAN><SPAN 
+lang=EN-US>300</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">多个字节，因此，一个页面中可以容纳</SPAN><SPAN 
+lang=EN-US>8</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">个以上的</SPAN><SPAN 
+lang=EN-US>inode</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构，因此，</SPAN><SPAN 
+lang=EN-US>inode</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构就为小对象。</SPAN><SPAN 
+lang=EN-US>Linux</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">内核中把小于</SPAN><SPAN 
+lang=EN-US>512</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">字节的对象叫做小对象。</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 83.45pt; TEXT-INDENT: 22.8pt"><!--[if gte vml 1]><o:wrapblock><v:group 
+id=_x0000_s1026 
+style="MARGIN-TOP: 0px; Z-INDEX: 1; LEFT: 0px; MARGIN-LEFT: 68.7pt; WIDTH: 343.5pt; POSITION: absolute; HEIGHT: 149.4pt; TEXT-ALIGN: left" 
+coordsize = "6870,2988" coordorigin = "2058,8578" o:allowincell = "f"><v:group 
+id=_x0000_s1027 
+style="LEFT: 2058px; WIDTH: 6870px; POSITION: absolute; TOP: 8578px; HEIGHT: 2988px" 
+coordsize = "6870,2988" coordorigin = "2058,7416"><v:group id=_x0000_s1028 
+style="LEFT: 2058px; WIDTH: 1603px; POSITION: absolute; TOP: 8578px; HEIGHT: 830px" 
+coordsize = "1603,830" coordorigin = "2058,10902"><v:shapetype id=_x0000_t176 
+coordsize = "21600,21600" o:spt = "176" path = 
+" m@0,0 qx0@0 l0@2 qy@0,21600 l@1,21600 qx21600@2 l21600@0 qy@1,0 x e" adj = 
+"2700"><v:stroke joinstyle = "miter"></v:stroke><v:formulas><v:f eqn = 
+"sum #0 0 0 "></v:f><v:f eqn = "sum width 0 #0 "></v:f><v:f eqn = 
+"sum height 0 #0 "></v:f><v:f eqn = "prod @0 2929 10000 "></v:f><v:f eqn = 
+"sum width 0 @3 "></v:f><v:f eqn = "sum height 0 @3 "></v:f><v:f eqn = 
+"sum width 0 0 "></v:f><v:f eqn = "sum height 0 0 "></v:f><v:f eqn = 
+"prod width 1 2 "></v:f><v:f eqn = "prod height 1 2 "></v:f></v:formulas><v:path 
+o:connectlocs="@8,0;0,@9;@8,@7;@6,@9" gradientshapeok = "t" o:connecttype = 
+"custom" limo = "10800,10800" textboxrect = 
+"@3,@3,@4,@5"></v:path></v:shapetype><v:shape id=_x0000_s1029 
+style="LEFT: 2287px; WIDTH: 1374px; POSITION: absolute; TOP: 10902px; HEIGHT: 664px" 
+type = "#_x0000_t176" coordsize = "21600,21600"></v:shape><v:shape 
+id=_x0000_s1030 
+style="LEFT: 2058px; WIDTH: 1374px; POSITION: absolute; TOP: 11068px; HEIGHT: 664px" 
+type = "#_x0000_t176" coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 5.281pt; LEFT: auto; MARGIN-LEFT: 8.968pt; WIDTH: 51.625pt; TOP: auto; HEIGHT: 23.375pt; mso-next-textbox: #_x0000_s1030"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">缓冲区</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape></v:group><v:group 
+id=_x0000_s1031 
+style="LEFT: 4119px; WIDTH: 1832px; POSITION: absolute; TOP: 9408px; HEIGHT: 996px" 
+coordsize = "1832,996" coordorigin = "4348,10570"><v:rect id=_x0000_s1032 
+style="LEFT: 4755px; WIDTH: 1425px; POSITION: absolute; TOP: 10570px; HEIGHT: 664px" 
+coordsize = "21600,21600"></v:rect><v:rect id=_x0000_s1033 
+style="LEFT: 4552px; WIDTH: 1424px; POSITION: absolute; TOP: 10736px; HEIGHT: 664px" 
+coordsize = "21600,21600"></v:rect><v:rect id=_x0000_s1034 
+style="LEFT: 4348px; WIDTH: 1425px; POSITION: absolute; TOP: 10902px; HEIGHT: 664px" 
+coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.625pt; LEFT: auto; MARGIN-LEFT: 8.281pt; WIDTH: 56.125pt; TOP: auto; HEIGHT: 25.281pt; mso-next-textbox: #_x0000_s1034"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+      class=GramE>slab</SPAN></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:rect></v:group><v:group 
+id=_x0000_s1035 
+style="LEFT: 8012px; WIDTH: 916px; POSITION: absolute; TOP: 7582px; HEIGHT: 664px" 
+coordsize = "916,664" coordorigin = "8012,7582"><v:rect id=_x0000_s1036 
+style="LEFT: 8216px; WIDTH: 712px; POSITION: absolute; TOP: 7582px; HEIGHT: 498px" 
+coordsize = "21600,21600"></v:rect><v:rect id=_x0000_s1037 
+style="LEFT: 8114px; WIDTH: 712px; POSITION: absolute; TOP: 7665px; HEIGHT: 498px" 
+coordsize = "21600,21600"></v:rect><v:rect id=_x0000_s1038 
+style="LEFT: 8012px; WIDTH: 712px; POSITION: absolute; TOP: 7748px; HEIGHT: 498px" 
+coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.812pt; LEFT: auto; MARGIN-LEFT: 7.937pt; WIDTH: 20.468pt; TOP: auto; HEIGHT: 16.937pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:rect></v:group><v:rect 
+id=_x0000_s1039 
+style="LEFT: 4984px; WIDTH: 1425px; POSITION: absolute; TOP: 7416px; HEIGHT: 664px" 
+coordsize = "21600,21600"></v:rect><v:rect id=_x0000_s1040 
+style="LEFT: 4781px; WIDTH: 1424px; POSITION: absolute; TOP: 7582px; HEIGHT: 664px" 
+coordsize = "21600,21600"></v:rect><v:rect id=_x0000_s1041 
+style="LEFT: 4577px; WIDTH: 1425px; POSITION: absolute; TOP: 7748px; HEIGHT: 664px" 
+coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.812pt; LEFT: auto; MARGIN-LEFT: 7.937pt; WIDTH: 56.125pt; TOP: auto; HEIGHT: 25.25pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+      </SPAN><SPAN 
+  class=GramE>slab</SPAN></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:rect><v:group 
+id=_x0000_s1042 
+style="LEFT: 6638px; WIDTH: 916px; POSITION: absolute; TOP: 8744px; HEIGHT: 664px" 
+coordsize = "916,664" coordorigin = "8012,7582"><v:rect id=_x0000_s1043 
+style="LEFT: 8216px; WIDTH: 712px; POSITION: absolute; TOP: 7582px; HEIGHT: 498px" 
+coordsize = "21600,21600"></v:rect><v:rect id=_x0000_s1044 
+style="LEFT: 8114px; WIDTH: 712px; POSITION: absolute; TOP: 7665px; HEIGHT: 498px" 
+coordsize = "21600,21600"></v:rect><v:rect id=_x0000_s1045 
+style="LEFT: 8012px; WIDTH: 712px; POSITION: absolute; TOP: 7748px; HEIGHT: 498px" 
+coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.406pt; LEFT: auto; MARGIN-LEFT: 8.218pt; WIDTH: 20.5pt; TOP: auto; HEIGHT: 16.937pt; mso-next-textbox: #_x0000_s1045"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US><SPAN 
+      style="mso-spacerun: yes"></SPAN></SPAN>&nbsp;</P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:rect></v:group><v:group 
+id=_x0000_s1046 
+style="LEFT: 7325px; WIDTH: 916px; POSITION: absolute; TOP: 9740px; HEIGHT: 664px" 
+coordsize = "916,664" coordorigin = "8012,7582"><v:rect id=_x0000_s1047 
+style="LEFT: 8216px; WIDTH: 712px; POSITION: absolute; TOP: 7582px; HEIGHT: 498px" 
+coordsize = "21600,21600"></v:rect><v:rect id=_x0000_s1048 
+style="LEFT: 8114px; WIDTH: 712px; POSITION: absolute; TOP: 7665px; HEIGHT: 498px" 
+coordsize = "21600,21600"></v:rect><v:rect id=_x0000_s1049 
+style="LEFT: 8012px; WIDTH: 712px; POSITION: absolute; TOP: 7748px; HEIGHT: 498px" 
+coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.687pt; LEFT: auto; MARGIN-LEFT: 8.093pt; WIDTH: 20.468pt; TOP: auto; HEIGHT: 16.937pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:rect></v:group><v:line 
+id=_x0000_s1050 style="POSITION: absolute" from = "2974,8080" to = 
+"2974,8578"></v:line><v:line id=_x0000_s1051 style="POSITION: absolute" from = 
+"2974,8080" to = "4577,8080"><v:stroke endarrow = 
+"block"></v:stroke></v:line><v:line id=_x0000_s1052 style="POSITION: absolute" 
+from = "3432,9076" to = "3890,9076"></v:line><v:line id=_x0000_s1053 
+style="POSITION: absolute" from = "3890,9076" to = "3890,9906"></v:line><v:line 
+id=_x0000_s1054 style="POSITION: absolute" from = "3890,9906" to = 
+"4119,9906"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1055 style="POSITION: absolute" from = "5954,8080" to = 
+"8015,8080"><v:stroke endcap = "round" endarrow = "block" dashstyle = 
+"shortDot"></v:stroke></v:line><v:line id=_x0000_s1056 
+style="POSITION: absolute; flip: y" from = "5035,9076" to = 
+"5035,9574"><v:stroke endcap = "round" dashstyle = 
+"shortDot"></v:stroke></v:line><v:line id=_x0000_s1057 
+style="POSITION: absolute" from = "5035,9076" to = "6638,9076"><v:stroke endcap 
+= "round" endarrow = "block" dashstyle = "shortDot"></v:stroke></v:line><v:line 
+id=_x0000_s1058 style="POSITION: absolute" from = "5493,10072" to = 
+"7325,10072"><v:stroke endcap = "round" endarrow = "block" dashstyle = 
+"shortDot"></v:stroke></v:line></v:group><v:shapetype id=_x0000_t202 coordsize = 
+"21600,21600" o:spt = "202" path = 
+" m0,0 l0,21600,21600,21600,21600,0 xe"><v:stroke joinstyle = 
+"miter"></v:stroke><v:path gradientshapeok = "t" o:connecttype = 
+"rect"></v:path></v:shapetype><v:shape id=_x0000_s1059 
+style="LEFT: 8012px; WIDTH: 916px; POSITION: absolute; TOP: 9574px; HEIGHT: 498px" 
+type = "#_x0000_t202" coordsize = "21600,21600" stroked = "f"><v:textbox 
+style="MARGIN-TOP: 3.875pt; LEFT: auto; MARGIN-LEFT: 7.562pt; WIDTH: 31.437pt; TOP: auto; HEIGHT: 17.718pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">对象</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><w:wrap 
+type = "topandbottom"></w:wrap></v:group><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+ <table cellpadding=0 cellspacing=0 align=left>
+  <tr>
+   <td width=91 height=0></td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><img width=463 height=203 src="6.3.3.files/image001.gif" v:shapes="_x0000_s1026 _x0000_s1027 _x0000_s1028 _x0000_s1029 _x0000_s1030 _x0000_s1031 _x0000_s1032 _x0000_s1033 _x0000_s1034 _x0000_s1035 _x0000_s1036 _x0000_s1037 _x0000_s1038 _x0000_s1039 _x0000_s1040 _x0000_s1041 _x0000_s1042 _x0000_s1043 _x0000_s1044 _x0000_s1045 _x0000_s1046 _x0000_s1047 _x0000_s1048 _x0000_s1049 _x0000_s1050 _x0000_s1051 _x0000_s1052 _x0000_s1053 _x0000_s1054 _x0000_s1055 _x0000_s1056 _x0000_s1057 _x0000_s1058 _x0000_s1059"></td>
+  </tr>
+ </table>
+ </span><![endif]><!--[if gte vml 1]></o:wrapblock><![endif]--><BR 
+style="mso-ignore: vglayout" clear=all></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 83.45pt; TEXT-INDENT: 22.8pt; mso-outline-level: 1"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">图</SPAN><SPAN 
+lang=EN-US>6.10 Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的组成</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">实际上，缓冲区就是主存中的一片区域，把这片区域划分为多个块，每块就是一个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，每个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">由一个或多个页面组成，每个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中存放的就是对象。</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">因为</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配模式的实现比较复杂，我们不准备对其进行详细的分析，只对主要内容给予描述。</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">．</SPAN><SPAN 
+lang=EN-US> Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的数据结构</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配模式有两个主要的数据结构，一个是描述缓冲区的结构</SPAN><SPAN 
+lang=EN-US>kmem_cache_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，一个是描述</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的结构</SPAN><SPAN 
+lang=EN-US>kmem_slab_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，下面对这两个结构给予简要讨论：</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（</SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）</SPAN><SPAN 
+lang=EN-US>Slab</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">是</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">管理模式中最基本的结构。它由一组连续的物理页面组成，对象就被顺序放在这些页面中。其数据结构在</SPAN><SPAN 
+lang=EN-US>mm/slab.c</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中定义如下：</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/*</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* slab_t</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>*</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* Manages the objs in a slab. Placed 
+either at the beginning of mem allocated</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* <SPAN class=GramE>for</SPAN> a slab, 
+or allocated from an general cache.</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>* Slabs are chained into three <SPAN 
+class=GramE>list</SPAN>: fully used, partial, fully free slabs.</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>*/</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN class=GramE>typedef</SPAN> 
+struct slab_s {</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> list_head<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>list;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>colouroff;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>void</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*s_mem;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* including colour offset */</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> int<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>inuse;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* num of objs active in slab */</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>kmem_bufctl_t</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>free;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>} slab_t;</SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 22.8pt"><!--[if gte vml 1]><o:wrapblock><v:group 
+id=_x0000_s1060 
+style="MARGIN-TOP: 0px; Z-INDEX: 2; LEFT: 0px; MARGIN-LEFT: 57.75pt; WIDTH: 263.35pt; POSITION: absolute; HEIGHT: 182.75pt; TEXT-ALIGN: left" 
+coordsize = "5267,3655" coordorigin = "2942,8042" o:allowincell = "f"><v:rect 
+id=_x0000_s1061 
+style="LEFT: 4545px; WIDTH: 2061px; POSITION: absolute; TOP: 8042px; HEIGHT: 3486px" 
+coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.718pt; LEFT: auto; MARGIN-LEFT: 8.187pt; WIDTH: 87.937pt; TOP: auto; HEIGHT: 166.343pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">着色补偿区</SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">对象区</SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">空闲对象链</SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">着色区</SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+      <P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:rect><v:line 
+id=_x0000_s1062 style="POSITION: absolute" from = "4545,8540" to = 
+"6606,8540"></v:line><v:line id=_x0000_s1063 style="POSITION: absolute" from = 
+"4545,10532" to = "6606,10532"></v:line><v:line id=_x0000_s1064 
+style="POSITION: absolute" from = "4545,11196" to = 
+"6606,11196"></v:line><v:line id=_x0000_s1065 style="POSITION: absolute" from = 
+"6148,11362" to = "7293,11362"><v:stroke endarrow = 
+"block"></v:stroke></v:line><v:line id=_x0000_s1066 
+style="POSITION: absolute; flip: x" from = "3858,11362" to = 
+"4774,11362"><v:stroke endarrow = "block"></v:stroke></v:line><v:shape 
+id=_x0000_s1067 
+style="LEFT: 7293px; WIDTH: 916px; POSITION: absolute; TOP: 11196px; HEIGHT: 501px" 
+type = "#_x0000_t202" coordsize = "21600,21600" stroked = "f"><v:textbox 
+style="MARGIN-TOP: 3.781pt; LEFT: auto; MARGIN-LEFT: 7.218pt; WIDTH: 31.437pt; TOP: auto; HEIGHT: 17.875pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN class=GramE><SPAN 
+      lang=EN-US>next</SPAN></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><v:shape 
+id=_x0000_s1068 
+style="LEFT: 2942px; WIDTH: 916px; POSITION: absolute; TOP: 11196px; HEIGHT: 501px" 
+type = "#_x0000_t202" coordsize = "21600,21600" stroked = "f"><v:textbox 
+style="MARGIN-TOP: 3.781pt; LEFT: auto; MARGIN-LEFT: 7.187pt; WIDTH: 31.406pt; TOP: auto; HEIGHT: 17.875pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN class=GramE><SPAN 
+      lang=EN-US>prev</SPAN></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><w:wrap 
+type = "topandbottom"></w:wrap></v:group><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+ <table cellpadding=0 cellspacing=0>
+  <tr>
+   <td width=77 height=0></td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><img width=355 height=249 src="6.3.3.files/image002.gif" v:shapes="_x0000_s1060 _x0000_s1061 _x0000_s1062 _x0000_s1063 _x0000_s1064 _x0000_s1065 _x0000_s1066 _x0000_s1067 _x0000_s1068"></td>
+  </tr>
+ </table>
+ </span><![endif]><!--[if gte vml 1]></o:wrapblock><![endif]--><BR 
+style="mso-ignore: vglayout" clear=all><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">这里的链表用来将前一个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">和后一个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">链接起来形成一个双向链表，</SPAN><SPAN 
+lang=EN-US>colouroff</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为该</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">上着色区的大小，指针</SPAN><SPAN 
+lang=EN-US>s_mem</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">指向对象区的起点，</SPAN><SPAN 
+lang=EN-US>inuse</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">是</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中所分配对象的个数。最后，</SPAN><SPAN 
+lang=EN-US>free</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的值指明了空闲对象链中的第一个对象，</SPAN><SPAN 
+lang=EN-US>kmem_bufctl_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">其实是一个整数。</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构的示意图如图</SPAN><SPAN 
+lang=EN-US>6.11</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">所示：</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">图</SPAN><SPAN 
+lang=EN-US>6.11 Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构示意图</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">对于小对象，</SPAN> 
+<SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">就把</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的描述结构</SPAN><SPAN 
+lang=EN-US>slab_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">放在该</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中；对于大对象，则把</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构游离出来，集中存放。关于</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中<SPAN 
+class=GramE>的着</SPAN>色区再给予具体描述：</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l5 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">每个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的首部都有一个小小的区域是不用的，称为<SPAN 
+class=GramE>“着</SPAN>色区（</SPAN><SPAN lang=EN-US>coloring area</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）</SPAN><SPAN 
+lang=EN-US>”</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。着色区的大小使</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中的每个对象的起始地址都按高速缓存中的<SPAN 
+class=GramE>”</SPAN>缓存行（</SPAN><SPAN lang=EN-US>cache line</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）</SPAN><SPAN 
+class=GramE><SPAN lang=EN-US>”</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">大小进行对齐（</SPAN><SPAN 
+lang=EN-US>80386</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的一级高速缓存<SPAN 
+class=GramE>行大小</SPAN>为</SPAN><SPAN lang=EN-US>16</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">字节，</SPAN><SPAN 
+lang=EN-US>Pentium</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为</SPAN><SPAN 
+lang=EN-US>32</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">字节）。因为</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">是由</SPAN><SPAN 
+lang=EN-US>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">个页面或多个页面（最多为</SPAN><SPAN 
+lang=EN-US>32</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）组成，因此，每个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">都是从一个页面边界开始的，它自然按高速缓存的缓冲行对齐。但是，</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中的对象大小不确定，设置着色区的目的就是将</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中第一个对象的起始地址往后推到与缓冲行对齐的位置。因为一个缓冲区中有多个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，因此，应该把每个缓冲区中的各个</SPAN><SPAN 
+class=GramE><SPAN lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">着</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">色区的大小尽量安排成不同的大小，这样可以使得在不同的</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中，处于同一相对位置的对象，让它们在高速缓存中的起始地址相互错开，这样就可以改善高速缓存的存取效率。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l5 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">每个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">上最后一个对象以后也有个小小的废料区是不用的，这是对着色区大小的补偿，其大小<SPAN 
+class=GramE>取决于着</SPAN>色区的大小，以及</SPAN><SPAN lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">与其每个对象的相对大小。但该区域<SPAN 
+class=GramE>与着</SPAN>色区的总和对于同一种对象的各个</SPAN><SPAN lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">是个常数。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l5 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">每个对象的大小基本上是所需数据结构的大小。只有当数据结构的大小不与高速缓存中的缓冲行对齐时，才增加若干字节使其对齐。所以，一个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">上的所有对象的起始地址都必然是按高速缓存中的缓冲行对齐的。</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN lang=EN-US>(2)</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">缓冲区</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">每个缓冲区管理着一个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">链表，</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">按序分为三组。第一组是全满的</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（没有空闲的对象），第二组</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中只有部分对象被分配，部分对象还空闲，最后一组</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中的对象全部空闲。只所以这样分组，是为了对</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">进行有效的管理。每个缓冲区还有一个轮转锁（</SPAN><SPAN 
+lang=EN-US>spinlock</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">），在对链表进行修改时用这个轮转<SPAN 
+class=GramE>锁进行</SPAN>同步。类型</SPAN><SPAN lang=EN-US>kmem_cache_s</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">在</SPAN><SPAN 
+lang=EN-US>mm/slab.c</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中定义如下：</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN class=GramE>struct</SPAN> 
+kmem_cache_s {</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt; mso-outline-level: 1"><SPAN 
+lang=EN-US>/* 1) each alloc &amp; free */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* full, partial first, then free */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> list_head<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>slabs_full;</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> list_head<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>slabs_partial;</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> list_head<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>slabs_free;</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+class=GramE>unsigned</SPAN> int<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>objsize;</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> int<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>flags;<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>/* constant flags 
+*/</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> int<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>num;<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* # of 
+objs per slab */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>spinlock_t</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>spinlock;</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US>#ifdef 
+CONFIG_SMP</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> int<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;</SPAN>batchcount;</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN 
+lang=EN-US>#endif</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US>/* 2) slab 
+additions /removals */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* order of pgs per slab (2^n) */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> int<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>gfporder;</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* force GFP flags, e.g. GFP_DMA */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> int<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>gfpflags;</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>size_t</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>colour;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* cache colouring range */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> int<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>colour_off;<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* colour offset */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> int<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>colour_next;<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* 
+cache colouring */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>kmem_cache_t<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*slabp_cache;</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> int<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>growing;</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> int<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>dflags;<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* dynamic flags */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* constructor func */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>void</SPAN> (*ctor)(void *, kmem_cache_t *, unsigned 
+long);</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>/* de-constructor func */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>void</SPAN> (*dtor)(void *, kmem_cache_t *, unsigned 
+long);</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>failures;</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US>/* 3) cache 
+creation/removal */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>char</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>name[CACHE_NAMELEN];</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> list_head<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>next;</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US>#ifdef 
+CONFIG_SMP</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US>/* 4) per-cpu 
+data */</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN lang=PT-BR style="mso-ansi-language: PT-BR">cpucache_t<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*cpudata[NR_CPUS];<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt; mso-outline-level: 1"><SPAN 
+lang=PT-BR style="mso-ansi-language: PT-BR">#endif<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=PT-BR 
+style="mso-ansi-language: PT-BR">…..<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=PT-BR 
+style="mso-ansi-language: PT-BR">};<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">然后定义了</SPAN><SPAN 
+lang=PT-BR style="mso-ansi-language: PT-BR">kmem_cache_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR">，</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">并给部分域赋给了初值</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-ansi-language: PT-BR">：</SPAN><SPAN 
+lang=PT-BR style="mso-ansi-language: PT-BR"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=PT-BR 
+style="mso-ansi-language: PT-BR">static kmem_cache_t cache_cache = 
+{<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=PT-BR 
+style="mso-ansi-language: PT-BR"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN lang=EN-US>slabs_full:<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>LIST_HEAD_<SPAN 
+class=GramE>INIT(</SPAN>cache_cache.slabs_full),</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>slabs_partial:<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>LIST_HEAD_<SPAN 
+class=GramE>INIT(</SPAN>cache_cache.slabs_partial),</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN>slabs_free:<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>LIST_HEAD_<SPAN 
+class=GramE>INIT(</SPAN>cache_cache.slabs_free),</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+class=GramE>objsize</SPAN>:<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>sizeof(kmem_cache_t),</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+class=GramE>flags</SPAN>:<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>SLAB_NO_REAP,</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+class=GramE>spinlock</SPAN>:<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>SPIN_LOCK_UNLOCKED,</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN>colour_off:<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>L1_CACHE_BYTES,</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+class=GramE>name</SPAN>:<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>"kmem_cache",</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN lang=EN-US>};</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 22.8pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">对该结构说明如下：</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l4 level1 lfo4; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">该结构中有三个队列</SPAN><SPAN 
+lang=EN-US>slabs_full</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">、</SPAN><SPAN 
+lang=EN-US>slabs_partial</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">以及</SPAN><SPAN 
+lang=EN-US>slabs_free</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，分别指向满</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">、半满</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">和空闲</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，另一个队列</SPAN><SPAN 
+lang=EN-US>next</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">则把所有的专用缓冲区链成一个链表。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l4 level1 lfo4; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">除了这些队列和指针，该结构中还有一些重要的域：</SPAN><SPAN 
+lang=EN-US>objsize</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">是原始的数据结构的大小，这里初始化为</SPAN><SPAN 
+lang=EN-US>kmem_cache_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的大小；</SPAN><SPAN 
+lang=EN-US>num</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">表示每个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">上有几个缓冲区；</SPAN><SPAN 
+lang=EN-US>gfporder</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">则表示每个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">大小的对数，即每个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">由</SPAN><SPAN 
+lang=EN-US>2 <SUP>gfporder</SUP></SPAN><SPAN class=GramE><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">个</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">页面构成。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l4 level1 lfo4; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">如前所述<SPAN 
+class=GramE>，着</SPAN>色区的使用是为了使同一缓冲区中不同</SPAN><SPAN lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">上的对象区的起始地址相互错开，这样有了利于改善高速缓存的效率。</SPAN><SPAN 
+lang=EN-US>colour_off</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">表示颜色的偏移量，</SPAN><SPAN 
+lang=EN-US>colour</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">表示颜色的数量；一个缓冲区中颜色的数量取决于</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中对象的个数、剩余空间以及高速缓存行的大小。所以，对每个缓冲区都要计算它的颜色数量，这个数量就保存在</SPAN><SPAN 
+lang=EN-US>colour</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中，而下一个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">将要使用的颜色则保存在</SPAN><SPAN 
+lang=EN-US>colour_next</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中。当</SPAN><SPAN 
+lang=EN-US>colour_next</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">达到最大值时，就又从</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">开始。着色区的大小可以根据（</SPAN><SPAN 
+lang=EN-US>colour_off</SPAN><SPAN lang=EN-US 
+style="FONT-FAMILY: Symbol; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'; mso-char-type: symbol; mso-symbol-font-family: Symbol"><SPAN 
+style="mso-char-type: symbol; mso-symbol-font-family: Symbol">&acute;</SPAN></SPAN><SPAN 
+lang=EN-US>colour</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）算得。例如，如果</SPAN><SPAN 
+lang=EN-US>colour </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为</SPAN><SPAN 
+lang=EN-US>5</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，</SPAN><SPAN 
+lang=EN-US>colour_off</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为</SPAN><SPAN 
+lang=EN-US>8</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，则第一个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的颜色将为</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中第一个对象区的起始地址（相对）为</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，下一个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中第一个对象区的起始地址为</SPAN><SPAN 
+lang=EN-US>8</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，再下一个为</SPAN><SPAN 
+lang=EN-US>16</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，</SPAN><SPAN 
+lang=EN-US>24</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，</SPAN><SPAN 
+lang=EN-US>32</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，</SPAN><SPAN 
+lang=EN-US>0…</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">等。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l4 level1 lfo4; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>cache_cache</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">变量实际上就是缓冲区结构的头指针。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">由此可以看出，缓冲区结构</SPAN><SPAN 
+lang=EN-US>kmem_cache_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">相当于</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的总控结构，缓冲区结构与</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构之间的关系如图</SPAN><SPAN 
+lang=EN-US>6.12</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">所示：</SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 21.25pt"><!--[if gte vml 1]><o:wrapblock><v:group 
+id=_x0000_s1090 
+style="MARGIN-TOP: 0px; Z-INDEX: 5; LEFT: 0px; MARGIN-LEFT: 31.5pt; WIDTH: 377.85pt; POSITION: absolute; HEIGHT: 224.1pt; TEXT-ALIGN: left" 
+coordsize = "7557,4482" coordorigin = "1600,5092" o:allowincell = "f"><v:rect 
+id=_x0000_s1091 
+style="LEFT: 1829px; WIDTH: 1374px; POSITION: absolute; TOP: 5092px; HEIGHT: 830px" 
+coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.718pt; LEFT: auto; MARGIN-LEFT: 8.5pt; WIDTH: 53.562pt; TOP: auto; HEIGHT: 33.531pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">缓冲区</SPAN></P>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:rect><v:roundrect 
+id=_x0000_s1092 
+style="LEFT: 1829px; WIDTH: 1374px; POSITION: absolute; TOP: 6586px; HEIGHT: 664px" 
+arcsize = "10923f" coordsize = "21600,21600" fillcolor = "gray"><v:textbox 
+style="MARGIN-TOP: 5.656pt; LEFT: auto; MARGIN-LEFT: 9.781pt; WIDTH: 51pt; TOP: auto; HEIGHT: 22.75pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US>Slab</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:roundrect><v:roundrect 
+id=_x0000_s1093 
+style="LEFT: 1829px; WIDTH: 1374px; POSITION: absolute; TOP: 7748px; HEIGHT: 664px" 
+arcsize = "10923f" coordsize = "21600,21600" fillcolor = "#ddd" strokecolor = 
+"silver"><v:textbox 
+style="MARGIN-TOP: 6pt; LEFT: auto; MARGIN-LEFT: 9.781pt; WIDTH: 51pt; TOP: auto; HEIGHT: 22.75pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US>Slab</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:roundrect><v:roundrect 
+id=_x0000_s1094 
+style="LEFT: 1829px; WIDTH: 1374px; POSITION: absolute; TOP: 8910px; HEIGHT: 664px" 
+arcsize = "10923f" coordsize = "21600,21600" filled = "f" fillcolor = "#ddd" 
+strokecolor = "silver"><v:textbox 
+style="MARGIN-TOP: 5.593pt; LEFT: auto; MARGIN-LEFT: 9.781pt; WIDTH: 51pt; TOP: auto; HEIGHT: 22.75pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US>Slab</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:roundrect><v:line 
+id=_x0000_s1095 style="POSITION: absolute" from = "2516,5922" to = 
+"2516,6586"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1096 style="POSITION: absolute" from = "2287,7250" to = 
+"2287,7748"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1097 style="POSITION: absolute" from = "2287,8412" to = 
+"2287,8910"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1098 style="POSITION: absolute; flip: y" from = "2745,8412" to = 
+"2745,8910"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1099 style="POSITION: absolute; flip: y" from = "2745,7250" to = 
+"2745,7748"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1100 style="POSITION: absolute" from = "2971,5922" to = 
+"2971,6254"><v:stroke endcap = "round" dashstyle = 
+"shortDot"></v:stroke></v:line><v:line id=_x0000_s1101 
+style="POSITION: absolute" from = "2971,6251" to = "3429,6251"><v:stroke endcap 
+= "round" dashstyle = "shortDot"></v:stroke></v:line><v:line id=_x0000_s1102 
+style="POSITION: absolute" from = "3432,6251" to = "3432,8077"><v:stroke endcap 
+= "round" dashstyle = "shortDot"></v:stroke></v:line><v:line id=_x0000_s1103 
+style="POSITION: absolute; flip: x" from = "3203,8080" to = 
+"3432,8080"><v:stroke endcap = "round" endarrow = "block" dashstyle = 
+"shortDot"></v:stroke></v:line><v:line id=_x0000_s1104 
+style="POSITION: absolute" from = "2287,5922" to = "2287,6420"><v:stroke endcap 
+= "round" dashstyle = "shortDot"></v:stroke></v:line><v:line id=_x0000_s1105 
+style="POSITION: absolute; flip: x" from = "1600,6420" to = 
+"2287,6420"><v:stroke endcap = "round" dashstyle = 
+"shortDot"></v:stroke></v:line><v:line id=_x0000_s1106 
+style="POSITION: absolute" from = "1600,6420" to = "1600,9242"><v:stroke endcap 
+= "round" dashstyle = "shortDot"></v:stroke></v:line><v:line id=_x0000_s1107 
+style="POSITION: absolute" from = "1600,9242" to = "1829,9242"><v:stroke endcap 
+= "round" endarrow = "block" dashstyle = "shortDot"></v:stroke></v:line><v:rect 
+id=_x0000_s1108 
+style="LEFT: 4806px; WIDTH: 1374px; POSITION: absolute; TOP: 5092px; HEIGHT: 830px" 
+coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.718pt; LEFT: auto; MARGIN-LEFT: 8.093pt; WIDTH: 53.562pt; TOP: auto; HEIGHT: 33.531pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">缓冲区</SPAN></P>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:rect><v:roundrect 
+id=_x0000_s1109 
+style="LEFT: 4806px; WIDTH: 1374px; POSITION: absolute; TOP: 6420px; HEIGHT: 664px" 
+arcsize = "10923f" coordsize = "21600,21600" fillcolor = "#ddd" strokecolor = 
+"silver"><v:textbox 
+style="MARGIN-TOP: 5.593pt; LEFT: auto; MARGIN-LEFT: 9.375pt; WIDTH: 51pt; TOP: auto; HEIGHT: 22.781pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US>Slab</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:roundrect><v:roundrect 
+id=_x0000_s1110 
+style="LEFT: 4806px; WIDTH: 1374px; POSITION: absolute; TOP: 7582px; HEIGHT: 664px" 
+arcsize = "10923f" coordsize = "21600,21600" filled = "f" fillcolor = "#ddd" 
+strokecolor = "silver"><v:textbox 
+style="MARGIN-TOP: 5.937pt; LEFT: auto; MARGIN-LEFT: 9.375pt; WIDTH: 51pt; TOP: auto; HEIGHT: 22.781pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US>Slab</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:roundrect><v:line 
+id=_x0000_s1111 style="POSITION: absolute" from = "5264,5922" to = 
+"5264,6420"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1112 style="POSITION: absolute" from = "5264,7084" to = 
+"5264,7582"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1113 style="POSITION: absolute; flip: y" from = "5722,7084" to = 
+"5722,7582"><v:stroke endcap = "round" endarrow = "block" dashstyle = 
+"shortDot"></v:stroke></v:line><v:line id=_x0000_s1114 
+style="POSITION: absolute; flip: y" from = "5722,5922" to = 
+"5722,6420"><v:stroke endcap = "round" startarrow = "block" dashstyle = 
+"shortDot"></v:stroke></v:line><v:line id=_x0000_s1115 
+style="POSITION: absolute" from = "5264,5922" to = "5264,6420"><v:stroke endcap 
+= "round" dashstyle = "shortDot"></v:stroke></v:line><v:rect id=_x0000_s1116 
+style="LEFT: 7554px; WIDTH: 1374px; POSITION: absolute; TOP: 5092px; HEIGHT: 830px" 
+coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.718pt; LEFT: auto; MARGIN-LEFT: 8.25pt; WIDTH: 53.562pt; TOP: auto; HEIGHT: 33.531pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">缓冲区</SPAN></P>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:rect><v:roundrect 
+id=_x0000_s1117 
+style="LEFT: 7554px; WIDTH: 1374px; POSITION: absolute; TOP: 6586px; HEIGHT: 664px" 
+arcsize = "10923f" coordsize = "21600,21600" fillcolor = "gray"><v:textbox 
+style="MARGIN-TOP: 5.656pt; LEFT: auto; MARGIN-LEFT: 9.531pt; WIDTH: 51pt; TOP: auto; HEIGHT: 22.75pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US>Slab</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:roundrect><v:roundrect 
+id=_x0000_s1118 
+style="LEFT: 7554px; WIDTH: 1374px; POSITION: absolute; TOP: 7748px; HEIGHT: 664px" 
+arcsize = "10923f" coordsize = "21600,21600" fillcolor = "#ddd" strokecolor = 
+"silver"><v:textbox 
+style="MARGIN-TOP: 6pt; LEFT: auto; MARGIN-LEFT: 9.531pt; WIDTH: 51pt; TOP: auto; HEIGHT: 22.75pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US>Slab</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:roundrect><v:roundrect 
+id=_x0000_s1119 
+style="LEFT: 7554px; WIDTH: 1374px; POSITION: absolute; TOP: 8910px; HEIGHT: 664px" 
+arcsize = "10923f" coordsize = "21600,21600" filled = "f" fillcolor = "#ddd" 
+strokecolor = "silver"><v:textbox 
+style="MARGIN-TOP: 5.593pt; LEFT: auto; MARGIN-LEFT: 9.531pt; WIDTH: 51pt; TOP: auto; HEIGHT: 22.75pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US>Slab</SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:roundrect><v:line 
+id=_x0000_s1120 style="POSITION: absolute" from = "8241,5922" to = 
+"8241,6586"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1121 style="POSITION: absolute" from = "8012,7250" to = 
+"8012,7748"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1122 style="POSITION: absolute" from = "8012,8412" to = 
+"8012,8910"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1123 style="POSITION: absolute; flip: y" from = "8470,8412" to = 
+"8470,8910"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1124 style="POSITION: absolute; flip: y" from = "8470,7250" to = 
+"8470,7748"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1125 style="POSITION: absolute" from = "8696,5922" to = 
+"8696,6254"><v:stroke endcap = "round" dashstyle = 
+"shortDot"></v:stroke></v:line><v:line id=_x0000_s1126 
+style="POSITION: absolute" from = "8699,6254" to = "9157,6254"><v:stroke endcap 
+= "round" dashstyle = "shortDot"></v:stroke></v:line><v:line id=_x0000_s1127 
+style="POSITION: absolute" from = "9157,6251" to = "9157,8077"><v:stroke endcap 
+= "round" dashstyle = "shortDot"></v:stroke></v:line><v:line id=_x0000_s1128 
+style="POSITION: absolute; flip: x" from = "8928,8080" to = 
+"9157,8080"><v:stroke endcap = "round" endarrow = "block" dashstyle = 
+"shortDot"></v:stroke></v:line><v:line id=_x0000_s1129 
+style="POSITION: absolute" from = "8012,5922" to = "8012,6420"><v:stroke endcap 
+= "round" dashstyle = "shortDot"></v:stroke></v:line><v:line id=_x0000_s1130 
+style="POSITION: absolute; flip: x" from = "7325,6420" to = 
+"8012,6420"><v:stroke endcap = "round" dashstyle = 
+"shortDot"></v:stroke></v:line><v:line id=_x0000_s1131 
+style="POSITION: absolute" from = "7325,6420" to = "7325,9242"><v:stroke endcap 
+= "round" dashstyle = "shortDot"></v:stroke></v:line><v:line id=_x0000_s1132 
+style="POSITION: absolute" from = "7325,9242" to = "7554,9242"><v:stroke endcap 
+= "round" endarrow = "block" dashstyle = "shortDot"></v:stroke></v:line><v:line 
+id=_x0000_s1133 style="POSITION: absolute" from = "5035,5922" to = 
+"5035,6254"></v:line><v:line id=_x0000_s1134 style="POSITION: absolute" from = 
+"4577,6254" to = "5035,6254"></v:line><v:line id=_x0000_s1135 
+style="POSITION: absolute" from = "4577,6254" to = "4577,8080"></v:line><v:line 
+id=_x0000_s1136 style="POSITION: absolute" from = "4577,8083" to = 
+"4806,8083"><v:stroke endarrow = "block"></v:stroke></v:line><v:line 
+id=_x0000_s1137 style="POSITION: absolute" from = "3203,5424" to = 
+"4806,5424"><v:stroke endcap = "round" endarrow = "block" dashstyle = 
+"shortDot"></v:stroke></v:line><v:line id=_x0000_s1138 
+style="POSITION: absolute" from = "6180,5424" to = "7554,5424"><v:stroke endcap 
+= "round" endarrow = "block" dashstyle = "shortDot"></v:stroke></v:line><w:wrap 
+type = "topandbottom"></w:wrap></v:group><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+ <table cellpadding=0 cellspacing=0>
+  <tr>
+   <td width=41 height=0></td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><img width=506 height=305 src="6.3.3.files/image003.gif" v:shapes="_x0000_s1090 _x0000_s1091 _x0000_s1092 _x0000_s1093 _x0000_s1094 _x0000_s1095 _x0000_s1096 _x0000_s1097 _x0000_s1098 _x0000_s1099 _x0000_s1100 _x0000_s1101 _x0000_s1102 _x0000_s1103 _x0000_s1104 _x0000_s1105 _x0000_s1106 _x0000_s1107 _x0000_s1108 _x0000_s1109 _x0000_s1110 _x0000_s1111 _x0000_s1112 _x0000_s1113 _x0000_s1114 _x0000_s1115 _x0000_s1116 _x0000_s1117 _x0000_s1118 _x0000_s1119 _x0000_s1120 _x0000_s1121 _x0000_s1122 _x0000_s1123 _x0000_s1124 _x0000_s1125 _x0000_s1126 _x0000_s1127 _x0000_s1128 _x0000_s1129 _x0000_s1130 _x0000_s1131 _x0000_s1132 _x0000_s1133 _x0000_s1134 _x0000_s1135 _x0000_s1136 _x0000_s1137 _x0000_s1138"></td>
+  </tr>
+ </table>
+ </span><![endif]><!--[if gte vml 1]></o:wrapblock><![endif]--><BR 
+style="mso-ignore: vglayout" clear=all><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt; mso-outline-level: 1"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">图</SPAN><SPAN 
+lang=EN-US>6.12</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">缓冲区结构</SPAN><SPAN 
+lang=EN-US>kmem_cache_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">与</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构</SPAN><SPAN 
+lang=EN-US>slab_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">之间的关系</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">在图</SPAN><SPAN 
+lang=EN-US>6.12</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中，深灰色表示全满的</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，浅灰色表示含有空闲对象的</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，而无色表示空的</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。缓冲区结构之间形成一个单向链表，</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构之间形成一个双向链表。另外，缓冲区结构还有分别指向满、半满、空闲</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构的指针。</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt; mso-outline-level: 1"><SPAN 
+lang=EN-US>2</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">．专用缓冲区的建立和撤销</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">专用缓冲区是通过</SPAN><SPAN 
+lang=EN-US>kmem_cache_create</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）函数建立的，函数原型为：</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>kmem_cache_t *kmem_cache_<SPAN 
+class=GramE>create(</SPAN>const char *name, size_t size, size_t 
+offset,</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long c_flags,</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+class=GramE>void</SPAN> (*ctor) (void *objp, kmem_cache_t *cachep, unsigned long 
+flags),</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>void</SPAN> (*dtor) (void *objp, kmem_cache_t *cachep, 
+unsigned long flags))</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">对其参数说明如下：</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+lang=EN-US>name</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：</SPAN> 
+<SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">缓冲区名</SPAN><SPAN 
+lang=EN-US> ( 19 </SPAN><SPAN class=GramE><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">个</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">字符</SPAN><SPAN 
+lang=EN-US>) </SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+lang=EN-US>size</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：</SPAN> 
+<SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">对象大小</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US>offset 
+</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：所请求的着色偏移量。</SPAN> 
+</P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US>c_flags 
+</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：对缓冲区的设置标志：</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 50.65pt"><SPAN 
+lang=EN-US>SLAB_HWCACHE_ALIGN</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：表示与第一个高速缓存中的缓冲行边界（</SPAN><SPAN 
+lang=EN-US>16</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">或</SPAN><SPAN 
+lang=EN-US>32</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">字节）对齐。</SPAN><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>SLAB_NO_REAP</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：不允许系统回收内存</SPAN><SPAN 
+lang=EN-US> </SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>SLAB_CACHE_DMA</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：表示</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">使用的是</SPAN><SPAN 
+lang=EN-US>DMA</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">内存</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US>ctor 
+</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：构造函数（一般都为</SPAN><SPAN 
+lang=EN-US>NULL) </SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US>dtor 
+</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：<SPAN 
+class=GramE>析构函数</SPAN>（一般都为</SPAN><SPAN lang=EN-US>NULL) </SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US>objp 
+</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：指向对象的指针</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US>cachep 
+</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：指向缓冲区</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">对专用缓冲区的创建过程简述如下：</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.8pt"><SPAN 
+lang=EN-US>kmem_cache_create</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）函数要进行一系列的计算，以确定最佳的</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">构成。包括：每个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">由几个页面组成，划分为多少个对象；</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的描述结构</SPAN><SPAN 
+lang=EN-US>slab_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">应该放在</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的外面还是放在</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的尾部；还有“颜色”的数量等等。并根据调用参数和计算结果设置</SPAN><SPAN 
+lang=EN-US>kmem_cache_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构中的各个域，包括两个函数指针</SPAN><SPAN 
+lang=EN-US>ctor</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">和</SPAN><SPAN 
+lang=EN-US>dtor</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。最后，将</SPAN><SPAN 
+lang=EN-US>kmem_cache_t</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构插入到</SPAN><SPAN 
+lang=EN-US>cache_cache</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的</SPAN><SPAN 
+lang=EN-US>next</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">队列中。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">但请注意，函数</SPAN><SPAN 
+lang=EN-US>kmem_cache_create</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）所创建的缓冲区中还没有包含任何</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，因此，也没有空闲的对象。只有以下两个条件都为真时，才给缓冲区分配</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 40.2pt; TEXT-INDENT: -28.8pt; mso-list: l1 level1 lfo5; tab-stops: list 40.2pt"><![if !supportLists]><SPAN 
+lang=EN-US style="mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">（1）<SPAN style="FONT: 7pt 'Times New Roman'"> 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">已发出一个分配新对象的请求；</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 40.2pt; TEXT-INDENT: -28.8pt; mso-list: l1 level1 lfo5; tab-stops: list 40.2pt"><![if !supportLists]><SPAN 
+lang=EN-US style="mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">（2）<SPAN style="FONT: 7pt 'Times New Roman'"> 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">缓冲区不包含任何空闲对象；</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 11.4pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">当这两个条件都成立时，</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配模式就调用</SPAN><SPAN 
+lang=EN-US>kmem_cache_grow</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）函数给缓冲区分配一个新的</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。其中，该函数调用</SPAN><SPAN 
+lang=EN-US>kmem_gatepages()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">从伙伴系统获得一组页面；然后又调用</SPAN><SPAN 
+lang=EN-US>kmem_cache_slabgmt()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">获得一个新的</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构；还要调用</SPAN><SPAN 
+lang=EN-US>kmem_cache_init_objs()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为新</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中的所有对象申请构造方法（如果定义的话）；最后，调用</SPAN><SPAN 
+lang=EN-US>kmem_slab_link_end()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">把这个</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构插入到缓冲区中</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">链表的末尾。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配模式的最大好处就是给频繁使用的数据结构建立专用缓冲区。但到目前的版本为止，</SPAN><SPAN 
+lang=EN-US>Linux</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">内核中多数专用缓冲区的建立都用</SPAN><SPAN 
+lang=EN-US>NULL</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">作为构造函数的指针，例如，为虚存区间结构</SPAN><SPAN 
+lang=EN-US>vm_area_struct</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">建立的专用缓冲区</SPAN><SPAN 
+lang=EN-US>vm_area_cachep</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">：</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>vm_area_cachep = kmem_cache_<SPAN 
+class=GramE>create(</SPAN>"vm_area_struct",</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>sizeof(</SPAN>struct vm_area_struct), 0,</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>SLAB_HWCACHE_ALIGN, NULL, NULL);</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">就把构造和<SPAN 
+class=GramE>析构</SPAN>函数的指针置为</SPAN><SPAN lang=EN-US>NULL</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，也就是说，内核并没有充分利用</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">管理机制所提供的好处。为了说明如何利用专用缓冲区，我们从内核代码中选取一个构造函数不为空的简单例子，这个例子与网络子系统有关，在</SPAN><SPAN 
+lang=EN-US>net/core/buff.c</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中定义：</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN class=GramE>void</SPAN> 
+__init<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>skb_init(void)</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: 23.4pt"><SPAN 
+lang=EN-US>{</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: 23.4pt"><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>int<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>i</SPAN>;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>skbuff_head_cache 
+= kmem_cache_<SPAN class=GramE>create(</SPAN>"skbuff_head_cache",</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>sizeof(</SPAN>struct sk_buff),</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>0,</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>SLAB_HWCACHE_ALIGN,</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>skb_headerinit, NULL);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (!skbuff_head_cache)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>panic(</SPAN>"cannot create skbuff cache");</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>for</SPAN> (i=0; i&lt;NR_CPUS; i++)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>skb_queue_head_<SPAN 
+class=GramE>init(</SPAN>&amp;skb_head_pool[i].list);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">从代码中可以看出，</SPAN><SPAN 
+lang=EN-US>skb_init</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）调用</SPAN><SPAN 
+lang=EN-US>kmem_cache_create</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）为网络子系统建立一个</SPAN><SPAN 
+lang=EN-US>sk_buff</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">数据结构的专用缓冲区，其名称为“</SPAN><SPAN 
+lang=EN-US>skbuff_head_cache</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">”（</SPAN> 
+<SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">你可以通过读取／</SPAN><SPAN 
+lang=EN-US>proc/slabinfo/</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">文件得到所有缓冲区的名字）。调用参数</SPAN><SPAN 
+lang=EN-US>offset</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为</SPAN><SPAN 
+lang=EN-US>0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，表示第一个对象在</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中的位移并无特殊要求。但是参数</SPAN><SPAN 
+lang=EN-US>flags</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为</SPAN><SPAN 
+lang=EN-US>SLAB_HWCACHE_ALIGN</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，表示</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中的对象要与高速缓存中的缓冲行边界对齐。对象的构造函数为</SPAN><SPAN 
+lang=EN-US>skb_headerinit</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（），<SPAN 
+class=GramE>而析构函数</SPAN>为空，也就是说，在释放一个</SPAN><SPAN lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">时无需对各个缓冲区进行特殊的处理。</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">当从内核卸载一个模块时，同时应当撤销为这个模块中的数据结构所建立的缓冲区，这是通过调用</SPAN><SPAN 
+lang=EN-US>kmem_cache_destroy()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数来完成的。从</SPAN><SPAN 
+lang=EN-US>Linux<st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" 
+Day="30" Month="12" Year="1899">2.4.16</st1:chsdate></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">内核代码中进行查找，对这个函数的调用非常少。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US>3</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">．通用缓冲区</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">在内核中初始化开销不大的数据结构可以合用一个通用的缓冲区。通用缓冲区非常类似于物理页面分配中的大小分区，最小的为</SPAN><SPAN 
+lang=EN-US>32</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，然后依次为</SPAN><SPAN 
+lang=EN-US>64</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">、</SPAN><SPAN 
+lang=EN-US>128</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">、</SPAN><SPAN 
+lang=EN-US>…</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">直至</SPAN><SPAN 
+lang=EN-US>128K</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（即</SPAN><SPAN 
+lang=EN-US>32</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">个页面），但是，对通用缓冲区的管理又采用的是</SPAN><SPAN 
+lang=EN-US>Slab</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">方式。从通用缓冲区中分配和释放缓冲区的函数为：</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: 24pt"><SPAN 
+class=GramE><SPAN lang=EN-US>void</SPAN></SPAN><SPAN lang=EN-US> *kmalloc(size_t 
+size, int flags);</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: 24pt"><SPAN 
+class=GramE><SPAN lang=EN-US>Void<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>kree</SPAN></SPAN><SPAN lang=EN-US>(const void *objp);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">因此，当一个数据结构的使用根本不频繁时，或其大小不足一个页面时，就没有必要给其分配专用缓冲区，而应该调用</SPAN><SPAN 
+lang=EN-US>kmallo()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">进行分配。如果数据结构的大小接近一个页面，则干脆通过</SPAN><SPAN 
+lang=EN-US>alloc_page()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为之分配一个页面。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">事实上，在内核中，尤其是驱动程序中，有大量的数据结构仅仅是一次性使用，而且所占内存只有几十个字节，因此，一般情况下调用</SPAN><SPAN 
+lang=EN-US>kmallo()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">给内核数据结构分配内存就足够了。另外，因为，在</SPAN><SPAN 
+lang=EN-US>Linux2.0</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">以前的版本一般都调用</SPAN><SPAN 
+lang=EN-US>kmallo()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">给内核数据结构分配内存，因此，调用该函数的一个优点是（让你开发的驱动程序）能保持向后兼容。</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><st1:chsdate w:st="on" 
+IsROCDate="False" IsLunarDate="False" Day="30" Month="12" Year="1899"><SPAN 
+lang=EN-US>6.3.4</SPAN></st1:chsdate><SPAN lang=EN-US> </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">内核空间非连续内存区的管理</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">我们说，任何时候，</SPAN><SPAN 
+lang=EN-US>CPU</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">访问的都是虚拟内存，那么，在你编写驱动程序，或者编写模块时，</SPAN><SPAN 
+lang=EN-US>Linux</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">给你分配什么样的内存？它处于</SPAN><st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="4" UnitName="g"><SPAN lang=EN-US>4G</SPAN></st1:chmetcnv><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">空间的什么位置？这就是我们要讨论的非连续内存。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">首先，非连续内存处于</SPAN><st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="3" UnitName="g"><SPAN lang=EN-US>3G</SPAN></st1:chmetcnv><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">到</SPAN><st1:chmetcnv 
+w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+SourceValue="4" UnitName="g"><SPAN lang=EN-US>4G</SPAN></st1:chmetcnv><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">之间，也就是处于内核空间，如图</SPAN><SPAN 
+lang=EN-US>6.13</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">所示：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>high_memory </SPAN></P>
+<P class=MsoNormal><!--[if gte vml 1]><v:group id=_x0000_s1070 
+style="MARGIN-TOP: 0px; Z-INDEX: 4; LEFT: 0px; MARGIN-LEFT: 34.35pt; WIDTH: 377.85pt; POSITION: absolute; HEIGHT: 81.05pt; TEXT-ALIGN: left" 
+coordsize = "7557,1621" coordorigin = "1651,1595" o:allowincell = 
+"f"><v:roundrect id=_x0000_s1071 
+style="LEFT: 1651px; WIDTH: 1603px; POSITION: absolute; TOP: 2246px; HEIGHT: 830px" 
+arcsize = "10923f" coordsize = "21600,21600" filled = "f"><v:textbox 
+style="MARGIN-TOP: 6.656pt; LEFT: auto; MARGIN-LEFT: 9.812pt; WIDTH: 61.687pt; TOP: auto; HEIGHT: 30.25pt"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">物理内存区</SPAN></P>
+      <P class=MsoNormal><SPAN 
+      style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的映射</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:roundrect><v:roundrect 
+id=_x0000_s1072 
+style="LEFT: 4628px; WIDTH: 1145px; POSITION: absolute; TOP: 2246px; HEIGHT: 830px" 
+arcsize = "10923f" coordsize = "21600,21600" filled = 
+"f"></v:roundrect><v:roundrect id=_x0000_s1073 
+style="LEFT: 6689px; WIDTH: 1145px; POSITION: absolute; TOP: 2246px; HEIGHT: 830px" 
+arcsize = "10923f" coordsize = "21600,21600" filled = "f"></v:roundrect><v:line 
+id=_x0000_s1074 style="POSITION: absolute" from = "1651,2249" to = 
+"8292,2249"></v:line><v:line id=_x0000_s1075 style="POSITION: absolute" from = 
+"1651,3063" to = "8292,3063"></v:line><v:line id=_x0000_s1076 
+style="POSITION: absolute" from = "1651,2249" to = "1651,3079"></v:line><v:line 
+id=_x0000_s1077 style="POSITION: absolute" from = "3254,2552" to = 
+"4628,2552"><v:stroke startarrow = "block" endarrow = 
+"block"></v:stroke></v:line><v:line id=_x0000_s1078 style="POSITION: absolute" 
+from = "5773,2552" to = "6689,2552"><v:stroke startarrow = "block" endarrow = 
+"block"></v:stroke></v:line><v:line id=_x0000_s1079 
+style="POSITION: absolute; flip: x" from = "8292,2884" to = 
+"8521,3216"></v:line><v:line id=_x0000_s1080 style="POSITION: absolute; flip: x" 
+from = "8532,2884" to = "8761,3216"></v:line><v:line id=_x0000_s1081 
+style="POSITION: absolute; flip: x" from = "8292,2080" to = 
+"8521,2412"></v:line><v:line id=_x0000_s1082 style="POSITION: absolute; flip: x" 
+from = "8521,2080" to = "8750,2412"></v:line><v:line id=_x0000_s1083 
+style="POSITION: absolute" from = "8750,3050" to = "9208,3050"></v:line><v:line 
+id=_x0000_s1084 style="POSITION: absolute" from = "8750,2233" to = 
+"9208,2233"></v:line><v:line id=_x0000_s1085 style="POSITION: absolute" from = 
+"9208,2249" to = "9208,3079"></v:line><v:line id=_x0000_s1086 
+style="POSITION: absolute" from = "1651,1930" to = "1651,2262"><v:stroke 
+endarrow = "block"></v:stroke></v:line><v:line id=_x0000_s1087 
+style="POSITION: absolute" from = "3274,1595" to = "3274,2233"><v:stroke 
+endarrow = "block"></v:stroke></v:line><v:line id=_x0000_s1088 
+style="POSITION: absolute" from = "4628,1914" to = "4628,2246"><v:stroke 
+endarrow = "block"></v:stroke></v:line><v:line id=_x0000_s1089 
+style="POSITION: absolute" from = "9208,1914" to = "9208,2246"><v:stroke 
+endarrow = "block"></v:stroke></v:line></v:group><![endif]--><![if !vml]><span style='mso-ignore:vglayout;
+position:relative;z-index:4'><span style='left:0px;position:absolute;
+left:40px;top:-1px;width:516px;height:110px'><img width=516 height=110
+src="6.3.3.files/image004.gif" v:shapes="_x0000_s1070 _x0000_s1071 _x0000_s1072 _x0000_s1073 _x0000_s1074 _x0000_s1075 _x0000_s1076 _x0000_s1077 _x0000_s1078 _x0000_s1079 _x0000_s1080 _x0000_s1081 _x0000_s1082 _x0000_s1083 _x0000_s1084 _x0000_s1085 _x0000_s1086 _x0000_s1087 _x0000_s1088 _x0000_s1089"></span></span><![endif]><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;</SPAN>PAGE_OFFSET<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>VMALLOC_START<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>4GB</SPAN></P>
+<P class=MsoNormal><!--[if gte vml 1]><o:wrapblock><v:line id=_x0000_s1069 
+style="Z-INDEX: 3; LEFT: 0px; POSITION: absolute; TEXT-ALIGN: left" from = 
+"34.375pt,0" to = "377.875pt,0" o:allowincell = "f" stroked = "f"><w:wrap type = 
+"topandbottom"></w:wrap></v:line><![endif]--><!--[if gte vml 1]></o:wrapblock><![endif]--><BR 
+style="mso-ignore: vglayout" clear=all></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp; </SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>8MB<SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">内存区</SPAN><SPAN 
+lang=EN-US><SPAN 
+style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>4KB<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">内存区</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">图</SPAN><SPAN 
+lang=EN-US>6.13 </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">从</SPAN><SPAN 
+lang=EN-US>PAGE_OFFSET</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">开始的内核地址区间</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">图中，</SPAN><SPAN 
+lang=EN-US>PAGE_OFFSET</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为</SPAN><SPAN 
+lang=EN-US>3GB</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，</SPAN><SPAN 
+lang=EN-US>high_memory</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为保存物理地址最高值的变量，</SPAN><SPAN 
+lang=EN-US>VMALLOC_START</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">为非连续区的<SPAN 
+class=GramE>的</SPAN>起始地址，定义于</SPAN><SPAN lang=EN-US>include</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">／</SPAN><SPAN 
+lang=EN-US>i386/pgtable.h</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>#define VMALLOC_<SPAN 
+class=GramE>OFFSET<SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>(</SPAN>8*1024*1024)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>#define VMALLOC_START<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>(((unsigned long) high_memory + 
+2*VMALLOC_OFFSET-1) &amp; \<SPAN 
+class=GramE>~(</SPAN>VMALLOC_OFFSET-1))</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">在物理地址的末尾与第一个内存区之间插入了一个</SPAN><SPAN 
+lang=EN-US>8MB</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（</SPAN><SPAN 
+lang=EN-US>VMALLOC_OFFSET</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）的区间，这是一个安全区，目的是为了“捕获”对非连续区的非法访问。出于同样的理由，在其他非连续的内存区之间也插入了</SPAN><SPAN 
+lang=EN-US>4K</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">大小的安全区。<SPAN 
+class=GramE>每个非</SPAN>连续内存区的大小都是</SPAN><SPAN lang=EN-US>4096</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的倍数。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>1</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">．非连续区的数据结构</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN class=GramE><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">描述非</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">连续区的数据结构为</SPAN><SPAN 
+lang=EN-US>struct vm_struct</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">，定义于</SPAN><SPAN 
+lang=EN-US>include/linux/vmalloc.h</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中：</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN class=GramE><SPAN 
+lang=EN-US>struct</SPAN></SPAN><SPAN lang=EN-US> vm_struct {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long flags;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>void</SPAN> * addr;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long size;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>struct</SPAN> vm_struct * next;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN lang=EN-US>};</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> vm_struct * vmlist;</SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 22.2pt"><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">非连续区组成一个单链表，链表第一个元素的地址存放在变量</SPAN><SPAN 
+lang=EN-US>vmlist</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中。</SPAN><SPAN 
+lang=EN-US>Addr</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">域是内存区的起始地址；</SPAN><SPAN 
+lang=EN-US>size</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">是内存区的大小加</SPAN><SPAN 
+lang=EN-US>4096(</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">安全区的大小</SPAN><SPAN 
+lang=EN-US>)</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US>2</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">．创建一个非连续区的结构</SPAN><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数</SPAN><SPAN 
+lang=EN-US>get_vm_area</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）创建一个新的非连续区结构，其代码在</SPAN><SPAN 
+lang=EN-US>mm/vmalloc.c</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> vm_struct * get_vm_area(unsigned long 
+size, unsigned long flags)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>{</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> long addr;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> vm_struct **p, *tmp, *area;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>area</SPAN> = (struct vm_struct *) 
+kmalloc(sizeof(*area), GFP_KERNEL);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (!area)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> NULL;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>size</SPAN> += PAGE_SIZE;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>addr</SPAN> = VMALLOC_START;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>write_<SPAN class=GramE>lock(</SPAN>&amp;vmlist_lock);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>for</SPAN> (p = &amp;vmlist; (tmp = *p) ; p = 
+&amp;tmp-&gt;next) {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> ((size + addr) &lt; addr)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>goto</SPAN> out;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (size + addr &lt;= (unsigned long) 
+tmp-&gt;addr)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+class=GramE>break</SPAN>;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>addr</SPAN> = tmp-&gt;size + (unsigned long) 
+tmp-&gt;addr;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (addr &gt; VMALLOC_END-size)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>goto</SPAN> out;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>area</SPAN>-&gt;flags = flags;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>area</SPAN>-&gt;addr = (void *)addr;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>area</SPAN>-&gt;size = size;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>area</SPAN>-&gt;next = *p;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>*p = area;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>write_<SPAN class=GramE>unlock(</SPAN>&amp;vmlist_lock);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> area;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN class=GramE><SPAN lang=EN-US>out</SPAN></SPAN><SPAN 
+lang=EN-US>:</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>write_<SPAN class=GramE>unlock(</SPAN>&amp;vmlist_lock);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>kfree(</SPAN>area);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> NULL;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">这个函数比较简单，就是在单链表中插入一个元素。其中调用了</SPAN><SPAN 
+lang=EN-US>kmalloc()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">和</SPAN><SPAN 
+lang=EN-US>kfree()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数</SPAN><SPAN 
+lang=EN-US>,</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分别用来为</SPAN><SPAN 
+lang=EN-US>vm_struct</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">结构分配内存和释放所分配的内存。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US>3</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">．分配非连续内存区</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>vmalloc</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）函数给内核分配一个非连续的内存区，在</SPAN><SPAN 
+lang=EN-US>/include/linux/vmalloc.h</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中定义如下：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>static</SPAN> inline void * vmalloc (unsigned long 
+size)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>{</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> __vmalloc(size, GFP_KERNEL | 
+__GFP_HIGHMEM, PAGE_KERNEL);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>vmalloc</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）最终调用的是</SPAN><SPAN 
+lang=EN-US>__vmalloc</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）函数，该函数的代码在</SPAN><SPAN 
+lang=EN-US>mm/vmalloc.c</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN><SPAN class=GramE>void</SPAN> * __vmalloc (unsigned long size, int 
+gfp_mask, pgprot_t prot)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>{</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>void</SPAN> * addr;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>struct</SPAN> vm_struct *area;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>size</SPAN> = PAGE_ALIGN(size);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (!size || (size &gt;&gt; PAGE_SHIFT) &gt; 
+num_physpages) {</SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>BUG(</SPAN>);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> NULL;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>area</SPAN> = get_vm_area(size, VM_ALLOC);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (!area)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> NULL;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>addr</SPAN> = area-&gt;addr;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (vmalloc_area_pages(VMALLOC_VMADDR(addr), 
+size, gfp_mask, prot)) {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>vfree(</SPAN>addr);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> NULL;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>return</SPAN> addr;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数首先把</SPAN><SPAN 
+lang=EN-US>size</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">参数取整为页面大小（</SPAN><SPAN 
+lang=EN-US>4096</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">）的一个倍数，也就是按页的大小进行对齐，然后进行有效性检查，如果有大小合适的可用内存，就调用</SPAN><SPAN 
+lang=EN-US>get_vm_area</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）获得一个内存区的结构。但真正的内存区还没有获得，函数</SPAN><SPAN 
+lang=EN-US>vmalloc_area_pages</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）真正进行非连续内存区的分配：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>inline</SPAN> int vmalloc_area_pages (unsigned long address, 
+unsigned long size,</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>int</SPAN> gfp_mask, pgprot_t prot)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>{</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>pgd_t * dir;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+class=GramE>unsigned</SPAN> long end = address + size;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>int</SPAN> ret;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>dir</SPAN> = pgd_offset_k(address);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>spin_<SPAN 
+class=GramE>lock(</SPAN>&amp;init_mm.page_table_lock);</SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: 21.25pt"><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+class=GramE>do</SPAN> {</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;</SPAN>pmd_t 
+*pmd;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>pmd</SPAN> = pmd_alloc(&amp;init_mm, dir, 
+address);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>ret</SPAN> = -ENOMEM;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (!pmd)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>break</SPAN>;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>ret</SPAN> = -ENOMEM;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>if</SPAN> (alloc_area_pmd(pmd, address, end - address, 
+gfp_mask, prot))</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>break</SPAN>;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>address</SPAN> = (address + PGDIR_SIZE) &amp; 
+PGDIR_MASK;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>dir</SPAN>++;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>ret</SPAN> = 0;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>} while (address &amp;&amp; (address &lt; end));</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>spin_<SPAN 
+class=GramE>unlock(</SPAN>&amp;init_mm.page_table_lock);</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;</SPAN><SPAN class=GramE>return</SPAN> 
+ret;</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>}</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">该函数有两个主要的参数，</SPAN><SPAN 
+lang=EN-US>address</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">表示内存区的起始地址，</SPAN><SPAN 
+lang=EN-US>size</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">表示内存区的大小。内存区的末尾地址赋给了局部变量</SPAN><SPAN 
+lang=EN-US>end</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。其中还调用了几个主要的函数或宏：</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo6; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>pgd_offset_k</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）宏导出这个内存区起始地址在页目录中的目录项；</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo6; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>pmd_alloc</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）为新的内存区创建一个中间页目录；</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo6; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US>alloc_area_pmd</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）为新的中间页目录分配所有相关的页表，并更新页的总目录；该函数调用</SPAN><SPAN 
+lang=EN-US>pte_alloc_kernel()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">函数来分配一个新的页表，之后再调用</SPAN><SPAN 
+lang=EN-US>alloc_area_pte</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）为页表项分配具体的物理页面。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">从</SPAN><SPAN 
+lang=EN-US>vmalloc_area_pages</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">（）函数可以看出，该函数实际建立起了非连续内存区到物理页面的映射。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US>4</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">．</SPAN><SPAN 
+lang=EN-US>kmalloc()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">与</SPAN><SPAN 
+lang=EN-US>vmalloc()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">的区别</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN>kmalloc()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">与</SPAN><SPAN 
+lang=EN-US>vmalloc() </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">都是在内核代码中提供给其他子系统用来分配内存的函数，但二者有何区别？</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">从前面的介绍已经看出，这两个函数所分配的内存都处于内核空间，即从</SPAN><SPAN 
+lang=EN-US>3GB</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">～</SPAN><SPAN 
+lang=EN-US>4GB</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">；但位置不同，</SPAN><SPAN 
+lang=EN-US>kmalloc()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配的内存处于</SPAN><SPAN 
+lang=EN-US>3GB</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">～</SPAN><SPAN 
+lang=EN-US>high_memory</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">之间，而</SPAN><SPAN 
+lang=EN-US>vmalloc()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">分配的内存在</SPAN><SPAN 
+lang=EN-US>VMALLOC_START</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">～</SPAN><SPAN 
+lang=EN-US>4GB</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">之间，也就是非连续内存区。一般情况下在驱动程序中都是调用</SPAN><SPAN 
+lang=EN-US>kmalloc()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">来给数据结构分配内存，而</SPAN><SPAN 
+lang=EN-US>vmalloc()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">用在为活动的交换区分配数据结构，为某些</SPAN><SPAN 
+lang=EN-US>I/O</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">驱动程序分配缓冲区，或为模块分配空间，例如在</SPAN><SPAN 
+lang=EN-US>include/asm-i386/module.h</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">中定义了如下语句：</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>#define module_map(x)<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>vmalloc(x)</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">其含义就是把模块映射到非连续的内存区。</SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">与</SPAN><SPAN 
+lang=EN-US>kmalloc()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">和</SPAN><SPAN 
+lang=EN-US>vmalloc()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">相对应，两个释放内存的函数为</SPAN><SPAN 
+lang=EN-US>kfree()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">和</SPAN><SPAN 
+lang=EN-US>vfree()</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-ascii-font-family: 'Times New Roman'; mso-hansi-font-family: 'Times New Roman'">。</SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

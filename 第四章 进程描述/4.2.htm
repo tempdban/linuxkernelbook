@@ -1,0 +1,292 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0065)http://www.kerneltravel.net/kernel-book/第四章%20进程描述/4.2.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>Linux中的进程概述</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="4.2.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chmetcnv" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-15T02:56:00Z</o:Created>
+  <o:LastSaved>2007-08-15T02:56:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>139</o:Words>
+  <o:Characters>794</o:Characters>
+  <o:Lines>6</o:Lines>
+  <o:Paragraphs>1</o:Paragraphs>
+  <o:CharactersWithSpaces>932</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: Wingdings;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; mso-footnote-separator: url("4.2.files/header.htm") fs; mso-footnote-continuation-separator: url("4.2.files/header.htm") fcs; mso-endnote-separator: url("4.2.files/header.htm") es; mso-endnote-continuation-separator: url("4.2.files/header.htm") ecs; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-font-kerning: 1.0pt; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-font-kerning: 1.0pt; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-font-kerning: 1.0pt; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体
+}
+P.MsoFootnoteText {
+	FONT-SIZE: 9pt; MARGIN: 0cm 0cm 0pt; LAYOUT-GRID-MODE: char; FONT-FAMILY: "Times New Roman"; mso-font-kerning: 1.0pt; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-style-noshow: yes
+}
+LI.MsoFootnoteText {
+	FONT-SIZE: 9pt; MARGIN: 0cm 0cm 0pt; LAYOUT-GRID-MODE: char; FONT-FAMILY: "Times New Roman"; mso-font-kerning: 1.0pt; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-style-noshow: yes
+}
+DIV.MsoFootnoteText {
+	FONT-SIZE: 9pt; MARGIN: 0cm 0cm 0pt; LAYOUT-GRID-MODE: char; FONT-FAMILY: "Times New Roman"; mso-font-kerning: 1.0pt; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-style-noshow: yes
+}
+SPAN.MsoFootnoteReference {
+	VERTICAL-ALIGN: super; mso-style-noshow: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><B style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">4.2 
+Linux</SPAN></B><B style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">中的进程概述<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">Linux</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">中的每个进程由一个<SPAN 
+lang=EN-US>task_struct</SPAN>数据结构来描述，在<SPAN lang=EN-US>Linux</SPAN>中，<B 
+style="mso-bidi-font-weight: normal">任务</B><SPAN lang=EN-US>(task)</SPAN>、和<B 
+style="mso-bidi-font-weight: normal">进程</B><SPAN 
+lang=EN-US>(process)</SPAN>是两个相同的术语，<SPAN 
+lang=EN-US>task_struct</SPAN>其实就是通常所说的“进程控制块”即<SPAN lang=EN-US>PCB</SPAN>。<SPAN 
+lang=EN-US>task_struct</SPAN>容纳了一个进程的所有信息，是系统对进程进行控制的唯一手段，也是最有效的手段。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">在<SPAN 
+lang=EN-US>Linux2.4</SPAN>中，<SPAN lang=EN-US>Linux</SPAN>为每个新创建的进程动态地分配一个<SPAN 
+lang=EN-US>task_struct</SPAN>结构。系统所允许的最大进程数是由机器所拥有的物理内存的大小决定的，例如，在<SPAN 
+lang=EN-US>IA32</SPAN>的体系结构中，一个<st1:chmetcnv w:st="on" TCSC="0" NumberType="1" 
+Negative="False" HasSpace="False" SourceValue="512" UnitName="m"><SPAN 
+lang=EN-US>512M</SPAN></st1:chmetcnv>内存的机器，其最大进程数可以达到<SPAN 
+lang=EN-US>32K</SPAN>，这是对旧内核（<SPAN lang=EN-US>2.2</SPAN>以前）版本的极大改进<A title="" 
+style="mso-footnote-id: ftn1" 
+href="http://www.kerneltravel.net/kernel-book/第四章%20进程描述/4.2.htm#_ftn1" 
+name=_ftnref1><SPAN class=MsoFootnoteReference><SPAN lang=EN-US><SPAN 
+style="mso-special-character: footnote"><![if !supportFootnotes]><SPAN 
+class=MsoFootnoteReference><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 'Times New Roman'; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">[1]</SPAN></SPAN><![endif]></SPAN></SPAN></SPAN></A>。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">Linux</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">支持多处理机（<SPAN 
+lang=EN-US>SMP</SPAN>），所以系统中允许有多个<SPAN lang=EN-US>CPU</SPAN>，<SPAN lang=EN-US> 
+Linux</SPAN>作为多处理机操作系统时系统中允许的最大<SPAN lang=EN-US>CPU</SPAN>个数为<SPAN 
+lang=EN-US>32</SPAN>。很显然，<SPAN lang=EN-US>Linux</SPAN>作为单机操作系统时，系统中只有一个<SPAN 
+lang=EN-US>CPU</SPAN>，本书主要讨论单处理机的情况。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">和其他操作系统类似，<SPAN 
+lang=EN-US>Linux</SPAN>也支持两种进程：普通进程和实时进程。实时进程具有一定程度上的紧迫性，要求对外部事件做出非常快的响应；而普通进程则没有这种限制。所以，调度程序要区分对待这两种进程，通常，实时进程要比普通进程优先运行。这两种进程的区分也反映在<SPAN 
+lang=EN-US>task_struct</SPAN>数据结构中了。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">总之，包含进程所有信息的<SPAN 
+lang=EN-US>task_struct</SPAN>数据结构是比较庞大的，但是该数据结构本身并不复杂，我们将它的所有域按其功能可做如下划分：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-outline-level: 1" 
+align=left><B style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·进程状态（<SPAN 
+lang=EN-US>State</SPAN>）<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-outline-level: 1" 
+align=left><B style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·进程调度信息（<SPAN 
+lang=EN-US>Scheduling Information</SPAN>）<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-outline-level: 1" 
+align=left><B style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·各种标识符（<SPAN 
+lang=EN-US>Identifiers</SPAN>）<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-outline-level: 1" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·<B 
+style="mso-bidi-font-weight: normal">进程通信有关信息（<SPAN lang=EN-US>IPC</SPAN>：<SPAN 
+lang=EN-US>Inter_Process Communication</SPAN>）<SPAN 
+lang=EN-US><o:p></o:p></SPAN></B></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-outline-level: 1" 
+align=left><B style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·时间和定时器信息（<SPAN 
+lang=EN-US>Times and Timers</SPAN>）<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-outline-level: 1" 
+align=left><B style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·进程链接信息（<SPAN 
+lang=EN-US>Links</SPAN>）<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-outline-level: 1" 
+align=left><B style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·文件系统信息（<SPAN 
+lang=EN-US>File System</SPAN>）<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-outline-level: 1" 
+align=left><B style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·虚拟内存信息（<SPAN 
+lang=EN-US>Virtual Memory</SPAN>）<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 45.05pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l0 level1 lfo1; tab-stops: list 45.05pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><B style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">页面管理信息（<SPAN 
+lang=EN-US>page</SPAN>）<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 45.05pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l0 level1 lfo1; tab-stops: list 45.05pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><B style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">对称多处理器（<SPAN 
+lang=EN-US>SMP</SPAN>）信息<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-outline-level: 1" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">·<B 
+style="mso-bidi-font-weight: normal">和处理器相关的环境（上下文）信息（<SPAN lang=EN-US>Processor 
+Specific Context</SPAN>）<SPAN lang=EN-US><o:p></o:p></SPAN></B></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 45.05pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l1 level1 lfo2; tab-stops: list 45.05pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: Wingdings; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><B style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">其它信息<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">下面我们对<SPAN 
+lang=EN-US>task_struct</SPAN>结构进行具体描述。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV>
+<DIV style="mso-element: footnote-list"><![if !supportFootnotes]><BR clear=all>
+<HR align=left width="33%" SIZE=1>
+<![endif]>
+<DIV id=ftn1 style="mso-element: footnote">
+<P class=MsoFootnoteText><A title="" style="mso-footnote-id: ftn1" 
+href="http://www.kerneltravel.net/kernel-book/第四章%20进程描述/4.2.htm#_ftnref1" 
+name=_ftn1><SPAN class=MsoFootnoteReference><SPAN lang=EN-US><SPAN 
+style="mso-special-character: footnote"><![if !supportFootnotes]><SPAN 
+class=MsoFootnoteReference><SPAN lang=EN-US 
+style="FONT-SIZE: 9pt; FONT-FAMILY: 'Times New Roman'; mso-font-kerning: 1.0pt; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA">[1]</SPAN></SPAN><![endif]></SPAN></SPAN></SPAN></A><SPAN 
+lang=EN-US> </SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">在</SPAN><SPAN 
+lang=EN-US>Linux2.2</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">及以前的版本中，用一个</SPAN><SPAN 
+lang=EN-US>task</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">数组来管理系统中所有进程的</SPAN><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">task_struct</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt">结构，因此，系统中进程的最大个数受数组大小的限制。</SPAN></P></DIV></DIV></BODY></HTML>

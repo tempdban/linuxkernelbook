@@ -1,0 +1,529 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0067)http://www.kerneltravel.net/kernel-book/第四章%20进程描述/4.4.1.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:v = 
+"urn:schemas-microsoft-com:vml" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>进程内核栈</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="4.4.1.files/filelist.xml" rel=File-List><LINK 
+href="4.4.1.files/editdata.mso" rel=Edit-Time-Data><!--[if !mso]>
+<STYLE>v\:* {
+	BEHAVIOR: url(#default#VML)
+}
+o\:* {
+	BEHAVIOR: url(#default#VML)
+}
+w\:* {
+	BEHAVIOR: url(#default#VML)
+}
+.shape {
+	BEHAVIOR: url(#default#VML)
+}
+</STYLE>
+<![endif]--><o:SmartTagType downloadurl="" name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-15T02:58:00Z</o:Created>
+  <o:LastSaved>2007-08-15T02:58:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>135</o:Words>
+  <o:Characters>776</o:Characters>
+  <o:Lines>6</o:Lines>
+  <o:Paragraphs>1</o:Paragraphs>
+  <o:CharactersWithSpaces>910</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: Wingdings;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal 
+style="TEXT-ALIGN: left; mso-outline-level: 1; mso-layout-grid-align: none" 
+align=left><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" 
+Month="12" Year="1899"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">4.4.1</SPAN></st1:chsdate><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">进程内核<SPAN 
+class=GramE>栈</SPAN></SPAN><B style="mso-bidi-font-weight: normal"><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 12pt; COLOR: black; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p></o:p></SPAN></B></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">每个进程都有自己的内核<SPAN 
+class=GramE>栈</SPAN>。当进程从用户<SPAN class=GramE>态进入</SPAN>内核态时，<SPAN 
+lang=EN-US>CPU</SPAN>就自动地设置该进程的内核<SPAN class=GramE>栈</SPAN>，也就是说，<SPAN 
+lang=EN-US>CPU</SPAN>从任务状态段<SPAN lang=EN-US>TSS</SPAN>中装入内核栈指针<SPAN 
+lang=EN-US>esp</SPAN>（参见下一章的进程切换一节）。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">X86</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">内核<SPAN 
+class=GramE>栈</SPAN>的分布如图<SPAN lang=EN-US>4.2</SPAN>所示：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><!--[if gte vml 1]><v:shapetype id=_x0000_t202 coordsize = 
+"21600,21600" o:spt = "202" path = 
+" m0,0 l0,21600,21600,21600,21600,0 xe"><v:stroke joinstyle = 
+"miter"></v:stroke><v:path gradientshapeok = "t" o:connecttype = 
+"rect"></v:path></v:shapetype><v:shape id=_x0000_s1033 
+style="MARGIN-TOP: 9.1pt; Z-INDEX: 8; LEFT: 0px; MARGIN-LEFT: 205pt; WIDTH: 70pt; TEXT-INDENT: 0px; POSITION: absolute; HEIGHT: 24.4pt; TEXT-ALIGN: left" 
+type = "#_x0000_t202" coordsize = "21600,21600" o:allowincell = "f" stroked = 
+"f"><v:fill opacity = ".5"></v:fill><v:textbox 
+style="MARGIN-TOP: 3.687pt; LEFT: auto; MARGIN-LEFT: 7.437pt; WIDTH: 55.625pt; TOP: auto; HEIGHT: 17.187pt; mso-next-textbox: #_x0000_s1033"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">0x018fbfff</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;position:
+absolute;z-index:8;left:0px;margin-left:273px;margin-top:12px;width:98px;
+height:37px'><img width=98 height=37 src="4.4.1.files/image001.gif"
+alt="文本框: 0x018fbfff" v:shapes="_x0000_s1033"></span><![endif]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><!--[if gte vml 1]><v:rect id=_x0000_s1026 
+style="MARGIN-TOP: 0px; Z-INDEX: 1; LEFT: 0px; MARGIN-LEFT: 123pt; WIDTH: 82pt; POSITION: absolute; HEIGHT: 145.6pt; TEXT-ALIGN: left" 
+coordsize = "21600,21600" o:allowincell = "f"></v:rect><v:shapetype 
+id=_x0000_t176 coordsize = "21600,21600" o:spt = "176" path = 
+" m@0,0 qx0@0 l0@2 qy@0,21600 l@1,21600 qx21600@2 l21600@0 qy@1,0 x e" adj = 
+"2700"><v:stroke joinstyle = "miter"></v:stroke><v:formulas><v:f eqn = 
+"sum #0 0 0 "></v:f><v:f eqn = "sum width 0 #0 "></v:f><v:f eqn = 
+"sum height 0 #0 "></v:f><v:f eqn = "prod @0 2929 10000 "></v:f><v:f eqn = 
+"sum width 0 @3 "></v:f><v:f eqn = "sum height 0 @3 "></v:f><v:f eqn = 
+"sum width 0 0 "></v:f><v:f eqn = "sum height 0 0 "></v:f><v:f eqn = 
+"prod width 1 2 "></v:f><v:f eqn = "prod height 1 2 "></v:f></v:formulas><v:path 
+o:connectlocs="@8,0;0,@9;@8,@7;@6,@9" gradientshapeok = "t" o:connecttype = 
+"custom" limo = "10800,10800" textboxrect = 
+"@3,@3,@4,@5"></v:path></v:shapetype><v:shape id=_x0000_s1028 
+style="MARGIN-TOP: 0px; Z-INDEX: 3; LEFT: 0px; MARGIN-LEFT: 123pt; WIDTH: 82pt; TEXT-INDENT: 0px; POSITION: absolute; HEIGHT: 91pt; TEXT-ALIGN: left" 
+type = "#_x0000_t176" coordsize = "21600,21600" o:allowincell = "f" fillcolor = 
+"#f8f8f8"><v:fill type = "gradient" color2 = "fill darken(118)" method = 
+"linear sigma"></v:fill><v:textbox 
+style="MARGIN-TOP: 7.468pt; LEFT: auto; MARGIN-LEFT: 10.781pt; WIDTH: 61.937pt; TOP: auto; HEIGHT: 77.562pt; mso-next-textbox: #_x0000_s1028"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+      style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">堆栈</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;position:
+relative;z-index:1'><span style='left:0px;position:absolute;left:163px;
+top:-1px;width:115px;height:198px'><img width=115 height=198
+src="4.4.1.files/image002.gif" v:shapes="_x0000_s1026 _x0000_s1028"></span></span><![endif]><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P><BR 
+style="mso-ignore: vglayout" clear=all>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><!--[if gte vml 1]><v:shapetype id=_x0000_t67 coordsize = 
+"21600,21600" o:spt = "67" path = 
+" m0@0 l@1@0@1,0@2,0@2@0,21600@0,10800,21600 xe" adj = "16200,5400"><v:stroke 
+joinstyle = "miter"></v:stroke><v:formulas><v:f eqn = "sum #0 0 0 "></v:f><v:f 
+eqn = "sum #1 0 0 "></v:f><v:f eqn = "sum height 0 #1 "></v:f><v:f eqn = 
+"sum 10800 0 #1 "></v:f><v:f eqn = "sum width 0 #0 "></v:f><v:f eqn = 
+"prod @4 @3 10800 "></v:f><v:f eqn = 
+"sum width 0 @5 "></v:f></v:formulas><v:path 
+o:connectlocs="10800,0;0,@0;10800,21600;21600,@0" o:connectangles="270,180,90,0" 
+o:connecttype = "custom" textboxrect = "@1,0,@2,@6"></v:path><v:handles><v:h 
+yrange="0,21600" xrange="0,10800" 
+position="#1,#0"></v:h></v:handles></v:shapetype><v:shape id=_x0000_s1030 
+style="MARGIN-TOP: 9.1pt; Z-INDEX: 5; LEFT: 0px; MARGIN-LEFT: 153.75pt; WIDTH: 20.5pt; POSITION: absolute; HEIGHT: 54.6pt; TEXT-ALIGN: left" 
+type = "#_x0000_t67" coordsize = "21600,21600" o:allowincell = "f" fillcolor = 
+"#969696"><v:fill type = "gradient" color2 = "fill darken(118)" method = 
+"linear sigma"></v:fill><v:textbox 
+style="MARGIN-TOP: 4.812pt; LEFT: auto; MARGIN-LEFT: 10.406pt; WIDTH: 2.687pt; LAYOUT-FLOW: vertical-ideographic; TOP: auto; HEIGHT: 40.812pt"></v:textbox></v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;position:
+absolute;z-index:5;left:0px;margin-left:203px;margin-top:11px;width:31px;
+height:75px'><img width=31 height=75 src="4.4.1.files/image003.gif" v:shapes="_x0000_s1030"></span><![endif]><SPAN 
+lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><!--[if gte vml 1]><v:line id=_x0000_s1031 
+style="Z-INDEX: 6; LEFT: 0px; POSITION: absolute; TEXT-ALIGN: left" from = 
+"123pt,15.625pt" to = "205pt,15.625pt" o:allowincell = "f"></v:line><v:shape 
+id=_x0000_s1032 
+style="MARGIN-TOP: 9.1pt; Z-INDEX: 7; LEFT: 0px; MARGIN-LEFT: 205pt; WIDTH: 71.75pt; TEXT-INDENT: 0px; POSITION: absolute; HEIGHT: 27.3pt; TEXT-ALIGN: left" 
+type = "#_x0000_t202" coordsize = "21600,21600" o:allowincell = "f" stroked = 
+"f"><v:fill opacity = ".5"></v:fill><v:textbox 
+style="MARGIN-TOP: 3.687pt; LEFT: auto; MARGIN-LEFT: 7.437pt; WIDTH: 57.375pt; TOP: auto; HEIGHT: 20.093pt; mso-next-textbox: #_x0000_s1032"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">0x018fb000</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><v:line 
+id=_x0000_s1034 
+style="Z-INDEX: 9; LEFT: 0px; POSITION: absolute; TEXT-ALIGN: left" from = 
+"92.25pt,15.625pt" to = "123pt,15.625pt" o:allowincell = "f"><v:stroke endarrow 
+= "block"></v:stroke></v:line><v:shape id=_x0000_s1035 
+style="MARGIN-TOP: 0px; Z-INDEX: 10; LEFT: 0px; MARGIN-LEFT: 71.75pt; WIDTH: 30.75pt; TEXT-INDENT: 0px; POSITION: absolute; HEIGHT: 27.3pt; TEXT-ALIGN: left" 
+type = "#_x0000_t202" coordsize = "21600,21600" o:allowincell = "f" stroked = 
+"f"><v:fill opacity = ".5"></v:fill><v:textbox 
+style="MARGIN-TOP: 4.343pt; LEFT: auto; MARGIN-LEFT: 7.687pt; WIDTH: 16.375pt; TOP: auto; HEIGHT: 20.093pt; mso-next-textbox: #_x0000_s1035"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN class=GramE><SPAN 
+      lang=EN-US>esp</SPAN></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><v:shape 
+id=_x0000_s1027 
+style="MARGIN-TOP: 62.4pt; Z-INDEX: 2; LEFT: 0px; MARGIN-LEFT: 123pt; WIDTH: 82pt; TEXT-INDENT: 0px; POSITION: absolute; HEIGHT: 36.4pt; TEXT-ALIGN: left" 
+type = "#_x0000_t176" coordsize = "21600,21600" o:allowincell = "f" fillcolor = 
+"silver" stroked = "f"><v:imagedata embosscolor = 
+"shadow add(51)"></v:imagedata><v:shadow type = "emboss" color = 
+"lineOrFill darken(153)" color2 = "shadow add(102)" offset = 
+"1pt,1pt"></v:shadow><o:extrusion v:ext="view" type = "perspective" skewangle = 
+"45" backdepth = "1in" viewpointorigin = "-.5,.5" viewpoint = 
+"-1249999emu,1249999emu" lightposition = "-50000" lightposition2 = 
+"50000"></o:extrusion><v:textbox 
+style="MARGIN-TOP: 4.812pt; LEFT: auto; MARGIN-LEFT: 8.312pt; WIDTH: 65.375pt; TOP: auto; HEIGHT: 27pt; mso-next-textbox: #_x0000_s1027"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">task_struct</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><v:shape 
+id=_x0000_s1029 
+style="MARGIN-TOP: 87.1pt; Z-INDEX: 4; LEFT: 0px; MARGIN-LEFT: 205pt; WIDTH: 71.75pt; TEXT-INDENT: 0px; POSITION: absolute; HEIGHT: 27.3pt; TEXT-ALIGN: left" 
+type = "#_x0000_t202" coordsize = "21600,21600" o:allowincell = "f" stroked = 
+"f"><v:fill opacity = ".5"></v:fill><v:textbox 
+style="MARGIN-TOP: 3.687pt; LEFT: auto; MARGIN-LEFT: 7.437pt; WIDTH: 57.375pt; TOP: auto; HEIGHT: 20.093pt; mso-next-textbox: #_x0000_s1029"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">0x018fa000</SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><v:shape 
+id=_x0000_s1036 
+style="MARGIN-TOP: 78pt; Z-INDEX: 11; LEFT: 0px; MARGIN-LEFT: 92.25pt; WIDTH: 30.75pt; TEXT-INDENT: 0px; POSITION: absolute; HEIGHT: 27.3pt; TEXT-ALIGN: left" 
+type = "#_x0000_t202" coordsize = "21600,21600" o:allowincell = "f" stroked = 
+"f"><v:fill opacity = ".5"></v:fill><v:textbox 
+style="MARGIN-TOP: 3.593pt; LEFT: auto; MARGIN-LEFT: 7.187pt; WIDTH: 16.375pt; TOP: auto; HEIGHT: 20.093pt; mso-next-textbox: #_x0000_s1036"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN class=GramE><SPAN lang=EN-US 
+      style="FONT-SIZE: 12pt; mso-bidi-font-size: 10.0pt">p</SPAN></SPAN><SPAN 
+      lang=EN-US 
+      style="FONT-SIZE: 12pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><v:line 
+id=_x0000_s1037 
+style="Z-INDEX: 12; LEFT: 0px; POSITION: absolute; TEXT-ALIGN: left" from = 
+"102.5pt,96.25pt" to = "123pt,96.25pt" o:allowincell = "f"><v:stroke endarrow = 
+"block"></v:stroke></v:line><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+
+<table cellpadding=0 cellspacing=0 align=left>
+ <tr>
+  <td width=95 height=0></td>
+  <td width=28></td>
+  <td width=250></td>
+ </tr>
+ <tr>
+  <td height=53></td>
+  <td colspan=2 align=left valign=top><img width=278 height=53
+  src="4.4.1.files/image004.gif" v:shapes="_x0000_s1031 _x0000_s1032 _x0000_s1034 _x0000_s1035"></td>
+ </tr>
+ <tr>
+  <td height=30></td>
+ </tr>
+ <tr>
+  <td height=74></td>
+  <td></td>
+  <td align=left valign=top><img width=250 height=74
+  src="4.4.1.files/image005.gif" v:shapes="_x0000_s1027 _x0000_s1029 _x0000_s1036 _x0000_s1037"></td>
+ </tr>
+</table>
+
+</span><![endif]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P><BR 
+style="mso-ignore: vglayout" clear=all>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-outline-level: 1; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-outline-level: 1; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">图<SPAN 
+lang=EN-US>4.2 </SPAN>内核<SPAN class=GramE>栈</SPAN>的分布图<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">在</SPAN><SPAN 
+lang=EN-US>Intel</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">系统中，<SPAN 
+class=GramE>栈</SPAN>起始于末端，并朝这个内存区开始的方向增长。从<SPAN 
+class=GramE>用户态刚切换到</SPAN>内核态以后，进程的内核<SPAN 
+class=GramE>栈</SPAN>总是空的，因此，</SPAN><SPAN lang=EN-US>esp</SPAN><SPAN 
+style="FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">寄存器直接指向这个内存区的顶端。</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"> 
+在图<SPAN lang=EN-US>4.2</SPAN>中，从用户态切换到内核态后，<SPAN 
+lang=EN-US>esp</SPAN>寄存器包含的地址为<SPAN lang=EN-US>0x018fc00</SPAN>。进程描述符存放在从<SPAN 
+lang=EN-US>0x015fa00</SPAN>开始的地址。只要把数据写进<SPAN class=GramE>栈</SPAN>中，<SPAN 
+lang=EN-US>esp</SPAN>的值就递减。</SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-outline-level: 1; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">在／<SPAN 
+lang=EN-US>include/linux/sched.h</SPAN>中定义了如下一个联合结构：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>union</SPAN> task_union {<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>struct</SPAN> task_struct task;<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long stack[2408];<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">};<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">从这个结构可以看出，内核<SPAN 
+class=GramE>栈</SPAN>占<SPAN lang=EN-US>8kb</SPAN>的内存区。实际上，进程的<SPAN 
+lang=EN-US>task_struct</SPAN>结构所占的内存是由内核动态分配的，更确切地说，内核根本不给<SPAN 
+lang=EN-US>task_struct</SPAN>分配内存，而仅仅给内核<SPAN class=GramE>栈</SPAN>分配<SPAN 
+lang=EN-US>8K</SPAN>的内存，并把其中的一部分给<SPAN lang=EN-US>task_struct</SPAN>使用。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">task_struct</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">结构大约占<SPAN 
+lang=EN-US>1K</SPAN>字节左右，其具体数字与内核版本有关，因为不同的<SPAN 
+class=GramE>版本其域稍有</SPAN>不同。因此，内核<SPAN class=GramE>栈</SPAN>的大小不能超过<SPAN 
+lang=EN-US>7K</SPAN>，否则，内核<SPAN class=GramE>栈</SPAN>会覆盖<SPAN 
+lang=EN-US>task_struct</SPAN>结构，从而导致内核崩溃。不过，<SPAN lang=EN-US>7K</SPAN>大小对内核<SPAN 
+class=GramE>栈</SPAN>已足够。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">把<SPAN 
+lang=EN-US>task_struct</SPAN>结构与内核<SPAN class=GramE>栈</SPAN>放在一起具有以下好处：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 45.05pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l0 level1 lfo1; tab-stops: list 45.05pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">内核可以方便而快速地找到这个结构，用伪代码描述如下：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.8pt; TEXT-INDENT: 23.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">task_struct 
+= (struct task_struct *) STACK_POINTER &amp; 0xffffe000<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 48.25pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l1 level1 lfo2; tab-stops: list 48.25pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">避免在创建进程时动态分配额外的内存<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 48.25pt; TEXT-INDENT: -21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none; mso-list: l1 level1 lfo2; tab-stops: list 48.25pt" 
+align=left><![if !supportLists]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">task_struct</SPAN><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">结构的起始地址总是开始于页大小（<SPAN 
+lang=EN-US>PAGE_SIZE</SPAN>）的边界。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

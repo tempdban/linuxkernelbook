@@ -1,0 +1,366 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns:st1="urn:schemas-microsoft-com:office:smarttags"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=gb2312">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 11">
+<meta name=Originator content="Microsoft Word 11">
+<link rel=File-List href="3.5.2.files/filelist.xml">
+<link rel=Edit-Time-Data href="3.5.2.files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>实现机制</title>
+<o:SmartTagType namespaceuri="urn:schemas-microsoft-com:office:smarttags"
+ name="chsdate" downloadurl=""/>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>MC SYSTEM</o:LastAuthor>
+  <o:Revision>3</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2007-08-14T09:53:00Z</o:Created>
+  <o:LastSaved>2008-10-05T03:51:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>185</o:Words>
+  <o:Characters>1060</o:Characters>
+  <o:Lines>8</o:Lines>
+  <o:Paragraphs>2</o:Paragraphs>
+  <o:CharactersWithSpaces>1243</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:Zoom>90</w:Zoom>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]><object
+ classid="clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D" id=ieooui></object>
+<style>
+st1\:*{behavior:url(#ieooui) }
+</style>
+<![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:宋体;
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-alt:SimSun;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 135135232 16 0 262145 0;}
+@font-face
+	{font-family:"\@宋体";
+	panose-1:2 1 6 0 3 1 1 1 1 1;
+	mso-font-charset:134;
+	mso-generic-font-family:auto;
+	mso-font-pitch:variable;
+	mso-font-signature:3 135135232 16 0 262145 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	mso-pagination:none;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:宋体;
+	mso-font-kerning:5.0pt;}
+ /* Page Definitions */
+ @page
+	{mso-page-border-surround-header:no;
+	mso-page-border-surround-footer:no;}
+@page Section1
+	{size:595.3pt 841.9pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;
+	mso-header-margin:42.55pt;
+	mso-footer-margin:49.6pt;
+	mso-paper-source:0;
+	layout-grid:15.6pt;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="3074"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+
+<div class=Section1 style="LAYOUT-GRID:  15.6pt none">
+
+<p class=MsoNormal align=left style="LAYOUT-GRID-MODE:
+ char; TEXT-ALIGN: left; mso-outline-level: 1; mso-layout-grid-align: none"><st1:chsdate w:st="on"
+ Year="1899" Month="12" Day="30" IsLunarDate="False" IsROCDate="False"><b
+ style="mso-bidi-font-weight: normal"><span lang=EN-US style="FONT-SIZE:
+ 10.5pt; COLOR: black;
+ FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">3.5.2</span></b></st1:chsdate><b
+ style="mso-bidi-font-weight: normal"><span lang=EN-US style="FONT-SIZE:
+ 10.5pt; COLOR:
+ black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt"> </span></b><b style="mso-bidi-font-weight:
+ normal"><span style="FONT-SIZE:
+ 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">实现机制<span
+ lang=EN-US><o:p></o:p></span></span></b></p>
+
+<p class=MsoNormal align=left style="LAYOUT-GRID-MODE:
+ char; TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-layout-grid-align: none"><span lang=EN-US
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">Linux</span><span
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">内核为将中断服务分为两部分提供了方便，并设立了相应的机制。在以前的内核中，这个机制就叫<span
+ lang=EN-US>bottom half(</span>简称<span lang=EN-US>bh)</span>，但在<span lang=EN-US>2.4</span>版中有了新的发展和推广，叫做软中断（<span
+ lang=EN-US>softirq</span>）机制。<span lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt;
+ LAYOUT-GRID-MODE: char; TEXT-INDENT: -16.2pt; TEXT-ALIGN: left; mso-layout-grid-align: none; tab-stops: list 16.2pt"><span lang=EN-US style="FONT-SIZE:
+ 10.5pt; COLOR:
+ black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体">1</span><span style="FONT-SIZE:
+ 10.5pt; COLOR:
+ black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体">．</span><span
+ lang=EN-US
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">Bh</span><span
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">机制<span lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-ALIGN: left; mso-layout-grid-align: none"><span style="FONT-SIZE:
+ 10.5pt; COLOR:
+ black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">以前内核中的<span lang=EN-US>Bh</span>机制设置了一个函数指针数组<span
+ lang=EN-US>bh_base[]</span>，它把所有的后半部分都组织起来，其大小为<span lang=EN-US>32</span>，数组中的每一项就是一个后半部分，即一个<span
+ lang=EN-US>bh </span>函数。同时，又设置了两个<span lang=EN-US>32</span>位无符号整数<span
+ lang=EN-US>bh_active</span>和<span lang=EN-US>bh_mask</span>，每个无符号整数中的一位对应着<span
+ lang=EN-US>bh_base[]</span>中的一个元素，如图<span lang=EN-US>3.9</span>所示：<span
+ lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-ALIGN: left; mso-layout-grid-align: none"><span lang=EN-US
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-ALIGN: left; mso-layout-grid-align: none"><span lang=EN-US
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-ALIGN: left; mso-layout-grid-align: none"><span lang=EN-US
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-ALIGN: left; mso-layout-grid-align: none"><span lang=EN-US
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-ALIGN: left; mso-layout-grid-align: none"><span lang=EN-US
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-ALIGN: left; mso-layout-grid-align: none"><span lang=EN-US
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></span></p>
+
+<p class=MsoNormal align=left style="LAYOUT-GRID-MODE:
+ char; TEXT-ALIGN: left; mso-layout-grid-align: none"><!--[if gte vml 1]><o:wrapblock><v:shapetype 
+id=_x0000_t75 coordsize = "21600,21600" o:preferrelative = "t" o:spt = "75" 
+filled = "f" stroked = "f" path = " m@4@5 l@4@11@9@11@9@5 xe"><v:stroke 
+joinstyle = "miter"></v:stroke><v:formulas><v:f eqn = 
+"if lineDrawn pixelLineWidth 0 "></v:f><v:f eqn = "sum @0 1 0 "></v:f><v:f eqn = 
+"sum 0 0 @1 "></v:f><v:f eqn = "prod @2 1 2 "></v:f><v:f eqn = 
+"prod @3 21600 pixelWidth "></v:f><v:f eqn = 
+"prod @3 21600 pixelHeight "></v:f><v:f eqn = "sum @0 0 1 "></v:f><v:f eqn = 
+"prod @6 1 2 "></v:f><v:f eqn = "prod @7 21600 pixelWidth "></v:f><v:f eqn = 
+"sum @8 21600 0 "></v:f><v:f eqn = "prod @7 21600 pixelHeight "></v:f><v:f eqn = 
+"sum @10 21600 0 "></v:f></v:formulas><v:path o:extrusionok = "f" 
+gradientshapeok = "t" o:connecttype = "rect"></v:path><o:lock aspectratio="t" 
+v:ext="edit"></o:lock></v:shapetype><v:shape id=_x0000_s1027 
+style="MARGIN-TOP: 0px; Z-INDEX: 1; MARGIN-LEFT: 279.65pt; WIDTH: 409.4pt; POSITION: absolute; HEIGHT: 214.35pt; mso-position-vertical: top" 
+type = "#_x0000_t75" coordsize = "21600,21600"><v:imagedata o:title="image002" 
+src = "3.5.2.files/image001.gif"></v:imagedata><w:wrap type = 
+"topandbottom"></w:wrap></v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout'>
+ <table cellpadding=0 cellspacing=0 align=left>
+  <tr>
+   <td width=373 height=0></td>
+  </tr>
+  <tr>
+   <td></td>
+   <td><img width=546 height=286 src="3.5.2.files/image001.gif" v:shapes="_x0000_s1027"></td>
+  </tr>
+ </table>
+ </span><![endif]><!--[if gte vml 1]></o:wrapblock><![endif]--><br
+ style="mso-ignore: vglayout" clear=all>
+<span lang=EN-US style="FONT-SIZE:
+ 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></span></p>
+
+<p class=MsoNormal align=center style="LAYOUT-GRID-MODE:
+ char; TEXT-INDENT: 24pt; TEXT-ALIGN: center; mso-outline-level: 1; mso-layout-grid-align: none"><span
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">图<span lang=EN-US>3.9 bh</span>机制示意图<span
+ lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none"><span
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">在<span lang=EN-US>2.4</span>以前的内核中，每次执行完<span
+ lang=EN-US>do_IRQ()</span>中的中断服务例程以后，以及每次系统调用结束之前，就在一个叫<span lang=EN-US>do_bottom_half</span>（）的函数中执行相应的<span
+ lang=EN-US>bh</span>函数。<span lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none"><span
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">在<span lang=EN-US>do_bottom_half</span>（）中对<span
+ lang=EN-US>bh</span>函数的执行是在关中断的情况下进行的，也就是说对<span lang=EN-US>bh</span>的执行进行了严格的“串行化”，这种方式简化了<span
+ lang=EN-US>bh</span>的设计，这是因为，对单<span lang=EN-US>CPU</span>来说，<span lang=EN-US>bh
+</span>函数的执行可以不嵌套；而对于多<span lang=EN-US>CPU</span>来说，在同一时间内最多只允许一个<span
+ lang=EN-US>CPU</span>执行<span lang=EN-US>bh</span>函数。<span lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none"><span
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">这种简化了的设计在一定程度上保证了从单<span
+ lang=EN-US>CPU</span>到多<span lang=EN-US>CPU SMP</span>结构的平稳过渡，但随着时间的推移，就会发现这样的处理对于<span
+ lang=EN-US>SMP</span>的性能有不利的影响。因为，当系统中有很多个<span lang=EN-US>bh</span>函数需要执行时，<span
+ lang=EN-US>bh</span>函数的“串行化”却只能使一个<span lang=EN-US>CPU</span>执行一个<span
+ lang=EN-US>bh</span>函数，其它<span lang=EN-US>CPU</span>即使空闲，也不能执行其它的<span
+ lang=EN-US>bh</span>函数。由此可以看出，<span lang=EN-US>bh</span>函数的串行化是针对所有<span
+ lang=EN-US>CPU</span>的，根本发挥不出多<span lang=EN-US>CPU</span>的优势。<span lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-INDENT: 21.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none"><span
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">那么，在新内核的设计中，是改进<span
+ lang=EN-US>bh</span>机制还是抛弃<span lang=EN-US>bh</span>机制，建立一种新的机制？<span
+ lang=EN-US>2.4</span>选择了一种折中的办法，继续保留<span lang=EN-US>bh</span>机制，另外增加一种或几种机制，并把它们纳入一个统一的框架中，这就是<span
+ lang=EN-US>2.4</span>内核中的软中断（<span lang=EN-US>softirq</span>）机制。<span
+ lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt;
+ LAYOUT-GRID-MODE: char; TEXT-INDENT: -16.2pt; TEXT-ALIGN: left; mso-layout-grid-align: none; tab-stops: list 16.2pt"><span lang=EN-US style="FONT-SIZE:
+ 10.5pt; COLOR:
+ black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体">2</span><span style="FONT-SIZE:
+ 10.5pt; COLOR:
+ black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体">．</span><span
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">软中断机制<span lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-ALIGN: left; mso-layout-grid-align: none"><span style="FONT-SIZE:
+ 10.5pt; COLOR:
+ black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">软中断机制也是推迟内核函数的执行，然而，与<span lang=EN-US>bh</span>函数严格地串行执行相比，软中断却在任何时候都不需要串行化。同一个软中断的两个实例完全有可能在两个<span
+ lang=EN-US>CPU</span>上同时运行。当然，在这种情况下，软中断必须是可重入的。软中断给网络部分带来的好处尤为突出，因为<span
+ lang=EN-US>2.4</span>内核中用两个软中断代替原来的一个<span lang=EN-US>NET_BH</span>函数，这就使得在多处理机系统上软中断的执行更为高效。<span
+ lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt;
+ LAYOUT-GRID-MODE: char; TEXT-INDENT: -16.2pt; TEXT-ALIGN: left; mso-layout-grid-align: none; tab-stops: list 16.2pt"><span lang=EN-US style="FONT-SIZE:
+ 10.5pt; COLOR:
+ black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体">3</span><span style="FONT-SIZE:
+ 10.5pt; COLOR:
+ black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt; mso-bidi-font-family: 宋体">．</span><span
+ lang=EN-US
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">Tasklet</span><span
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">机制<span lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-ALIGN: left; mso-layout-grid-align: none"><span style="FONT-SIZE:
+ 10.5pt; COLOR:
+ black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">另一个类似于<span lang=EN-US>bh</span>的机制叫做<span
+ lang=EN-US>tasklet</span>。<span lang=EN-US>Tasklet</span>建立在软中断之上，但与软中断的区别是，同一个<span
+ lang=EN-US>tasklet</span>只能运行在一个<span lang=EN-US>CPU</span>上，而不同的<span
+ lang=EN-US>tasklet</span>可以同时运行在不同的<span lang=EN-US>CPU</span>上。在这种情况下，<span
+ lang=EN-US>tasklet</span>就不需要是可重入的，因此，编写<span lang=EN-US>tasklet</span>比编写一个软中断要容易。<span
+ lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal align=left style="MARGIN-LEFT:
+ 16.2pt; LAYOUT-GRID-MODE: char; TEXT-ALIGN: left; mso-layout-grid-align: none"><span lang=EN-US
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt"><span
+ style="mso-spacerun: yes">&nbsp;</span><o:p></o:p></span></p>
+
+<p class=MsoNormal align=left style="LAYOUT-GRID-MODE:
+ char; TEXT-ALIGN: left; mso-layout-grid-align: none"><span lang=EN-US style="FONT-SIZE:
+ 10.5pt; COLOR:
+ black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt"><span
+ style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </span>Bh</span><span
+
+ style ="FONT-SIZE: 10.5pt; COLOR: black; FONT-FAMILY: 宋体; mso-hansi-font-family: 'Times New Roman'; mso-font-kerning: 0pt; mso-bidi-font-size: 10.0pt">机制在<span lang=EN-US>2.4</span>中依然存在，但不是作为一个单独的机制存在，而是建立在<span
+ lang=EN-US>tasklet</span>之上。因此，在<span lang=EN-US>2.4</span>版中，设备驱动程序的开发者必须更新他们原来的驱动程序，用<span
+ lang=EN-US>tasklet</span>代替<span lang=EN-US>bh</span>。<span lang=EN-US><o:p></o:p></span></span></p>
+
+<p class=MsoNormal style="LAYOUT-GRID-MODE: char"><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
+
+</div>
+
+</body>
+
+</html>

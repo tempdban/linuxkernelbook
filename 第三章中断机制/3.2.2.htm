@@ -1,0 +1,871 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0064)http://www.kerneltravel.net/kernel-book/第三章中断机制/3.2.2.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:v = 
+"urn:schemas-microsoft-com:vml" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>中断描述符表IDT的预初始化</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="3.2.2.files/filelist.xml" rel=File-List><LINK 
+href="3.2.2.files/editdata.mso" rel=Edit-Time-Data><!--[if !mso]>
+<STYLE>v\:* {
+	BEHAVIOR: url(#default#VML)
+}
+o\:* {
+	BEHAVIOR: url(#default#VML)
+}
+w\:* {
+	BEHAVIOR: url(#default#VML)
+}
+.shape {
+	BEHAVIOR: url(#default#VML)
+}
+</STYLE>
+<![endif]--><o:SmartTagType downloadurl="" name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><o:SmartTagType 
+downloadurl="" name="chmetcnv" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-14T09:07:00Z</o:Created>
+  <o:LastSaved>2007-08-14T09:07:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>432</o:Words>
+  <o:Characters>2463</o:Characters>
+  <o:Lines>20</o:Lines>
+  <o:Paragraphs>5</o:Paragraphs>
+  <o:CharactersWithSpaces>2890</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: Wingdings;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 5.0pt
+}
+P.MsoPlainText {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Times New Roman"
+}
+LI.MsoPlainText {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Times New Roman"
+}
+DIV.MsoPlainText {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Times New Roman"
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="2050"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="mso-outline-level: 1"><st1:chsdate w:st="on" 
+IsROCDate="False" IsLunarDate="False" Day="30" Month="12" Year="1899"><B 
+style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">3.2.2</SPAN></B></st1:chsdate><B 
+style="mso-bidi-font-weight: normal"><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">中断描述符表</SPAN></B><B 
+style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IDT</SPAN></B><B 
+style="mso-bidi-font-weight: normal"><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">的预初始化</SPAN></B><B 
+style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></B></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">当计算机运行在实模式时，</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IDT</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">被初始化并由</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">BIOS</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">使用。然而，一旦真正进入了</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">Linux</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">内核，</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IDT</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">就被移到内存的另一个区域，并进行进入实模式的初步初始化。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>1</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">．中断描述表寄存器</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IDTR</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">的初始化</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">用汇编指令</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">LIDT</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">对中断向量表寄存器</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IDTR</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">进行初始化，其代码在</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">arch/i386/boot/setup.S 
+</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">中：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-INDENT: 21.6pt; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+class=GramE><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">lidt</SPAN></SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>idt_48<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN># load idt with 0,0<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-INDENT: 21.6pt; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">…<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN>idt_48:<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>.word<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>0<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN># idt limit = 0<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>.word<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>0, 0<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN># idt base = <st1:chmetcnv w:st="on" TCSC="0" NumberType="1" 
+Negative="False" HasSpace="False" SourceValue="0" 
+UnitName="l">0L</st1:chmetcnv><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>2</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">．把</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IDT</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">表的起始地址装入</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IDTR<o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">用汇编指令</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">LIDT</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">装入</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IDT</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">的大小和它的地址（在</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">arch/i386/kernel/head.S</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">中）：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-INDENT: 21.25pt; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">#define 
+IDT_ENTRIES<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>256<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-INDENT: 21.25pt; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">.globl 
+SYMBOL_<SPAN class=GramE>NAME(</SPAN>idt)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-INDENT: 21.25pt; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+class=GramE><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">lidt</SPAN></SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"> 
+idt_descr<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-INDENT: 21.25pt; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">…<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; TEXT-INDENT: 21.25pt; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">idt_descr:<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>.word IDT_ENTRIES*8-1<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN># idt contains 256 entries<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">SYMBOL_<SPAN 
+class=GramE>NAME(</SPAN>idt):<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>.long SYMBOL_<SPAN 
+class=GramE>NAME(</SPAN>idt_table)<o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">其中</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">idt</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">为一个全局变量，内核对这个变量的引用就可以获得</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">IDT</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">表的地址。表的长度为</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">256</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: Symbol; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'; mso-char-type: symbol; mso-symbol-font-family: Symbol"><SPAN 
+style="mso-char-type: symbol; mso-symbol-font-family: Symbol">&acute;</SPAN></SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">8</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">＝</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">2048</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">字节。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="mso-outline-level: 1"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">3</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">．用</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">setup_idt()</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">函数填充</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">idt_table</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">表中的</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">256</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">个表项。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">我们首先要看一下</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">idt_table</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">的定义（在</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">arch/i386/kernel/traps.c</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">中）：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; BACKGROUND: #bfbfbf; mso-bidi-font-size: 10.0pt; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN class=GramE>struct</SPAN> 
+desc_struct idt_table[256] __attribute__((__section__(".data.idt"))) = { {0, 0}, 
+};</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>desc_struct</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">结构定义为：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>struct desc_struct </SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">｛</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+class=GramE>unsigned</SPAN> long a,b<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN>} <o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">对</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">idt_table</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">变量还定义了其属性（</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">__attribute__</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">），</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">__section__</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">是汇编中的“节”，指定了</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">idt_table</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">的起始地址存放在数据节的</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">idt</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">变量中，如上面第</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">2</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">条所述。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">在对</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">idt_table</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">表进行填充时，使用了一个空的中断处理程序</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">ignore_int()</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">。因为现在处于初始化阶段，还没有任何中断处理程序，因此用这个空的中断处理程序填充每个表项。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">ignore_int()</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">是一段汇编程序（在</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">head.S</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">中）：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">ignore_int:<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>cld<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">＃方向标志清</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">0</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">，表示串指令自动增长它们的索引寄存器（</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">esi</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">和</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">edi</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">）</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>pushl</SPAN> %eax<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>pushl</SPAN> %ecx<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>pushl</SPAN> %edx<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>pushl</SPAN> %es<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>pushl</SPAN> %ds<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>movl</SPAN> $(__KERNEL_DS),%eax<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>movl</SPAN> %eax,%ds<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>movl</SPAN> %eax,%es<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>pushl</SPAN> $int_msg<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>call</SPAN> SYMBOL_NAME(printk)<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>popl</SPAN> %eax<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>popl</SPAN> %ds<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>popl</SPAN> %es<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>popl</SPAN> %edx<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>popl</SPAN> %ecx<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN class=GramE>popl</SPAN> 
+%eax<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>iret</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">int_msg:<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>.asciz 
+"Unknown interrupt\n"<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>ALIGN<o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-INDENT: 21.25pt"><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">该中断处理程序模仿一般的中断处理程序，执行如下操作：</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 42.5pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo1; tab-stops: list 21.25pt 42.5pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">在<SPAN 
+class=GramE>栈</SPAN>中保存一些寄存器的值</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 42.5pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo1; tab-stops: list 21.25pt 42.5pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">调用</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">printk()</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">函数打印“</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">Unknown 
+interrupt”</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">系统信息</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 42.5pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo1; tab-stops: list 21.25pt 42.5pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">从<SPAN 
+class=GramE>栈</SPAN>中恢复寄存器的内容</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 42.5pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo1; tab-stops: list 21.25pt 42.5pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">执行</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">iret</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">指令以恢复被中断的程序。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21pt">实际上，<SPAN 
+lang=EN-US>ignore_int</SPAN>（）处理程序应该从不执行。如果在控制台或日志文件中出现了 “<SPAN 
+lang=EN-US>Unknown interrupt</SPAN>”消息，说明要么是出现了一个硬件问题（一个<SPAN 
+lang=EN-US>I/O</SPAN>设备正在产生没有预料到的中断），要么就是出现了一个内核问题（一个中断或异常未被恰当地处理）。</P>
+<P class=MsoPlainText><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN>最后，我们来看<SPAN lang=EN-US>setup_idt()</SPAN>函数如何对<SPAN 
+lang=EN-US>IDT</SPAN>表进行填充<SPAN lang=EN-US>:</SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;</SPAN>/*</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN class=GramE>*<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>setup</SPAN>_idt</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN>*</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+class=GramE>*<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>sets</SPAN> up a idt 
+with 256 entries pointing to</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+class=GramE>*<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>ignore</SPAN>_int, 
+interrupt gates. It doesn't actually load</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+class=GramE>*<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>idt</SPAN> - that can 
+be done only after paging has been enabled</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+class=GramE>*<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>and</SPAN> the kernel 
+moved to PAGE_OFFSET. Interrupts</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+class=GramE>*<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>are</SPAN> enabled 
+elsewhere, when we can be relatively</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+class=GramE>*<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>sure</SPAN> 
+everything is ok.</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN>*/</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US>setup_idt:</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>lea ignore_int,%edx<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+</SPAN>/*</SPAN>计算<SPAN lang=EN-US>ignore_int</SPAN>地址的偏移量<SPAN 
+lang=EN-US>,</SPAN>并将其装入<SPAN lang=EN-US>%edx*/</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>movl</SPAN> $(__KERNEL_CS &lt;&lt; 16),%eax<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>/* selector = 0x0010 = cs */</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>movw</SPAN> %dx,%ax<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>movw</SPAN> $0x8E00,%dx<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>/* 
+interrupt gate - dpl=0, present */</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>lea</SPAN> SYMBOL_NAME(idt_table),%edi</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>mov</SPAN> $256,%ecx</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US>rp_sidt:</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>movl</SPAN> %eax,(%edi)</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>movl</SPAN> %edx,4(%edi)</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>addl</SPAN> $8,%edi</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>dec</SPAN> %ecx</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>jne</SPAN> rp_sidt</SPAN></P>
+<P class=MsoPlainText 
+style="BACKGROUND: #bfbfbf; mso-shading: white; mso-pattern: gray-25 auto"><SPAN 
+lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>ret</SPAN></SPAN></P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes"></SPAN></SPAN>&nbsp;</P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN>这段程序的理解要对照门描述符的格式。<SPAN lang=EN-US>8</SPAN>个字节的门描述符放在两个<SPAN 
+lang=EN-US>32</SPAN>位寄存器<SPAN lang=EN-US>eax</SPAN>和<SPAN 
+lang=EN-US>edx</SPAN>，如图<SPAN lang=EN-US>3.5</SPAN>所示，从<SPAN 
+lang=EN-US>rp_sidt</SPAN>开始的那段程序是循环填充<SPAN lang=EN-US>256</SPAN>个表项。<SPAN 
+lang=EN-US style="mso-no-proof: yes"><o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt; mso-outline-level: 1"><!--[if gte vml 1]><v:group 
+id=_x0000_s1026 
+style="MARGIN-TOP: 0px; Z-INDEX: 1; LEFT: 0px; MARGIN-LEFT: 55pt; WIDTH: 273pt; POSITION: absolute; HEIGHT: 63.95pt; TEXT-ALIGN: left" 
+coordsize = "5460,1279" coordorigin = "2119,10716"><v:group id=_x0000_s1027 
+style="LEFT: 2749px; WIDTH: 4830px; POSITION: absolute; TOP: 10716px; HEIGHT: 468px" 
+wrapcoords="-70 0 -70 21600 21670 21600 21670 0 -70 0" coordsize = "4620,468" 
+coordorigin = "2698,1752" o:allowincell = "f"><v:shapetype id=_x0000_t202 
+coordsize = "21600,21600" o:spt = "202" path = 
+" m0,0 l0,21600,21600,21600,21600,0 xe"><v:stroke joinstyle = 
+"miter"></v:stroke><v:path gradientshapeok = "t" o:connecttype = 
+"rect"></v:path></v:shapetype><v:shape id=_x0000_s1028 
+style="LEFT: 2698px; WIDTH: 4620px; POSITION: absolute; TOP: 1752px; HEIGHT: 468px; mso-wrap-edited: f" 
+wrapcoords="-70 0 -70 21600 21670 21600 21670 0 -70 0" type = "#_x0000_t202" 
+coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.718pt; LEFT: auto; MARGIN-LEFT: 8.531pt; WIDTH: 226.406pt; TOP: auto; HEIGHT: 15.437pt; mso-next-textbox: #_x0000_s1028"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN 
+      style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN class=GramE><SPAN 
+      style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">段选择符</SPAN></SPAN><SPAN 
+      lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+      style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>(0x0010)<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      </SPAN></SPAN><SPAN 
+      style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">偏移量的低</SPAN><SPAN 
+      lang=EN-US 
+      style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">16</SPAN><SPAN 
+      style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">位</SPAN><SPAN 
+      lang=EN-US 
+      style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><v:line 
+id=_x0000_s1029 style="POSITION: absolute" from = "5008,1752" to = 
+"5008,2220"></v:line></v:group><v:group id=_x0000_s1030 
+style="LEFT: 2749px; WIDTH: 4830px; POSITION: absolute; TOP: 11527px; HEIGHT: 468px" 
+wrapcoords="-70 0 -70 21600 21670 21600 21670 0 -70 0" coordsize = "4620,468" 
+coordorigin = "2698,1752" o:allowincell = "f"><v:shape id=_x0000_s1031 
+style="LEFT: 2698px; WIDTH: 4620px; POSITION: absolute; TOP: 1752px; HEIGHT: 468px; mso-wrap-edited: f" 
+wrapcoords="-70 0 -70 21600 21670 21600 21670 0 -70 0" type = "#_x0000_t202" 
+coordsize = "21600,21600"><v:textbox 
+style="MARGIN-TOP: 4.75pt; LEFT: auto; MARGIN-LEFT: 8.531pt; WIDTH: 226.406pt; TOP: auto; HEIGHT: 15.437pt; mso-next-textbox: #_x0000_s1031"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN lang=EN-US 
+      style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+      style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">偏移量的高</SPAN><SPAN 
+      lang=EN-US 
+      style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">16</SPAN><SPAN 
+      style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">位</SPAN><SPAN 
+      lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;</SPAN><SPAN 
+      style="mso-spacerun: yes">&nbsp;</SPAN>00 <SPAN 
+      style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+      style="mso-spacerun: yes">&nbsp;</SPAN>110<SPAN 
+      style="mso-spacerun: yes">&nbsp; 
+      </SPAN>00000000<o:p></o:p></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape><v:line 
+id=_x0000_s1032 style="POSITION: absolute" from = "5008,1752" to = 
+"5008,2220"></v:line></v:group><v:line id=_x0000_s1033 
+style="POSITION: absolute" from = "6319,11524" to = "6319,11992" o:allowincell = 
+"f"></v:line><v:line id=_x0000_s1034 style="POSITION: absolute" from = 
+"5269,11524" to = "5269,11992" o:allowincell = "f"></v:line><v:line 
+id=_x0000_s1035 style="POSITION: absolute" from = "5584,11524" to = "5584,11992" 
+o:allowincell = "f"></v:line><v:line id=_x0000_s1036 style="POSITION: absolute" 
+from = "5794,11524" to = "5794,11992" o:allowincell = "f"></v:line><v:shape 
+id=_x0000_s1037 
+style="LEFT: 2119px; WIDTH: 735px; POSITION: absolute; TOP: 11527px; HEIGHT: 468px" 
+type = "#_x0000_t202" coordsize = "21600,21600" o:allowincell = "f" stroked = 
+"f"><v:fill opacity = ".5"></v:fill><v:textbox 
+style="MARGIN-TOP: 3.625pt; LEFT: auto; MARGIN-LEFT: 7.437pt; WIDTH: 22.375pt; TOP: auto; HEIGHT: 16.187pt; mso-next-textbox: #_x0000_s1037"><![if !mso]>
+<TABLE cellSpacing=0 cellPadding=0 width="100%">
+  <TBODY>
+  <TR>
+    <TD><![endif]>
+      <DIV>
+      <P class=MsoNormal><SPAN class=GramE><SPAN 
+      lang=EN-US>edx</SPAN></SPAN></P></DIV><![if !mso]></TD></TR></TBODY></TABLE><![endif]></v:textbox></v:shape></v:group><![endif]--><![if !vml]><span style='mso-ignore:vglayout;
+position:relative;z-index:1'><span style='left:0px;position:absolute;
+left:73px;top:-1px;width:369px;height:91px'><img width=369 height=91
+src="3.2.2.files/image001.gif" v:shapes="_x0000_s1026 _x0000_s1027 _x0000_s1028 _x0000_s1029 _x0000_s1030 _x0000_s1031 _x0000_s1032 _x0000_s1033 _x0000_s1034 _x0000_s1035 _x0000_s1036 _x0000_s1037"></span></span><![endif]><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-tab-count: 1"></SPAN>32<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>16 15<SPAN 
+style="mso-tab-count: 5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>0<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt"><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN class=GramE>eax</SPAN> 
+<o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="MARGIN-LEFT: 21.25pt; mso-outline-level: 1"><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><SPAN 
+style="mso-tab-count: 5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 23.15pt; TEXT-INDENT: 61.4pt; mso-outline-level: 1; mso-para-margin-left: 1.93gd; mso-char-indent-count: 5.85"><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">图</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">3.4 
+</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">门描述符存放在两个</SPAN><SPAN 
+lang=EN-US style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt">32</SPAN><SPAN 
+style="FONT-SIZE: 10.5pt; FONT-FAMILY: 宋体; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: 'Times New Roman'; mso-ascii-font-family: 'Times New Roman'">位的寄存器</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt"><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

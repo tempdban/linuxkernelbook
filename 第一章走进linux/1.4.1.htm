@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0065)http://www.kerneltravel.net/kernel-book/第一章走进linux/1.4.1.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>开发适合自己的操作系统</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="1.4.1.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2007-08-14T01:56:00Z</o:Created>
+  <o:LastSaved>2007-08-14T01:56:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>186</o:Words>
+  <o:Characters>1065</o:Characters>
+  <o:Lines>8</o:Lines>
+  <o:Paragraphs>2</o:Paragraphs>
+  <o:CharactersWithSpaces>1249</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-pagination: none; mso-style-parent: ""; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-pagination: none; mso-style-parent: ""; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-pagination: none; mso-style-parent: ""; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-margin-top-alt: auto; mso-margin-bottom-alt: auto; mso-pagination: widow-orphan" 
+align=left><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" 
+Month="12" Year="1899"><SPAN lang=EN-US 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">1.4.1</SPAN></st1:chsdate><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"> 
+</SPAN><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">开发适合自己的操作系统</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 12pt; COLOR: windowtext; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-margin-top-alt: auto; mso-margin-bottom-alt: auto; mso-pagination: widow-orphan" 
+align=left><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">因为操作系统是所有软件赖以生存的基础，因此，我们强烈地需要拥有自己的操作系统，这不仅对我们国家的民族软件发展有极大的好处，而且对国家的安全和国防事业都至关重要。但是如果<SPAN 
+class=GramE>象</SPAN>日本那样搞自己的一套体系结构<SPAN 
+lang=EN-US>(PC98)</SPAN>，不同国际标准兼容，结果会严重阻碍软件业的发展，那也是死路一条。但是国产操作系统<SPAN 
+lang=EN-US>COSIX</SPAN>没有任何市场，而<SPAN 
+lang=EN-US>Windows</SPAN>又几乎处于垄断地位，面对这种局面，出路何在？<SPAN 
+lang=EN-US>Linux</SPAN>的出现正符合我们所有的要求，因为源代码公开，我们可以立即加入开发，不仅开发速度大大快于任何商业操作系统，并且可以保证操作系统中不存在任何黑洞和隐蔽的问题，永远不会受制于人。因为<SPAN 
+lang=EN-US>Linux</SPAN>是国际化的，我们也不必考虑兼容性问题，永远不会同国际脱轨。因此<SPAN 
+lang=EN-US>Linux</SPAN>对于我们来说，是实现民族软件腾飞的一个难得的机遇。</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 12pt; COLOR: windowtext; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-margin-top-alt: auto; mso-margin-bottom-alt: auto; mso-pagination: widow-orphan" 
+align=left><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">实际上，操作系统的发展必将出现基于某一标准的百花齐放的局面，定制适合自己的操作系统也将不仅仅是梦想。但是，开发一个操作系统不是一件容易的事，甚至分析一个现有的操作系统也并不简单，而<SPAN 
+lang=EN-US>Linux</SPAN>作为分析实例是比较合适的。因为<SPAN 
+lang=EN-US>Linux</SPAN>的开放、众多人的参与以及<SPAN lang=EN-US>Linux</SPAN>社区的互助都为<SPAN 
+lang=EN-US>Linux</SPAN>的学习和普及提供了良好的外部环境。</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 12pt; COLOR: windowtext; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-ALIGN: left; mso-margin-top-alt: auto; mso-margin-bottom-alt: auto; mso-pagination: widow-orphan" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">&nbsp;1</SPAN><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">．开发嵌入式操作系统</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 12pt; COLOR: windowtext; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-ALIGN: left; mso-margin-top-alt: auto; mso-margin-bottom-alt: auto; mso-pagination: widow-orphan" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">&nbsp;&nbsp; 
+</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 12pt; COLOR: windowtext; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">Linux</SPAN><SPAN 
+style="FONT-SIZE: 12pt; COLOR: windowtext; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">为嵌入操作系统提供了一个极有吸引力的选择，它和<SPAN 
+lang=EN-US>Unix</SPAN>相似、是以内核为基础的、完全内存保护、多任务<SPAN 
+class=GramE>多进程</SPAN>的操作系统。支持广泛的计算机硬件<SPAN lang=EN-US>,</SPAN>包括<SPAN 
+lang=EN-US>X86,Alpha,Sparc,MIPS,PPC,ARM,NEC,MOTOROLA</SPAN>等现有的大部分芯片。程序源码全部公开，任何人可以修改并在<SPAN 
+lang=EN-US>GNU</SPAN>通用公共许可证<SPAN lang=EN-US>(GNU General Public 
+License)</SPAN>下发行，这样，开发人员可以对操作系统进行定制，再也不必担心像<SPAN lang=EN-US>Ms 
+windows</SPAN>操作系统中“后门”的威胁。同时由于有<SPAN lang=EN-US>GPL</SPAN>的控制<SPAN 
+lang=EN-US>,</SPAN>大家开发的东西大都相互兼容，不会走向分裂之路。<SPAN 
+lang=EN-US>Linux</SPAN>用户遇到问题时可以通过<SPAN lang=EN-US>Internet</SPAN>向网上成千上万的<SPAN 
+lang=EN-US>Linux</SPAN>开发者请教<SPAN lang=EN-US>,</SPAN>这使最困难的问题也有办法解决。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-ALIGN: left; mso-margin-top-alt: auto; mso-margin-bottom-alt: auto; mso-pagination: widow-orphan" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 12pt; COLOR: windowtext; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">&nbsp;&nbsp; 
+</SPAN><SPAN 
+style="FONT-SIZE: 12pt; COLOR: windowtext; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">正是嵌入式操作系统的特殊要求为<SPAN 
+lang=EN-US>Linux</SPAN>在嵌入式系统中的发展提供了广阔的空间，使得<SPAN 
+lang=EN-US>Linux</SPAN>成为嵌入式操作系统中的新贵。在应用上，嵌入式<SPAN 
+lang=EN-US>Linux</SPAN>可应用于信息家电（机顶盒、数字电视）、多媒体手机、工业、商业控制（智能工控设备、<SPAN 
+lang=EN-US>POS/ATM</SPAN>机）、电子商务平台，甚至军事应用等。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-ALIGN: left; mso-margin-top-alt: auto; mso-margin-bottom-alt: auto; mso-pagination: widow-orphan" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">&nbsp;2</SPAN><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">．开发实时操作系统</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 12pt; COLOR: windowtext; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-ALIGN: left; mso-margin-top-alt: auto; mso-margin-bottom-alt: auto; mso-pagination: widow-orphan" 
+align=left><SPAN lang=EN-US 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">在实时<SPAN 
+lang=EN-US>Linux</SPAN>出现之前，在为实时应用选择系统平台的时候，人们大抵只有两种选择，要么使用<SPAN 
+lang=EN-US>DOS</SPAN>并自己编写所有必要的驱动程序，要么就得购买专用的实时系统。前者不仅费时费力，其性能也难以令人满意。而后者性能虽佳，其价格却高得让人难以接受。</SPAN><SPAN 
+lang=EN-US 
+style="FONT-SIZE: 12pt; COLOR: windowtext; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 24pt; TEXT-ALIGN: left; mso-margin-top-alt: auto; mso-margin-bottom-alt: auto; mso-pagination: widow-orphan" 
+align=left><SPAN 
+style="FONT-SIZE: 12pt; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体">实时<SPAN 
+lang=EN-US>Linux</SPAN>的出现解决了这一问题，它为实时应用领域的研究与开发提供了一个物美价廉的完备的操作系统平台。凭着自身的技术特色，借助于<SPAN 
+lang=EN-US>Linux</SPAN>的强大功能，实时<SPAN 
+lang=EN-US>Linux</SPAN>下开发出的实时应用有着不俗的表现。</SPAN><SPAN lang=EN-US 
+style="FONT-SIZE: 12pt; COLOR: windowtext; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-bidi-font-family: 宋体"><o:p></o:p></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

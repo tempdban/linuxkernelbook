@@ -1,0 +1,1257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0077)http://www.kerneltravel.net/kernel-book/第十一章%20%20设备驱动程序/11.3.5.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>硬盘驱动程序的实现</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="11.3.5.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><o:SmartTagType 
+downloadurl="" name="chmetcnv" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-17T04:01:00Z</o:Created>
+  <o:LastSaved>2007-08-17T04:01:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>648</o:Words>
+  <o:Characters>3694</o:Characters>
+  <o:Lines>30</o:Lines>
+  <o:Paragraphs>8</o:Paragraphs>
+  <o:CharactersWithSpaces>4334</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	FONT-WEIGHT: bold; TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-font-kerning: 1.0pt; mso-bidi-font-weight: normal
+}
+LI.MsoNormal {
+	FONT-WEIGHT: bold; TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-font-kerning: 1.0pt; mso-bidi-font-weight: normal
+}
+DIV.MsoNormal {
+	FONT-WEIGHT: bold; TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 12pt; MARGIN: 0cm 0cm 0pt; COLOR: black; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-hansi-font-family: "Times New Roman"; mso-bidi-font-family: "Times New Roman"; mso-font-kerning: 1.0pt; mso-bidi-font-weight: normal
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal 
+style="MARGIN-LEFT: 2.25pt; TEXT-ALIGN: left; mso-outline-level: 1; mso-layout-grid-align: none" 
+align=left><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" 
+Month="12" Year="1899"><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">11.3.5</SPAN></st1:chsdate><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">硬盘驱动程序的实现<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 2.55pt; TEXT-INDENT: 29.2pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">1</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">、磁盘硬件<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">所有实际的磁盘都组织成许多柱面，每个柱面上的磁道数和磁头数相同。磁道又被划分成许多扇区。如果每条磁道上的扇区数相同的话，外圈磁道的数据的密度就会小一些，这就意味着会牺牲一些磁盘容量，也意味着必须存在更复杂的系统。现代大容量的硬盘中外圈磁道有的扇区数比内圈多，这就是<SPAN 
+lang=EN-US>IDE(Integrated Drive Electronics) 
+</SPAN>驱动器，它内置的电子器件屏蔽了复杂的细节，对于操作系统来说仍呈现出简单的几何结构，每条磁道具有相同的扇区。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">下面我们看一下硬盘控制器的硬件结构，以便于我们进一步了解硬盘驱动程序。对于驱动程序，了解硬盘的各种寄存器以及寄存器的各个位是重要的，表<SPAN 
+lang=EN-US>11.1(a)</SPAN>～<SPAN lang=EN-US>(e)</SPAN>给出各个寄存器的具体描述。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 35.4pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">表<SPAN 
+lang=EN-US>11.1<SPAN style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+style="mso-tab-count: 5">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;</SPAN>(a) IDE 
+</SPAN>硬盘的控制寄存<SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><o:p></o:p></SPAN></SPAN></P>
+<TABLE class=MsoNormalTable 
+style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; MARGIN-LEFT: 5.4pt; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-top-alt: solid black 1.0pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black 1.0pt; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt" 
+cellSpacing=0 cellPadding=0 border=1>
+  <TBODY>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 104pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-top-alt: 1.0pt; mso-border-left-alt: 1.0pt; mso-border-right-alt: .5pt; mso-border-bottom-alt: .5pt; mso-border-color-alt: black; mso-border-style-alt: solid" 
+    vAlign=top width=173>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">A<st1:chmetcnv 
+      w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="True" 
+      SourceValue="2" UnitName="a">2<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; 
+      </SPAN>A</st1:chmetcnv><st1:chmetcnv w:st="on" TCSC="0" NumberType="1" 
+      Negative="False" HasSpace="True" SourceValue="1" UnitName="a">1<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; 
+      </SPAN>A</st1:chmetcnv>0<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.7pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">读功能<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.4pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">写功能<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 104pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=173>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">0<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>0<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      </SPAN>0<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.7pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">数据<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.4pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">数据<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 104pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=173>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">0<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>0<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      </SPAN>0<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.7pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">出错<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.4pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      class=GramE><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">写预补偿</SPAN></SPAN><SPAN 
+      lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p></o:p></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 104pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=173>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">0<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>0<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      </SPAN>0<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.7pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">扇区计数<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.4pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">扇区计数<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 104pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=173>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">0<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>1<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      </SPAN>1<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.7pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">扇区号（<SPAN 
+      lang=EN-US>0</SPAN>～<SPAN lang=EN-US>7</SPAN>）<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.4pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">扇区号（<SPAN 
+      lang=EN-US>0</SPAN>～<SPAN lang=EN-US>7</SPAN>）<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 104pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=173>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">1<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>0<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      </SPAN>0<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.7pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      class=GramE><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">柱面号低位</SPAN></SPAN><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">（<SPAN 
+      lang=EN-US>8</SPAN>～<SPAN lang=EN-US>15</SPAN>）<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.4pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      class=GramE><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">柱面号低位</SPAN></SPAN><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">（<SPAN 
+      lang=EN-US>8</SPAN>～<SPAN lang=EN-US>15</SPAN>）<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 104pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=173>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">1<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>0<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;</SPAN>0<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.7pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      class=GramE><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">柱面号</SPAN></SPAN><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">高位（<SPAN 
+      lang=EN-US>16</SPAN>～<SPAN lang=EN-US>23</SPAN>）<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.4pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      class=GramE><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">柱面号</SPAN></SPAN><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">高位（<SPAN 
+      lang=EN-US>16</SPAN>～<SPAN lang=EN-US>23</SPAN>）<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 104pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=173>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">1<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>1<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      </SPAN>0<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.7pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">选择驱动器磁头（<SPAN 
+      lang=EN-US>24</SPAN>～<SPAN lang=EN-US>27</SPAN>）<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.4pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">选择驱动器磁头（<SPAN 
+      lang=EN-US>24</SPAN>～<SPAN lang=EN-US>27</SPAN>）<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 17pt; page-break-inside: avoid; mso-yfti-lastrow: yes">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 104pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=173>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">1<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>1<SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      </SPAN>1<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.7pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">状态<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 147.4pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 17pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=246>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">状态<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">表<SPAN 
+lang=EN-US>11.1<SPAN style="mso-tab-count: 1">&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>(b)</SPAN>驱动器<SPAN lang=EN-US>/</SPAN>磁头<SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN>寄存器的选择域<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<TABLE class=MsoNormalTable 
+style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; MARGIN-LEFT: 5.4pt; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-top-alt: solid black 1.0pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black 1.0pt; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt" 
+cellSpacing=0 cellPadding=0 border=1>
+  <TBODY>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 31.7pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: 1.0pt; mso-border-left-alt: 1.0pt; mso-border-right-alt: .5pt; mso-border-bottom-alt: .5pt; mso-border-color-alt: black; mso-border-style-alt: solid" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>7<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 32.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>6<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 31.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>5<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 32.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>4<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 31.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>3<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 32pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>2<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 31.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>1<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 32.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>0<o:p></o:p></SPAN></P></TD></TR>
+  <TR 
+    style="HEIGHT: 12.15pt; page-break-inside: avoid; mso-yfti-lastrow: yes"><TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 31.7pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>1<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 32.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">LBA<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 31.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>1<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 32.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>D<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 31.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">HS3<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 32pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">HS2<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 31.75pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">HS1<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 32.05pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=53>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">HS0<o:p></o:p></SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 125.85pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">LBA</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">：<SPAN 
+lang=EN-US>0 = </SPAN><SPAN class=GramE>柱面数</SPAN><SPAN 
+lang=EN-US>/</SPAN>磁头<SPAN lang=EN-US>/</SPAN>扇区模式<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 125.85pt; TEXT-ALIGN: left; mso-outline-level: 1; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>1 = 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">逻辑寻块模式<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 125.85pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">D</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">：<SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>0 = 
+</SPAN>主驱动器<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 125.85pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>1 =<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">从驱动器<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 125.85pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">HSn</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">：<SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN>CHS</SPAN>模式：在<SPAN 
+lang=EN-US>CHS</SPAN>模式下磁头选择<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 125.85pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>LBA</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">模式：<SPAN 
+class=GramE>块选择位</SPAN><SPAN lang=EN-US>24 </SPAN>－<SPAN 
+lang=EN-US>27<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 125.85pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">表<SPAN 
+lang=EN-US>11.1<SPAN 
+style="mso-tab-count: 3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>(c)</SPAN>出错标志寄存器各个域的功能<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<TABLE class=MsoNormalTable 
+style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; MARGIN-LEFT: 5.4pt; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-top-alt: solid black 1.0pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black 1.0pt; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt" 
+cellSpacing=0 cellPadding=0 border=1>
+  <TBODY>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: 1.0pt; mso-border-left-alt: 1.0pt; mso-border-right-alt: .5pt; mso-border-bottom-alt: .5pt; mso-border-color-alt: black; mso-border-style-alt: solid" 
+    width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">位<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">功能<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>D0<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当它置<SPAN 
+      lang=EN-US>1</SPAN>时<SPAN lang=EN-US>,</SPAN>表明找到了扇区但不能找到数据地址的标记<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>D1<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当它置<SPAN 
+      lang=EN-US>1</SPAN>时<SPAN lang=EN-US>,</SPAN><SPAN 
+      class=GramE>表明回</SPAN>零道命令时<SPAN lang=EN-US>,</SPAN>发了<SPAN 
+      lang=EN-US>1024</SPAN>个脉冲仍未找到<SPAN lang=EN-US> 0 </SPAN>道<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>D2<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当它置<SPAN 
+      lang=EN-US>1</SPAN>时<SPAN lang=EN-US>,</SPAN>表明无效命令<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>D4<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当它置<SPAN 
+      lang=EN-US>1</SPAN>时<SPAN lang=EN-US>,</SPAN>表示磁盘转了<SPAN 
+      lang=EN-US>8</SPAN>圈仍未找到所要求的参数或出现<SPAN lang=EN-US>ID</SPAN>段<SPAN 
+      lang=EN-US>CRC</SPAN>错<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>D6 <o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当它置<SPAN 
+      lang=EN-US>1</SPAN>时<SPAN lang=EN-US>,</SPAN>表明数据段<SPAN 
+      lang=EN-US>CRC</SPAN>错或未找到数据地址标志<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR 
+    style="HEIGHT: 12.15pt; page-break-inside: avoid; mso-yfti-lastrow: yes"><TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp; </SPAN>D7<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当它置<SPAN 
+      lang=EN-US>1</SPAN>时<SPAN lang=EN-US>,</SPAN>表明在<SPAN lang=EN-US>ID 
+      </SPAN>段有坏块标志<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 2.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 2.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">表<SPAN 
+lang=EN-US>11.1<SPAN style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp; 
+</SPAN>(d)</SPAN>状态寄存器各个域的含义<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<TABLE class=MsoNormalTable 
+style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; MARGIN-LEFT: 5.4pt; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-top-alt: solid black 1.0pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black 1.0pt; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt" 
+cellSpacing=0 cellPadding=0 border=1>
+  <TBODY>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: 1.0pt; mso-border-left-alt: 1.0pt; mso-border-right-alt: .5pt; mso-border-bottom-alt: .5pt; mso-border-color-alt: black; mso-border-style-alt: solid" 
+    vAlign=top width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">位<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">功能<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>D0<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当它置位时<SPAN 
+      lang=EN-US>,</SPAN>标志错误寄存器存在错误标志<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>D1<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当它置位时<SPAN 
+      lang=EN-US>,</SPAN>表示正在进行命令不能接受新的命令<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>D2<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">未用<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>D3<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当它置位时<SPAN 
+      lang=EN-US>,</SPAN>表明<SPAN lang=EN-US>WDC</SPAN>请求与主机交换数据<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>D4<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">寻找完成标志<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>D5<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当它置位时<SPAN 
+      lang=EN-US>,</SPAN>表示有<SPAN class=GramE>写错误</SPAN><SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>D6<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当它置位时<SPAN 
+      lang=EN-US>,</SPAN>表示盘准备好<SPAN 
+  lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR>
+  <TR 
+    style="HEIGHT: 12.15pt; page-break-inside: avoid; mso-yfti-lastrow: yes"><TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 49.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=82>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+      style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>D7<o:p></o:p></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 373.3pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=622>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">命令写入时将它置位<SPAN 
+      lang=EN-US>,</SPAN>命令结束时将它清除<SPAN 
+    lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 2.25pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">表<SPAN 
+lang=EN-US>11.1<SPAN style="mso-spacerun: yes">&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>(e) 
+</SPAN>命令寄存器的功能<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<TABLE class=MsoNormalTable 
+style="BORDER-RIGHT: medium none; BORDER-TOP: medium none; MARGIN-LEFT: 5.4pt; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none; BORDER-COLLAPSE: collapse; mso-border-top-alt: solid black 1.0pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black 1.0pt; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt" 
+cellSpacing=0 cellPadding=0 border=1>
+  <TBODY>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 108pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: 1.0pt; mso-border-left-alt: 1.0pt; mso-border-right-alt: .5pt; mso-border-bottom-alt: .5pt; mso-border-color-alt: black; mso-border-style-alt: solid" 
+    vAlign=top width=180>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">命令<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: black 1pt solid; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 119.9pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-top-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=200>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">D7D6D5D4D3D2D1D0<o:p></o:p></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 108pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=180>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">回零道<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 119.9pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=200>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">0001R3R2R1R0<o:p></o:p></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 108pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=180>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">寻道<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 119.9pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=200>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">1111R3R2R1R0<o:p></o:p></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 108pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=180>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">读扇区<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 119.9pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=200>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">0010IM0T<o:p></o:p></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 108pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=180>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">写扇区<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 119.9pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=200>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><st1:chmetcnv 
+      w:st="on" TCSC="0" NumberType="1" Negative="False" HasSpace="False" 
+      SourceValue="110" UnitName="m"><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">00110M</SPAN></st1:chmetcnv><SPAN 
+      lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">0T<o:p></o:p></SPAN></P></TD></TR>
+  <TR style="HEIGHT: 12.15pt; page-break-inside: avoid">
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 108pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=180>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">扫描<SPAN 
+      lang=EN-US>ID<o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 119.9pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=200>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">01000000<o:p></o:p></SPAN></P></TD></TR>
+  <TR 
+    style="HEIGHT: 12.15pt; page-break-inside: avoid; mso-yfti-lastrow: yes"><TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: black 1pt solid; WIDTH: 108pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-left-alt: solid black 1.0pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=180>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">格式化<SPAN 
+      lang=EN-US><o:p></o:p></SPAN></SPAN></P></TD>
+    <TD 
+    style="BORDER-RIGHT: black 1pt solid; PADDING-RIGHT: 5.4pt; BORDER-TOP: medium none; PADDING-LEFT: 5.4pt; PADDING-BOTTOM: 0cm; BORDER-LEFT: medium none; WIDTH: 119.9pt; PADDING-TOP: 0cm; BORDER-BOTTOM: black 1pt solid; HEIGHT: 12.15pt; mso-border-right-alt: solid black .5pt; mso-border-bottom-alt: solid black .5pt" 
+    vAlign=top width=200>
+      <P class=MsoNormal style="TEXT-ALIGN: left" align=left><SPAN lang=EN-US 
+      style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">01010000<o:p></o:p></SPAN></P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 95.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">R3 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">－<SPAN 
+lang=EN-US>R0 </SPAN>的编码规定了步进脉冲的间隔<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 227.9pt; TEXT-INDENT: -131.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">I 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">是中断允许位．当<SPAN 
+lang=EN-US>I=0 </SPAN>时，将在<SPAN lang=EN-US>BDRQ(BDRQ</SPAN>为扇区缓冲区数据请求输出信号<SPAN 
+lang=EN-US>)</SPAN>有效时产生中断．<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 227.9pt; TEXT-INDENT: -131.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">　　　　　　　　当<SPAN 
+lang=EN-US>I=1 </SPAN>时，是在命令结束时产生中断．<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 227.9pt; TEXT-INDENT: -131.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">M 
+</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">是多扇区读写标志．当<SPAN 
+lang=EN-US>M=0 </SPAN>时，只写一个扇区．<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 227.9pt; TEXT-INDENT: -131.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">　　　　　　　　　　 
+当<SPAN lang=EN-US> M=1 </SPAN>时<SPAN lang=EN-US>, </SPAN>传送多个扇区．<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 227.9pt; TEXT-INDENT: -131.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">T<SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">是允许重试命令．<SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN></SPAN>当<SPAN 
+lang=EN-US>T=0 </SPAN>时，允许重试．<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 227.9pt; TEXT-INDENT: -131.8pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">　　　　　　　　　　<SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN></SPAN>当<SPAN 
+lang=EN-US> T=1 </SPAN>时，不允许重试．<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 227.9pt; TEXT-INDENT: -53.85pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 2.55pt; TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">上面对于硬盘控制器的几个寄存器的功能作了简要的说明，由此我们可以了解到，对于硬盘的很大一部分工作，由硬盘控制器就可以完成。而对于软盘来说，其控制器则简单得多，我们需要编程去完成各种功能，这样软盘驱动程序就变得比较复杂。在这儿我们只讨论硬盘驱动程序。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">2</SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">、<SPAN 
+lang=EN-US>Linux </SPAN>中硬盘驱动程序的实现<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">接下来我们将要讨论的驱动程序在<SPAN 
+lang=EN-US>drivers/ide/hd.c</SPAN>中 ，在文件为<SPAN lang=EN-US>include/linux/hdreg.h 
+</SPAN>中，定义了控制器寄存器、状态位和命令、数据结构和原形。这些宏定义可以根据其名字并结合上面所说的硬件内容去理解。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>Linux </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">中，硬盘被认为是计算机的最基本的配置，所以在装载内核的时候，硬盘驱动程序必须就被编译进内核，不能作为模块编译。硬盘驱动程序提供内核的接口为：　<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><SPAN class=GramE>static</SPAN> 
+struct block_device_operations hd_fops = {<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>open</SPAN>:<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>hd_open,<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>release</SPAN>:<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>hd_release,<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+class=GramE>ioctl</SPAN>:<SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN>hd_ioctl,<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>};<o:p></o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">对硬盘的操作只有三个函数。　我们来看一下<SPAN 
+lang=EN-US> hd_open ( ) </SPAN>和<SPAN lang=EN-US> hd_release ( ) 
+</SPAN>函数，打开操作首先检测了设备的有效性，接着测试了它的忙标志，最后对请求硬盘的总数加<SPAN 
+lang=EN-US>1</SPAN>，来标识对硬盘的请求个数，<SPAN lang=EN-US>hd_release ( ) 
+</SPAN>函数则将请求的总数减<SPAN lang=EN-US>1</SPAN>。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">前面说过，对于<SPAN 
+class=GramE>块设备</SPAN>的读写操作是先对缓冲区操作，但是当需要真正同硬盘交换数据的时候，驱动程序又干了些什么？在<SPAN 
+lang=EN-US> hd.c </SPAN>中有一个函数<SPAN lang=EN-US> hd_out ( ) 
+</SPAN>，可以说它在实际的数据交换中起着主要的作用．它的原形是：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN class=GramE><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">static</SPAN></SPAN><SPAN 
+lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"> 
+void<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>hd_out(unsigned int 
+drive,unsigned int nsect,unsigned int sect,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-tab-count: 1">&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>unsigned</SPAN> int head,unsigned int cyl,unsigned int 
+cmd,<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-tab-count: 1">&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-tab-count: 1">&nbsp;&nbsp; </SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN class=GramE>void</SPAN> (*intr_addr)(void));<o:p></o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">其中参数<SPAN 
+lang=EN-US>drive</SPAN>是进行操作的设备号；<SPAN lang=EN-US><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN>nsect </SPAN>是每次读写的扇区数；<SPAN lang=EN-US> 
+sect </SPAN>是读写的开始扇区号；<SPAN lang=EN-US> head </SPAN>是读写的磁头号；<SPAN 
+lang=EN-US>cmd</SPAN>是操作命令控制命令字。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">通过这个函数向硬盘控制器的寄存器中写入数据，启动硬盘进行实际的操作。同时这个函数也配合完成<SPAN 
+lang=EN-US> cmd </SPAN>命令相应的中断服务子程序，通过<SPAN lang=EN-US>SET_INIT(intr_addr) 
+</SPAN>宏定义将其地址赋给<SPAN lang=EN-US> DEVICE_INTR</SPAN>。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">hd_request 
+() </SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">函数就是通过这个函数进行实际的数据交换，同其它驱动程序不同的是该函数还要根据每个命令的不同来确定一些参数，最基本的是读写方式的确定，关于硬盘的读写方式有两种，一种是单扇区的读写，另一种是多扇区的读写，单扇区的读写是指每次操作只对一个扇区操作，而多扇区则指每次对多个扇区进行操作，不同的方式其中断服务子程序不同，其相应的地址就作为参数传给<SPAN 
+lang=EN-US> hd_out ( ) </SPAN>，由它设置<SPAN lang=EN-US>DEVICE_INIT</SPAN>。<SPAN 
+lang=EN-US>hd_request( ) </SPAN>函数确定的其它参数也就是<SPAN 
+lang=EN-US>hd_out()</SPAN>所需要的参数：<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">我们知道<SPAN 
+class=GramE>块设备</SPAN>的实际数据交换需要中断服务子程序的配合，在本驱动程序中的中断服务子程序有以下几个主要函数：<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">（ 
+<SPAN lang=EN-US>1</SPAN>）<SPAN lang=EN-US> void 
+unexpected_hd_interrupt(void)<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">功能：对不期望的中断进行处理<SPAN 
+lang=EN-US>(</SPAN>设置<SPAN lang=EN-US>SET_TIMER)</SPAN>。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">（<SPAN 
+lang=EN-US>2</SPAN>）<SPAN lang=EN-US> static void 
+bad_rw_intr(void)<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">功能： 
+当硬盘的读写操作出现错误时进行处理。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">每重复四次磁头复位 
+；<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">每重复八次控制器复位；<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN><SPAN style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">每重复十六次放弃操作。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">（<SPAN 
+lang=EN-US>3</SPAN>）<SPAN lang=EN-US> static void 
+recal_intr(void)<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">功能：重新进行硬盘的本次操作。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">（<SPAN 
+lang=EN-US>4</SPAN>）<SPAN lang=EN-US>static void 
+read_intr(void)<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">功能：从硬盘读数据到缓冲区 
+。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">（<SPAN 
+lang=EN-US>5</SPAN>）<SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN>static void write_intr(void)<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">功能： 
+从缓冲区读数据到硬盘。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp;</SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">（<SPAN 
+lang=EN-US>6</SPAN>）<SPAN lang=EN-US>static void 
+hd_interupt(void)<o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">功能：决定硬盘中断所要调用的中断程序。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN lang=EN-US 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt"><o:p>&nbsp;</o:p></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">在注册的时候，同硬盘中断联系的是<SPAN 
+lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; </SPAN>hd_interupt ( ) 
+</SPAN>，也就是说当硬盘中断到来的时候，执行的函数是<SPAN lang=EN-US>hd_interupt ( 
+)</SPAN>，在此函数中调用<SPAN lang=EN-US> DEVICE_INTR </SPAN>所指向的中断函数，如果<SPAN 
+lang=EN-US> DEVICE_INTR </SPAN>为空，则执行<SPAN 
+lang=EN-US>unexpected_hd_interrupt()</SPAN>　函数。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">对硬盘的操作离不开控制寄存器，为了控制磁盘要经常的去检测磁盘的运行状态，在本驱动程序中有一系列的函数是完成这项工作的，<SPAN 
+lang=EN-US>check_status ( ) </SPAN>检测硬盘的运行状态，如果出现错误则进行处理。<SPAN 
+lang=EN-US>contorller_ready ( ) </SPAN>检测控制器是否准备好。<SPAN lang=EN-US>drive_busy ( 
+) </SPAN>检测硬盘设备是否处于忙态。当出现错误的时候，由<SPAN lang=EN-US> dump_status ( ) 
+</SPAN>函数去检测出错的原因。<SPAN lang=EN-US>wait_DRQ ( ) </SPAN>对数据<SPAN 
+class=GramE>请求位</SPAN>进行测试。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">当硬盘的操作出现错误的时候，硬盘驱动程序会把它尽量在接近硬件的地方解决掉，其方法是进行重复操作，这些在<SPAN 
+lang=EN-US> bad_rw_intr ( ) </SPAN>中进行，与其相关的函数有<SPAN lang=EN-US> 
+reset_controller ( ) </SPAN>和<SPAN lang=EN-US> reset_hd ( ) </SPAN>。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="TEXT-INDENT: 29.75pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">函数<SPAN 
+lang=EN-US> hd_init ( ) </SPAN>是对硬盘进行初始化的，这个函数的过程同其它<SPAN 
+class=GramE>块设备</SPAN>基本一致。还有一些对硬盘的参数进行测试和确定的函数，这里就不一<SPAN 
+class=GramE>一</SPAN>说明。<SPAN lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal 
+style="MARGIN-LEFT: 2.55pt; TEXT-INDENT: 24.65pt; TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><SPAN 
+style="FONT-WEIGHT: normal; FONT-SIZE: 10.5pt; mso-bidi-font-size: 10.0pt; mso-font-kerning: 0pt">通过对<SPAN 
+lang=EN-US> RAM </SPAN>盘和硬盘驱动程序的分析我们对一个<SPAN 
+class=GramE>块设备</SPAN>的驱动程序应已经有一个大概的认识，那么对于其它的块设备驱动程序我们就可以根据硬盘驱动程序的分析方法去分析，在分析的时候要切记不能脱离硬件控制器，也不能一开始就扎入技术细节，那样我们就会陷入一个不可自拔的泥潭。如果要写一个<SPAN 
+class=GramE>块设备</SPAN>的驱动程序，我们除了要了解硬件寄存器外还要弄清具体驱动程序所要解决的问题，然后再根据驱动程序写法去做进一步的工作。<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>

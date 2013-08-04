@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0071)http://www.kerneltravel.net/kernel-book/第八章%20虚拟文件系统/8.3.3.htm -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word" xmlns:st1 = 
+"urn:schemas-microsoft-com:office:smarttags"><HEAD><TITLE>目录高速缓存</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=gb2312">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.3790.4324" name=GENERATOR>
+<META content="Microsoft Word 11" name=Originator><LINK 
+href="8.3.3.files/filelist.xml" rel=File-List><o:SmartTagType downloadurl="" 
+name="chsdate" 
+namespaceuri="urn:schemas-microsoft-com:office:smarttags"></o:SmartTagType><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>CLJ</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>CLJ</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>0</o:TotalTime>
+  <o:Created>2007-08-15T09:10:00Z</o:Created>
+  <o:LastSaved>2007-08-15T09:10:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>220</o:Words>
+  <o:Characters>1257</o:Characters>
+  <o:Lines>10</o:Lines>
+  <o:Paragraphs>2</o:Paragraphs>
+  <o:CharactersWithSpaces>1475</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing>
+  <w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery>
+  <w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:SpaceForUL/>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:AdjustLineHeightInTable/>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+   <w:DontGrowAutofit/>
+   <w:UseFELayout/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]--><!--[if !mso]>
+<OBJECT id=ieooui classid=clsid:38481807-CA0E-42D2-BF39-B33AF135CC4D></OBJECT>
+<STYLE>st1\:* {
+	BEHAVIOR: url(#ieooui)
+}
+</STYLE>
+<![endif]-->
+<STYLE>@font-face {
+	font-family: Wingdings;
+}
+@font-face {
+	font-family: 宋体;
+}
+@font-face {
+	font-family: @宋体;
+}
+@page  {mso-page-border-surround-header: no; mso-page-border-surround-footer: no; }
+@page Section1 {size: 595.3pt 841.9pt; margin: 72.0pt 90.0pt 72.0pt 90.0pt; mso-header-margin: 42.55pt; mso-footer-margin: 49.6pt; mso-paper-source: 0; layout-grid: 15.6pt; }
+P.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+LI.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+DIV.MsoNormal {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: "Times New Roman"; TEXT-ALIGN: justify; mso-style-parent: ""; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-fareast-font-family: 宋体; mso-font-kerning: 1.0pt
+}
+P.MsoPlainText {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Times New Roman"
+}
+LI.MsoPlainText {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Times New Roman"
+}
+DIV.MsoPlainText {
+	TEXT-JUSTIFY: inter-ideograph; FONT-SIZE: 10.5pt; MARGIN: 0cm 0cm 0pt; FONT-FAMILY: 宋体; TEXT-ALIGN: justify; mso-pagination: none; mso-bidi-font-size: 10.0pt; mso-font-kerning: 1.0pt; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Times New Roman"
+}
+SPAN.GramE {
+	mso-style-name: ""; mso-gram-e: yes
+}
+DIV.Section1 {
+	page: Section1
+}
+OL {
+	MARGIN-BOTTOM: 0cm
+}
+UL {
+	MARGIN-BOTTOM: 0cm
+}
+</STYLE>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:普通表格;
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--></HEAD>
+<BODY lang=ZH-CN style="TEXT-JUSTIFY-TRIM: punctuation; tab-interval: 21.0pt">
+<DIV class=Section1 style="LAYOUT-GRID:  15.6pt none">
+<P class=MsoNormal style="TEXT-ALIGN: left; mso-layout-grid-align: none" 
+align=left><st1:chsdate w:st="on" IsROCDate="False" IsLunarDate="False" Day="30" 
+Month="12" Year="1899"><B style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">8.3.3</SPAN></B></st1:chsdate><B 
+style="mso-bidi-font-weight: normal"><SPAN lang=EN-US 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'"><SPAN 
+style="mso-spacerun: yes">&nbsp; </SPAN></SPAN></B><B 
+style="mso-bidi-font-weight: normal"><SPAN 
+style="COLOR: black; FONT-FAMILY: 宋体; mso-font-kerning: 0pt; mso-hansi-font-family: 'Times New Roman'">目录高速缓存<SPAN 
+lang=EN-US><o:p></o:p></SPAN></SPAN></B></P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt">由于从磁盘读入一个目录项并构造相应的目录<SPAN 
+class=GramE>项对象</SPAN>需要花费大量的时间，所以，在完成对目录<SPAN 
+class=GramE>项对象</SPAN>的操作后，可能后面还要使用它，因此在内存仍保留它有重要的意义。例如，我们经常需要编辑文件，随后进行编译或编辑，然后打印或拷贝，再进行编辑，诸如此类的情况中，同一个文件需要被反复访问。</P>
+<P class=MsoPlainText><SPAN lang=EN-US><SPAN style="mso-spacerun: yes">&nbsp; 
+</SPAN></SPAN>每个目录<SPAN class=GramE>项对象</SPAN>属于以下四种状态之一：</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l3 level1 lfo3; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>空闲状态<SPAN lang=EN-US>:</SPAN>：处于该状态的目录<SPAN 
+class=GramE>项对象</SPAN>不包含有效的信息，还没有被<SPAN lang=EN-US>VFS</SPAN>使用。它对应的内存区由<SPAN 
+lang=EN-US>slab</SPAN>分配器进行管理。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l1 level1 lfo4; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>未使用状态：处于该状态的目录<SPAN 
+class=GramE>项对象</SPAN>当前还没有被内核使用。该对象的引用计数器<SPAN 
+lang=EN-US>d_count</SPAN>的值为<SPAN lang=EN-US>NULL</SPAN>。但其<SPAN 
+lang=EN-US>d_inode</SPAN><SPAN class=GramE>域仍然</SPAN>指向相关的索引节点。该目录<SPAN 
+class=GramE>项对象</SPAN>包含有效的信息，但为了在必要时回收内存，它的内容可能被丢弃。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l0 level1 lfo5; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>正在使用状态：处于该状态的目录<SPAN 
+class=GramE>项对象</SPAN>当前正在被内核使用。该对象的引用计数器<SPAN 
+lang=EN-US>d_count</SPAN>的值为正数，而其<SPAN 
+lang=EN-US>d_inode</SPAN>域指向相关的索引节点对象。该目录<SPAN 
+class=GramE>项对象</SPAN>包含有效的信息，并且不能被丢弃。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 26.65pt; TEXT-INDENT: -21.25pt; mso-list: l2 level1 lfo6; tab-stops: list 26.65pt; mso-outline-level: 1"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>负状态：与目录<SPAN 
+class=GramE>项相关</SPAN>的索引节点不复存在，那是因为相应的磁盘索引节点已被删除。该目录<SPAN 
+class=GramE>项对象</SPAN>的<SPAN lang=EN-US>d_inode</SPAN><SPAN 
+class=GramE>域置为</SPAN><SPAN 
+lang=EN-US>NULL</SPAN>，但该对象仍然被保存在目录项高速缓存中，以便后续对同一文件目录名的查找操作能够快速完成，术语“负的”容易使人误解，因为根本不涉及任何负值。</P>
+<P class=MsoPlainText style="TEXT-INDENT: 21pt">为了最大限度地提高处理这些目录<SPAN 
+class=GramE>项对象</SPAN>的效率，<SPAN 
+lang=EN-US>Linux</SPAN>使用目录项高速缓存，它由两种类型的数据结构组成：</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l5 level1 lfo1; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>处于正在使用、未使用或<SPAN class=GramE>负状态</SPAN>的目录<SPAN 
+class=GramE>项对象</SPAN>的集合。</P>
+<P class=MsoPlainText 
+style="MARGIN-LEFT: 21.25pt; TEXT-INDENT: -21.25pt; mso-list: l4 level1 lfo2; tab-stops: list 21.25pt"><![if !supportLists]><SPAN 
+lang=EN-US 
+style="mso-hansi-font-family: Wingdings; mso-bidi-font-family: 宋体"><SPAN 
+style="mso-list: Ignore">·<SPAN 
+style="FONT: 7pt 'Times New Roman'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</SPAN></SPAN></SPAN><![endif]>一个哈希表，从中能够快速获取与给定的文件名和目录名对应的目录项对象。如果访问的对象不在目录项高速缓存中，哈希函数返回一个空值。</P>
+<P class=MsoPlainText 
+style="TEXT-INDENT: 21.25pt">目录项高速缓存的作用也相当于索引节点高速缓存的控制器。内核内存中，目录项可能已经不使用，但与其相关的索引节点并不被丢弃，这是由于目录项高速缓存仍在使用它们，因此，索引节点的<SPAN 
+lang=EN-US>i_count</SPAN><SPAN class=GramE>域不为</SPAN>空。于是，这些索引节点对象还保存在<SPAN 
+lang=EN-US>RAM</SPAN>中，并能够借助相应的目录<SPAN class=GramE>项快速</SPAN>引用它们。</P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt">所有“未使用” 目录<SPAN 
+class=GramE>项对象</SPAN>都存放在一个“最近最少使用”的双向链表中，该链表按照插入的时间排序。换句话说，最后释放的目录<SPAN 
+class=GramE>项对象</SPAN>放在链表的首部，所以最近最少使用的目录<SPAN 
+class=GramE>项对象</SPAN>总是靠近链表的尾部。一旦目录项高速缓存的空间开始变小，内核就从链表的尾部删除元素，使得多数最近经常使用的对象得以保留。<SPAN 
+lang=EN-US>LRU</SPAN>链表的首元素和<SPAN class=GramE>尾元素</SPAN>的地址存放在变量<SPAN 
+lang=EN-US>dentry_unused</SPAN>中的<SPAN lang=EN-US>next </SPAN>域和<SPAN 
+lang=EN-US> prev</SPAN>域中。目录<SPAN class=GramE>项对象</SPAN>的<SPAN 
+lang=EN-US>d_lru</SPAN>域包含的指针指向该链表中相邻目录的对象。</P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt">每个“正在使用”的目录<SPAN 
+class=GramE>项对象</SPAN>都被插入一个双向链表中，该链表由相应索引节点对象的<SPAN 
+lang=EN-US>i_dentry</SPAN>域所指向（由于每个索引节点可能与若干硬连接关联，所以需要一个链表）。目录<SPAN 
+class=GramE>项对象</SPAN>的<SPAN lang=EN-US>d_alias</SPAN>域存放链表中相邻元素的地址。</P>
+<P class=MsoPlainText 
+style="TEXT-INDENT: 21.25pt">当指向相应文件的最后一个硬链接被删除后，一个“正在使用”的目录<SPAN 
+class=GramE>项对象</SPAN>可能变成“负”状态。在这种情况下，该目录<SPAN class=GramE>项对象</SPAN>被移到“未使用” 
+目录<SPAN class=GramE>项对象</SPAN>组成的<SPAN 
+lang=EN-US>LRU</SPAN>链表中。每当内核缩减目录项高速缓存时，“负”状态目录<SPAN 
+class=GramE>项对象</SPAN>就朝着<SPAN lang=EN-US>LRU</SPAN>链表的尾部移动，这样一来，这些对象就逐渐被释放。</P>
+<P class=MsoPlainText style="TEXT-INDENT: 21.25pt">哈希表是由<SPAN 
+lang=EN-US>dentry_hashtable</SPAN>数组实现的。数组中的每个元素是一个指向链表的指针，这种链表就是把具有相同哈希表值的目录项进行散列而形成的。该数组的长度取决于系统已安装<SPAN 
+lang=EN-US>RAM</SPAN>的数量。目录<SPAN class=GramE>项对象</SPAN>的<SPAN 
+lang=EN-US>d_hash</SPAN>域包含指向具有相同<SPAN 
+lang=EN-US>hash</SPAN>值的链表中的相邻元素。哈希函数产生的值是由目录及文件名的目录<SPAN 
+class=GramE>项对象</SPAN>的地址计算出的。</P>
+<P class=MsoNormal><SPAN 
+lang=EN-US><o:p>&nbsp;</o:p></SPAN></P></DIV></BODY></HTML>
